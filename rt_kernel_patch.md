@@ -24,3 +24,8 @@ sudo reboot
 Used the newest kernel patch version 4.19.132-rt59 and the matching linux kernel  
 Verify that the installation was correct: uname -a -> PREEMPT should appear  
 
+Useful Links:  
+[PREEMPT_RT_SETUP](https://wiki.linuxfoundation.org/realtime/documentation/howto/applications/preemptrt_setup)  
+[PREEMPT_APP](https://wiki.linuxfoundation.org/realtime/documentation/howto/applications/application_base)  
+
+
