@@ -86,3 +86,23 @@ sudo rosdep init
 rosdep update
 rosdep install --from-paths src --ignore-src --rosdistro foxy -y --skip-keys "console_bridge fastcdr fastrtps rti-connext-dds-5.3.1 urdfdom_headers"
 ```
+
+Build
+```
+cd ~/ros2_foxy
+colcon build --symlink-install
+7 packages had stderr output: foonathan_memory_vendor qt_gui_cpp rmw_connext_cpp rmw_connext_shared_cpp ros1_bridge rosidl_typesupport_connext_c rosidl_typesupport_connext_cpp
+```
+
+setup script
+
+```
+. ~/ros2_foxy/install/setup.bash
+
+```
+
+Talker/Listener example
+```
+. ~/ros2_foxy/install/local_setup.bash
+ros2 run demo_nodes_py [talker / listener]
+```
