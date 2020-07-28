@@ -1,13 +1,11 @@
 // g++ -o test1 main.cpp -lpthread -L/usr/local/lib -std=c++11
-
-#include <pthread.h>
+#include <thread>
+#include <vector>
 #include <unistd.h>
 #include <iostream>
 #include <time.h>
 #include "sched_deadline.hpp"
 using namespace std;
-
-pthread_t thrs[16];
 
 struct thr_arg {
     int task_id;
@@ -18,7 +16,7 @@ struct thr_arg {
     int period;
 };
 
-void *routine1(void *data) {
+void routine1(void *data) {
     struct thr_arg targ = *((struct thr_arg *) data);
     free(data);
     cout << "task_id: " << targ.task_id << endl;
@@ -46,7 +44,7 @@ void *routine1(void *data) {
     }
 
     // actual routine
-    clock_t start_t, end_t, slack_t;
+    clock_t start_t, end_t;
     for(int iter = 0; iter < 100; iter++) {
         start_t = clock();
 
@@ -64,15 +62,16 @@ void *routine1(void *data) {
 
         sched_yield();
     }
-    return NULL;
+    return;
 }
 
-int main(int argc, char **argv) {
+// int main(int argc, char **argv) {
+int main() {
     cout << "main thread id: " << gettid() << endl;
 
     // two task example
     int num_task = 2;
-    int thr_cnt = 0;
+    vector<thread> thrs;
     for(int i = 0; i < num_task; i++) {
         struct thr_arg targ;
         struct thr_arg* targ_ptr = &targ;
@@ -90,14 +89,11 @@ int main(int argc, char **argv) {
                 "[ERROR] Couldn't allocate memory for thread arg.\n");
             exit(EXIT_FAILURE);
         }
-
-        pthread_create(&thrs[thr_cnt], 0, routine1, arg);
-        thr_cnt++;
+        thrs.push_back(thread(routine1, arg));
     }
     
-    for(int i = 0; i < thr_cnt; i++) {
-        pthread_join(thrs[i], NULL);
-    }    
+    for(thread &t : thrs)
+        t.join();
 
     cout << "main dies: " << gettid() << endl;
 
