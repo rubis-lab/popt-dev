@@ -16,6 +16,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O0")
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+# json
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
 # headers
 include_directories(include)
 
@@ -29,3 +32,4 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 # libraries
 target_link_libraries(${PROJECT_NAME} Threads::Threads)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)

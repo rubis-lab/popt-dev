@@ -1,9 +1,7 @@
-// g++ -o test1 main.cpp -lpthread -L/usr/local/lib -std=c++11
 #include <thread>
 #include <vector>
 #include <unistd.h>
 #include <iostream>
-#include <time.h>
 #include "sched_deadline.hpp"
 using namespace std;
 
