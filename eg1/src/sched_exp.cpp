@@ -13,7 +13,7 @@ thr_arg SchedExp::parse_config(string fname) {
     json j;
     i >> j;
     exp_name = j["exp_name"];
-    num_task = j["tasks"].size();
+    num_task = j["task_set"].size();
     cout << "num_task: " << num_task << endl;
 
     vector<thr_arg> targs;

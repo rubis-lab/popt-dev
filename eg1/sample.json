@@ -2,16 +2,16 @@
     "exp_name": "test1",
     "scheduler": "GEDF",
     "duration": 1000000,
-    "tasks": [
+    "task_set": [
         {
-            "id": "0",
+            "name": "task-0",
             "runtime": 100000,
             "deadline": 200000,
             "period": 300000,
             "max_popt": 4
         },
         {
-            "id": "1",
+            "name": "task-1",
             "runtime": 200000,
             "deadline": 300000,
             "period": 400000,
