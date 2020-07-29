@@ -22,7 +22,7 @@ void routine_deadline(thr_arg targ) {
     
     int ret = sched_setattr(0, &attr, attr.sched_flags);
     if(ret < 0) {
-        cout << "[ERROR] sched_setattr failed." << endl;
+        cerr << "[ERROR] sched_setattr failed." << endl;
         perror("sched_setattr");
         exit(-1);
     }
@@ -42,7 +42,7 @@ void routine_deadline(thr_arg targ) {
         end_t = clock();
 
         // analyze
-        cout << "task_id: " << targ.task_id << "thr_id: " << targ.thr_id << "\titer: " << iter << "\tdeadline: " << targ.deadline << "\tstart_t: " << start_t << "\tend_t: " << end_t << "\tresponse_time: " << end_t - start_t << endl;
+        cout << "task_id: " << targ.task_id << "\tthr_id: " << targ.thr_id << "\titer: " << iter << "\tdeadline: " << targ.deadline << "\tstart_t: " << start_t << "\tend_t: " << end_t << "\tresponse_time: " << end_t - start_t << endl;
 
         sched_yield();
     }
