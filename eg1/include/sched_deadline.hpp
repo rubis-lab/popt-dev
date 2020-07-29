@@ -2,12 +2,22 @@
 #define __SCHED_DEADLINE_H__
 
 #include <unistd.h>
+#include <iostream>
 #include <linux/kernel.h>
 #include <linux/types.h>
 #include <sys/syscall.h>
 
 #define gettid() syscall(__NR_gettid)
 #define SCHED_DEADLINE	6
+
+struct thr_arg {
+    int task_id;
+    int thr_id;
+    int parent;
+    int exec_time;
+    int deadline;
+    int period;
+};
 
 struct sched_attr {
 	__u32 size;
@@ -36,4 +46,5 @@ int sched_getattr(pid_t pid,
     unsigned int size,
     unsigned int flags);
 
+void routine_deadline(thr_arg targ);
 #endif
