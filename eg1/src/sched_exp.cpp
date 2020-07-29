@@ -16,8 +16,9 @@ thr_arg SchedExp::parse_config(string fname) {
     num_task = j["tasks"].size();
     cout << "num_task: " << num_task << endl;
 
-    thr_arg targ;
-    return targ;
+    vector<thr_arg> targs;
+    for()
+    return targs;
 }
 
 bool SchedExp::run() {

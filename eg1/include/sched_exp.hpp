@@ -15,7 +15,7 @@ private:
     std::string exp_name;
     int num_task;
     std::vector<std::vector<std::thread>> tasks;
-    thr_arg parse_config(std::string fname);
+    std::vector<thr_arg> parse_config(std::string fname);
 public:
     SchedExp(std::string fname);
     bool run();
