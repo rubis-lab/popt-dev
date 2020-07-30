@@ -5,6 +5,7 @@ using namespace std;
 void routine_deadline(task_arg targ, int idx) {
     cout << "task_id: " << targ.task_id << endl;
 
+    // Target Thread Arguments
     struct thr_arg tta = targ.thr_set.at(idx);
     // init workloads
     // configure thread attributes

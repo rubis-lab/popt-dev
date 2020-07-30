@@ -9,11 +9,13 @@
 
 #define gettid() syscall(__NR_gettid)
 
+// contains thread-specific arguments
 struct thr_arg {
     int thr_id;
     int exec_time;
 };
 
+// contains shared arguments among the threads and the vector of threads
 struct task_arg {
     int option;
     int task_id;
