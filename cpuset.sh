@@ -4,6 +4,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+printf "adding pid : $2\n"
+
 if [ ! -d /dev/cpuset ] ; then
  mkdir -p /dev/cpuset
 fi
@@ -28,4 +30,17 @@ fi
 /bin/echo 1 > rubis/cpuset.cpu_exclusive
 /bin/echo 1 > rubis/cpuset.mem_exclusive
 sudo echo -1 > /proc/sys/kernel/sched_rt_runtime_us # sched rt check off
-/bin/echo $$ > /dev/cpuset/rubis/tasks
+/bin/echo $2 > /dev/cpuset/rubis/tasks
+
+printf "\nafter : \n"
+
+printf "tasks: \n"
+cat /dev/cpuset/rubis/tasks
+printf "cpuset.sched_load_balance: "
+cat /dev/cpuset/rubis/cpuset.sched_load_balance
+printf "cpuset.mems: "
+cat /dev/cpuset/rubis/cpuset.mems
+printf "cpuset.cpu_exclusive: "
+cat /dev/cpuset/rubis/cpuset.cpu_exclusive
+printf "cpuset_mem.exclusive: "
+cat /dev/cpuset/rubis/cpuset.mem_exclusive
