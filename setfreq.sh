@@ -10,6 +10,9 @@ if [ $2 -lt 0 -o $2 -gt 12 ] ; then
 	exit 1
 fi
 
+echo "before : "
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
 # -eq is ==
 if [ $# -eq 2 ]
 then
@@ -35,5 +38,8 @@ else
 	echo "There is no value"
 	exit 1
 fi
+
+printf "\nafter : \n"
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 exit 0
