@@ -18,7 +18,7 @@ if [ ! -d rubis ] ; then
  mkdir rubis
 fi
 
-if [ $1 -eq 1 ] then
+if [ $1 -eq 1 ] ; then
    /bin/echo 1 > rubis/cpuset.cpus
 else 
    /bin/echo 1-$1 > rubis/cpuset.cpus
