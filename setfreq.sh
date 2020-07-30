@@ -39,7 +39,7 @@ else
 	exit 1
 fi
 
-printf "\nafter : \n"
+printf "after : \n"
 cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
 exit 0
