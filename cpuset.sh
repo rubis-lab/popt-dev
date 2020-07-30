@@ -18,7 +18,11 @@ if [ ! -d rubis ] ; then
  mkdir rubis
 fi
 
-/bin/echo 1-4 > rubis/cpuset.cpus
+if [ $1 -eq 1 ] then
+   /bin/echo 1 > rubis/cpuset.cpus
+else 
+   /bin/echo 1-$1 > rubis/cpuset.cpus
+fi   
 /bin/echo 0 > cpuset.sched_load_balance
 /bin/echo 0 > rubis/cpuset.mems
 /bin/echo 1 > rubis/cpuset.cpu_exclusive
