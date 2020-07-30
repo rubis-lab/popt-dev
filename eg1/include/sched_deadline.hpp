@@ -5,5 +5,5 @@
 #include "sched_core.hpp"
 #include <iostream>
 
-void routine_deadline(thr_arg targ);
+void routine_deadline(task_arg targ, int idx);
 #endif

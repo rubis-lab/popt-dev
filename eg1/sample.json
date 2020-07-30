@@ -5,17 +5,65 @@
     "task_set": [
         {
             "name": "task-0",
-            "runtime": 100000,
+            "options": [
+                {
+                    "option": 1,
+                    "runtimes": [
+                        100000
+                    ]
+                },
+                {
+                    "option": 2,
+                    "runtimes": [
+                        50000, 50000
+                    ]
+                },
+                {
+                    "option": 3,
+                    "runtimes": [
+                        33333, 33335, 33337
+                    ]
+                },
+                {
+                    "option": 4,
+                    "runtimes": [
+                        25000, 25000, 25000, 25000
+                    ]
+                }
+            ],
             "deadline": 200000,
-            "period": 300000,
-            "max_popt": 4
+            "period": 300000
         },
         {
             "name": "task-1",
-            "runtime": 200000,
+            "options": [
+                {
+                    "option": 1,
+                    "runtimes": [
+                        200000
+                    ]
+                },
+                {
+                    "option": 2,
+                    "runtimes": [
+                        100000, 100000
+                    ]
+                },
+                {
+                    "option": 3,
+                    "runtimes": [
+                        66666, 66666, 66666
+                    ]
+                },
+                {
+                    "option": 4,
+                    "runtimes": [
+                        50000, 50000, 50000, 50000
+                    ]
+                }
+            ],
             "deadline": 300000,
-            "period": 400000,
-            "max_popt": 4
+            "period": 400000
         }
     ]
 }
