@@ -18,4 +18,5 @@
 ## Generate ftrace log data of our tasks
 
 *Problem is this command can't provide proper log data.*
-    - sudo trace-cmd record -e sched -F /home/rubis/rt-preempt-docs/eg1/EG1 /home/rubis/rt-preempt-docs/eg1/sample.json
+
+    sudo trace-cmd record -e sched -F /home/rubis/rt-preempt-docs/eg1/EG1 /home/rubis/rt-preempt-docs/eg1/sample.json
