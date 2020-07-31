@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]] ; then
 fi
 
 current_date=$(date "+%m.%d.%y")
-current_time=$(date "+%m_%d_%y-%H-%M")
+current_time=$(date "+%m.%d.%y-%H:%M:%S")
 
 if [ ! -d /home/rubis/experiment ] ; then
 	mkdir -p /home/rubis/experiment
