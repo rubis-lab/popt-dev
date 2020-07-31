@@ -13,6 +13,8 @@ mount the cpuset folder and set up the CPUs to guarantee exclusive cpu and mem n
 note that /dev/cpuset has to be mounted first for the flags to work  
 ```
 sudo su
-./cpuset.sh [1~12]
+./cpuset.sh [1~12] $$
 // To unmount the cpuset: umount -l /dev/cpuset
 ```
+fix: the pid of the terminal has to be given as a parameter;  
+inside the shell program, '$$' accesses the pid of itself, which is not the desired pid.
