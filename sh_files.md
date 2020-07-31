@@ -18,3 +18,13 @@ sudo su
 ```
 fix: the pid of the terminal has to be given as a parameter;  
 inside the shell program, '$$' accesses the pid of itself, which is not the desired pid.
+
+**kernelshark.sh**
+automates ftrace using trace-cmd and extracting & visualizing data using kernelshark  
+1. creates /experiment directory if not present  
+2. creates /experiment/$current_date directory if not present  
+3. extracts .dat files into $current_time.dat and opens it with kernelshark  
+```
+./kernelshark.sh /home/rubis/.../EG1 /home/rubis/.../sample.json
+```
+Need to pass the .exe file and .json file (currently only supports 1 input file)  
