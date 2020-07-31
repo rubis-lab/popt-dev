@@ -9,12 +9,12 @@ Generate ftrace log data by using trace-cmd
 
 3. stop tracigng.
 
-        sudo trace-cmd stop
-        // file name => example.dat
+        sudo trace-cmd stop        
 
 4. Extract the generated ftrace log data by using trace-cmd.
 
         sudo trace-cmd extract -o [filename]
+        // file name => example.dat
 
 5. See the log data by using kernel shark.
     
