@@ -10,6 +10,7 @@ Generate ftrace log data by using trace-cmd
 3. stop tracigng.
 
         sudo trace-cmd stop
+        // file name => example.dat
 
 4. Extract the generated ftrace log data by using trace-cmd.
 
