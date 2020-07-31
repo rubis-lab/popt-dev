@@ -5,8 +5,20 @@ if [[ $EUID -ne 0 ]] ; then
     exit 1
 fi
 
-current_time = $(date "+%Y.%m.%d-%H.%M.%S")
-echo "Current time : $current_time"
+current_date=$(date "+%m.%d.%y")
+current_time=$(date "+%m_%d_%y-%H-%M")
 
+if [ ! -d /home/rubis/experiment ] ; then
+	mkdir -p /home/rubis/experiment
+fi
 
-#if [ ! -d /experiment/]
+if [ ! -d /home/rubis/experiment/$current_date ] ; then
+	mkdir -p /home/rubis/experiment/$current_date
+fi
+
+cd /home/rubis/experiment/$current_date
+trace-cmd record -e sched -F $1 $2
+mv trace.dat $current_time.dat
+kernelshark $current_time.dat
+
+exit 0
