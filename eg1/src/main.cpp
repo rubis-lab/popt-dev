@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
         return -1;
     }
     cout << "main thread id: " << gettid() << endl;
-    SchedExp se(argv[1]);
+    SchedExp se(argv[1], 4);
     se.run();
     cout << "main dies: " << gettid() << endl;
     return 0;

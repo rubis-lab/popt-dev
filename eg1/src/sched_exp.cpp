@@ -3,40 +3,56 @@
 using namespace std;
 using json = nlohmann::json;
 
-SchedExp::SchedExp(string fname) {
-    parse_config(fname);
-    cout << exp_name << endl;
+SchedExp::SchedExp(string fname, int popt) {
+    fileName = fname;
+    // Can be modified to give thread-specific parallelization options
+    this->popt = popt;
 }
 
-thr_arg SchedExp::parse_config(string fname) {
-    ifstream i(fname);
-    json j;
-    i >> j;
-    exp_name = j["exp_name"];
-    num_task = j["task_set"].size();
-    cout << "num_task: " << num_task << endl;
+void SchedExp::parse_config(string fname) {
+    ifstream inputFile(fname);
+    json json;
+    inputFile >> json;
+    exp_name = json["exp_name"];
+    num_task = json["task_set"].size();
 
-    vector<thr_arg> targs;
-    for()
-    return targs;
+    for(int i(0); i < num_task; i++){
+        // Initialize task-specific arguments
+        struct task_arg temp;
+        temp.option = popt;
+        temp.task_id = i;
+        temp.parent = gettid();
+        temp.deadline = json["task_set"][i]["deadline"];
+        temp.period = json["task_set"][i]["period"];
+        // Initialize thread-specific arguments
+        vector<thr_arg> thread_args;
+        for(int j(0); j < popt; j ++){
+            struct thr_arg temp;
+            temp.exec_time = json["task_set"][i]["options"][popt-1]["runtimes"][j];
+            temp.thr_id = j;
+            thread_args.push_back(temp);
+        }
+        temp.thr_set = thread_args;
+        
+        task_set.push_back(temp);
+    }
 }
 
 bool SchedExp::run() {
-    // two task example
-    // int num_task = 2;
-    // vector<thread> thrs;
-    // for(int i = 0; i < num_task; i++) {
-    //     struct thr_arg targ;
-    //     targ.task_id = i;
-    //     targ.thr_id = 0;
-    //     targ.parent = gettid();
-    //     targ.exec_time = 10000;
-    //     targ.deadline = 15000;
-    //     targ.period = 20000;
-    //     thrs.push_back(thread(routine_deadline, targ));
-    // }
-    
-    // for(thread &t : thrs)
-    //     t.join();
+    // 1. Parse
+    parse_config(fileName);
+    cout << exp_name << endl;
+    // 2. Create Thread
+    int numTask = task_set.size(); 
+    vector<thread> thrs;
+    for(int i(0); i < numTask; i ++){
+        int numThread = task_set.at(i).thr_set.size();
+        for(int j(0); j < numThread; j++){
+            thrs.push_back(thread(routine_deadline, task_set.at(i), j));
+        }
+    }
+    // 3. Release
+    for(thread &t : thrs)
+        t.join();
     return true;
 }

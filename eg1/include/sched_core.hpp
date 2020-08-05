@@ -5,16 +5,24 @@
 #include <linux/types.h>
 #include <unistd.h>
 #include <sys/syscall.h>
+#include <vector>
 
 #define gettid() syscall(__NR_gettid)
 
+// contains thread-specific arguments
 struct thr_arg {
-    int task_id;
     int thr_id;
-    int parent;
     int exec_time;
+};
+
+// contains shared arguments among the threads and the vector of threads
+struct task_arg {
+    int option;
+    int task_id;
+    int parent;
     int deadline;
     int period;
+    std::vector<thr_arg> thr_set;
 };
 
 struct sched_attr {
