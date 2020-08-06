@@ -69,10 +69,11 @@ $ sudo apt autoremove
 
 ## [TARGET] Install CUDA and TensorFlow
 ```shell
-$ sudo dpkg -i /home/nvidia/cuda-repo-l4t-8-0-local_8.0.84-1_arm64.deb
-$ sudo dpkg -i /home/nvidia/libcudnn6_6.0.21-1+cuda8.0_arm64.deb
-$ sudo dpkg -i /home/nvidia/libcudnn6-dev_6.0.21-1+cuda8.0_arm64.deb
-$ sudo dpkg -i /home/nvidia/libcudnn6-doc_6.0.21-1+cuda8.0_arm64.deb
+$ scp $HOME/Downloads/nvidia/sdkm_downalods_43/cuda-repo-l4t-10-0-local-10.0.326_1.0.1_arm64.deb nvidia@JETSON_IP_ADDRESS:/home/nvidia
+$ scp $HOME/Downloads/nvidia/sdkm_downloads_43/libcudnn7_7.6.3.28-1+cuda10.0_arm64.deb nvidia@JETSON_IP_ADDRESS:/home/nvidia
+$ scp $HOME/Downloads/nvidia/sdkm_downloads_43/libcudnn7-dev_7.6.3.28-1+cuda10.0_arm64.deb nvidia@JETSON_IP_ADDRESS:/home/nvidia
+$ scp $HOME/Downloads/nvidia/sdkm_downloads_43/libcudnn7-doc_7.6.3.28-1+cuda10.0_arm64.deb nvidia@JETSON_IP_ADDRESS:/home/nvidia
+# Doesn't match from here
 $ sudo dpkg -i /home/nvidia/nv-gie-repo-ubuntu1604-ga-cuda8.0-trt2.1-20170614_1-1_arm64.deb
 $ sudo dpkg -i /home/nvidia/libopencv4tegra-repo_2.4.13-17-g5317135_arm64_l4t-r26.deb
 $ sudo apt update
