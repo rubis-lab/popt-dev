@@ -88,70 +88,100 @@ export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64:$LD_LIBRARY_PATH
 
 ## Download dev tools
 ```shell
-$ cd $HOME/nvidia
-wget -O l4t-gcc-7-3-1-toolchain-64-bit.tar.xz https://developer.nvidia.com/embedded/dlc/l4t-gcc-7-3-1-toolchain-64-bit
-wget https://developer.nvidia.com/embedded/L4T/r32_Release_v4.2/Sources/T186/public_sources.tbz2
+$ mkdir -p $HOME/nvidia_rt
+$ cd $HOME/nvidia_rt
+$ wget -O l4t-gcc-7-3-1-toolchain-64-bit.tar.xz https://developer.nvidia.com/embedded/dlc/l4t-gcc-7-3-1-toolchain-64-bit
+$ wget https://developer.nvidia.com/embedded/L4T/r32_Release_v4.2/Sources/T186/public_sources.tbz2
 ```
 
 ## Prepare build sources
 ```shell
-$ cd $HOME/nvidia
+$ cd $HOME/nvidia_rt
 $ tar -xf l4t-gcc-7-3-1-toolchain-64-bit.tar.xz
-$ sudo tar -xf public_sources.tbz2
-$ cd $HOME/nvidia/Linux_for_Tegra/source/public
-$ sudo tar -xjf kernel_src.tbz2
+$ tar -xf public_sources.tbz2
+$ cd $HOME/nvidia_rt/Linux_for_Tegra/source/public
+$ tar -xjf kernel_src.tbz2
 ```
 
 ## Create an `environment` file for envvars
 ```shell
-$ cd $HOME/nvidia
-$ vim $HOME/nvidia/rubis_env
+$ cd $HOME/nvidia_rt
+$ vim $HOME/nvidia_rt/rubis_env_rt
 #!/bin/sh
 # toolchain flags
-export BSPTOOLCHAIN=$HOME/nvidia/install/bin
+export BSPTOOLCHAIN=$HOME/nvidia_rt/install/bin
 export PATH=${BSPTOOLCHAIN}:${PATH}
 # kernel flags
 export ARCH=arm64
-export CROSS_COMPILE=$HOME/nvidia/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
-export TEGRA_KERNEL_OUT=$HOME/nvidia/tegra-jetson-tx2-kernel
+export CROSS_COMPILE=$HOME/nvidia_rt/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+export TEGRA_KERNEL_OUT=$HOME/nvidia_rt/tegra-jetson-tx2-kernel
 ```
 
 ## Export build variables and start compiling
 Test kernel config with `CONFIG_LOCALVERSION="-rt"` and `CONFIG_PREEMPT_RT_FULL=y` can be found [here](https://github.com/kozyilmaz/nvidia-jetson-rt/raw/master/scripts/jetson-tx2-rt.config)
 
 ```shell
-$ cd $HOME/nvidia
-$ source environment
+$ cd $HOME/nvidia_rt
+$ source rubis_env_rt
 $ mkdir -p $TEGRA_KERNEL_OUT
-$ cd $HOME/nvidia/Linux_for_Tegra/source/public/kernel/kernel-4.9
+$ cd $HOME/nvidia_rt/Linux_for_Tegra/source/public/kernel/kernel-4.9
 # list and apply real-time patches
 $ for i in rt-patches/*.patch; do echo $i; done
-$ for i in rt-patches/*.patch; do sudo patch -p1 < $i; done
+$ for i in rt-patches/*.patch; do patch -p1 < $i; done
 # create default config
-$ sudo make O=$TEGRA_KERNEL_OUT ARCH=$ARCH tegra_defconfig
+$ make O=$TEGRA_KERNEL_OUT ARCH=$ARCH tegra_defconfig
 # change CONFIG_LOCALVERSION="-rt", "CONFIG_HZ_1000=y" and  CONFIG_PREEMPT_RT_FULL=y for real-time scheduling
-$ sudo make O=$TEGRA_KERNEL_OUT ARCH=$ARCH menuconfig
+$ make O=$TEGRA_KERNEL_OUT ARCH=$ARCH menuconfig
+
+```
+
+## To make a stanalone kernel:
+
+```shell
+# create kernel image
+$ make -j10 O=$TEGRA_KERNEL_OUT ARCH=$ARCH
+# replace image to release kernel
+$ cp $HOME/nvidia_rt/tegra-jetson-tx2-kernel/arch/arm64/boot/Image $HOME/nvidia/Linux_for_Tegra/kernel/
+# replace dts
+$ cd /nvidia/Linux_for_Tegra/kernel/dtb
+$ rm -f ./*
+$ cp -r $HOME/nvidia_rt/tegra-jetson-tx2-kernel/arch/arm64/boot/dts/* $HOME/nvidia/Linux_for_Tegra/kernel/dtb/
+
+# make kernel modules
+$ cd $HOME/Linux_for_Tegra/source/public/kernel/kernel-4.9
+$ sudo make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$HOME/nvidia/Linux_for_Tegra/rootfs
+$ cd $HOME/nvidia/Linux_for_Tegra/rootfs
+$ sudo tar --owner root --group root -cjf kernel_supplements.tbz2 lib/modules
+$ sudo mv kernel_supplements.tbz2 $HOME/nvidia/Linux_for_Tegra/kernel/
+$ cd $HOME/nvidia/Linux_for_Tegra
+$ sudo ./apply_binaries.sh
+```
+
+## To update an existing kernel:
+```shell
+$ cd $HOME/nvidia_rt
+$ mkdir L4T
+$ cd $HOME/nvidia_rt/Linux_for_Tegra/source/public/kernel/kernel-4.9
 # create compressed kernel image
-$ sudo make -j12 O=$TEGRA_KERNEL_OUT ARCH=$ARCH zImage
+$ make -j10 O=$TEGRA_KERNEL_OUT ARCH=$ARCH zImage
 # compile device tree
 $ make O=$TEGRA_KERNEL_OUT ARCH=$ARCH dtbs
 # compile and install kernel modules
-$ make -j4 O=$TEGRA_KERNEL_OUT ARCH=$ARCH modules
+$ make -j10 O=$TEGRA_KERNEL_OUT ARCH=$ARCH modules
 $ make O=$TEGRA_KERNEL_OUT ARCH=$ARCH modules_install INSTALL_MOD_PATH=$TEGRA_KERNEL_OUT/modules
-```
 
 ## Copy binaries to `L4T` for deployment
-```shell
-$ mkdir -p $HOME/nvidia/L4T/kernel
-$ cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $HOME/nvidia/L4T/kernel
-$ mkdir -p $HOME/nvidia/L4T/kernel/dtb
-$ cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/*.dtb $HOME/nvidia/L4T/kernel/dtb
+$ mkdir -p $HOME/nvidia_rt/L4T/kernel
+$ cp $TEGRA_KERNEL_OUT/arch/arm64/boot/Image $HOME/nvidia_rt/L4T/kernel
+$ mkdir -p $HOME/nvidia_rt/L4T/kernel/dtb
+$ cp $TEGRA_KERNEL_OUT/arch/arm64/boot/dts/*.dtb $HOME/nvidia_rt/L4T/kernel/dtb
 $ cd $TEGRA_KERNEL_OUT/modules
 $ tar --owner root --group root -cjf kernel_supplements.tbz2 *
-$ cp $TEGRA_KERNEL_OUT/modules/kernel_supplements.tbz2 $HOME/nvidia/L4T/kernel/kernel_supplements.tbz2
-$ cd $HOME/nvidia
-$ tar -cjf $HOME/nvidia/L4T.tbz2 L4T
-$ scp $HOME/nvidia/L4T.tbz2 nvidia@JETSON_IP_ADDRESS:/home/nvidia
+$ cp $TEGRA_KERNEL_OUT/modules/kernel_supplements.tbz2 $HOME/nvidia_rt/L4T/kernel/kernel_supplements.tbz2
+$ cd $HOME/nvidia_rt
+$ tar -cjf $HOME/nvidia_rt/L4T.tbz2 L4T
+$ scp $HOME/nvidia_rt/L4T.tbz2 nvidia@JETSON_IP_ADDRESS:/home/nvidia
+
 ```
 
 ## [TARGET] Update Kernel and Drivers on Jetson Board
@@ -185,7 +215,8 @@ CONFIG_PREEMPT_LAZY=y
 # CONFIG_PREEMPT_RTB is not set
 CONFIG_PREEMPT_RT_FULL=y
 CONFIG_PREEMPT_COUNT=y
+# CONFIG_PREEMPTIRQ_EVENTS is not set
 # CONFIG_PREEMPT_TRACER is not set
 nvidia@tegra-ubuntu:~/devel/nvidia-jetson-rt$ uname -a
-Linux tegra-ubuntu 4.4.38-rt49-rt #1 SMP PREEMPT RT Fri Jan 5 01:04:27 +03 2018 aarch64 aarch64 aarch64 GNU/Linux
+Linux nvidia 4.9.140-rt93-rt #1 SMP PREEMPT RT Thu Aug 6 16:40:53 KST 2020 aarch64 aarch64 aarch64 GNU/Linux
 ```
