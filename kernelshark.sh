@@ -8,15 +8,15 @@ fi
 current_date=$(date "+%m.%d.%y")
 current_time=$(date "+%m.%d.%y-%H:%M:%S")
 
-if [ ! -d /home/rubis/experiment ] ; then
-	mkdir -p /home/rubis/experiment
+if [ ! -d $HOME/experiment ] ; then
+	mkdir -p $HOME/experiment
 fi
 
-if [ ! -d /home/rubis/experiment/$current_date ] ; then
-	mkdir -p /home/rubis/experiment/$current_date
+if [ ! -d $HOME/experiment/$current_date ] ; then
+	mkdir -p $HOME/experiment/$current_date
 fi
 
-cd /home/rubis/experiment/$current_date
+cd $HOME/experiment/$current_date
 trace-cmd record -e sched -F $1 $2
 mv trace.dat $current_time.dat
 kernelshark $current_time.dat
