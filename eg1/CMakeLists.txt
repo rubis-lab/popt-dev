@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.10)
 
 # project name / version
 project(EG1 VERSION 1.0)
@@ -12,15 +12,22 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O0")
 
+# no test for nlohmann
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+# no install
+set(JSON_Install OFF CACHE INTERNAL "")
+add_subdirectory(nlohmann_json)
+
 # pthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-# json
-find_package(nlohmann_json 3.2.0 REQUIRED)
-
 # headers
 include_directories(include)
+
+# json
+# find_package(nlohmann_json 2.1.1 REQUIRED)
+
 
 # source (manual)
 # set(SOURCES src/main.cpp src/sched_deadline.cpp)
