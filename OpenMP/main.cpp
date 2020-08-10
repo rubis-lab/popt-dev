@@ -1,3 +1,6 @@
+// g++ -fopenmp -o main main.cpp
+
+
 #include <iostream>
 #include <omp.h>
 
