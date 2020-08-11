@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import uic
-rtp_ui = uic.loadUiType('rtp.ui')[0]
+rtp_ui = uic.loadUiType('popt_dev/gui/rtp.ui')[0]
 
 
 class RTPFuncs(QMainWindow, rtp_ui):

@@ -1,5 +1,5 @@
 import sys
-from rtp_funcs import RTPFuncs
+from popt_dev.gui.rtp_funcs import RTPFuncs
 from PyQt5.QtWidgets import QApplication
 
 
