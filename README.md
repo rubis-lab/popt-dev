@@ -6,8 +6,31 @@
 
 ## Installation
 
+## popt-gui
+
 ```shell
 git clone --recurse-submodules https://github.com/upoque/popt-dev
 cd popt-dev
 pip3 install -e .
+```
+
+## rts shared library
+
+```shell
+cd rts
+mkdir build
+cd build
+cmake ..
+make
+```
+
+## eg1
+
+```shell
+cd eg1
+mkdir build
+cd build
+cmake ..
+make
+./EG1
 ```
