@@ -1,7 +1,5 @@
 {
-    "exp_name": "test1",
-    "scheduler": "GEDF",
-    "duration": 1000000,
+    "name": "ts1",
     "task_set": [
         {
             "name": "task-0",

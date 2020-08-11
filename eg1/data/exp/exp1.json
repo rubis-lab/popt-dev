@@ -1,0 +1,7 @@
+{
+    "exp_name": "exp1",
+    "scheduler": "GEDF",
+    "duration": 1000000,
+    "strategy": "custom",
+    "custom_option": [1, 2, 3, 4, 3, 2, 1]
+}
