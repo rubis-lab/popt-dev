@@ -3,3 +3,10 @@
 .json
 *build/
 .swp
+
+# python related
+*.pyc
+*.egg-info
+/.eggs/
+/dist/
+/build/
