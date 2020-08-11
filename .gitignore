@@ -3,6 +3,7 @@
 .json
 *build/
 .swp
+*Makefile
 
 # python related
 *.pyc
