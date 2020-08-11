@@ -1,9 +1,10 @@
 .DS_Store
 /.vscode/
-.json
+*.json
 *build/
 .swp
 *Makefile
+/data/
 
 # python related
 *.pyc
