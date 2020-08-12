@@ -1,5 +1,5 @@
 #include <iostream>
-#include <task.hpp>
+#include <rts/task.hpp>
 using namespace std;
 
 int main(int argc, char **argv) {
@@ -8,5 +8,6 @@ int main(int argc, char **argv) {
     //     return -1;
     // }
     cout << "(dev)" << endl;
+    rts::task_print(1);
     return 0;
 }
