@@ -1,7 +1,9 @@
 #include "task.hpp"
-using namespace std;
+namespace rts {
 
 int task_print(int n) {
-    cout << "task_print: " << n << endl;
+    std::cout << "task_print: " << n << std::endl;
     return 0;
+}
+
 }

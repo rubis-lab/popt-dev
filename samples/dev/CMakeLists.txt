@@ -12,12 +12,9 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O0")
 
-# pthread
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
 # headers
 include_directories(include)
+include_directories(/usr/local/include)
 
 # source (global)
 file(GLOB SOURCES "src/*.cpp")
@@ -26,4 +23,5 @@ file(GLOB SOURCES "src/*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # libraries
-target_link_libraries(${PROJECT_NAME} Threads::Threads)
+file(GLOB LIBRARIES "/usr/local/lib/librts*.dylib")
+target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
