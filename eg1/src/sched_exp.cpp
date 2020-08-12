@@ -1,4 +1,5 @@
 #include "sched_exp.hpp"
+#include "dummy_workload.hpp"
 #include <omp.h>
 using namespace std;
 using json = nlohmann::json;
@@ -46,19 +47,11 @@ bool SchedExp::run() {
     int numTask = task_set.size(); 
     vector<thread> thrs;
     for(int i(0); i < numTask; i ++){
-        int numThread = task_set.at(i).thr_set.size();
-        for(int j(0); j < numThread; j++){
-            thrs.push_back(thread(routine_deadline, task_set.at(i), j));
-        }
+        thrs.push_back(thread(work, 100, popt_vec.at(i)));
     }
     // 3. Release
-    for(int i(0); i < numTask; i++){
-        omp_set_dynamic(0);
-        omp_set_num_threads(thrs.size());
-        #pragma omp parallel
-        for(thread &t : thrs){
-            t.join();
-        }
+    for(thread &t : thrs){
+        t.join();
     }
     return true;
 }
