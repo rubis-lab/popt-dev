@@ -39,14 +39,15 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
-    PUBLIC_HEADER include/task.hpp)
+    PUBLIC_HEADER include/task.hpp
+    PUBLIC_HEADER include/task_set.hpp)
 
 configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
 target_include_directories(${PROJECT_NAME} PRIVATE .)
 
 # libraries
 # target_link_libraries(${PROJECT_NAME} Threads::Threads)
-# target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
 # Shared library
 install(TARGETS ${PROJECT_NAME}
