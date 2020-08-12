@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 # no install
 set(JSON_Install OFF CACHE INTERNAL "")
-# add_subdirectory(nlohmann_json)
+add_subdirectory(lib/nlohmann_json)
 
 # pthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -24,10 +24,6 @@ find_package(Threads REQUIRED)
 
 # headers
 include_directories(include)
-
-# json
-find_package(nlohmann_json REQUIRED)
-
 
 # source (manual)
 # set(SOURCES src/main.cpp src/sched_deadline.cpp)
@@ -41,7 +37,7 @@ file(GLOB SOURCES "src/*.cpp")
 add_library(${PROJECT_NAME} ${SOURCES})
 
 # libraries
-# target_link_libraries(${PROJECT_NAME} Threads::Threads)
+target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
 # Shared library

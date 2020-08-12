@@ -12,12 +12,6 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -fopenmp")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O0")
 
-# no test for nlohmann
-set(JSON_BuildTests OFF CACHE INTERNAL "")
-# no install
-set(JSON_Install OFF CACHE INTERNAL "")
-add_subdirectory(nlohmann_json)
-
 # pthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
