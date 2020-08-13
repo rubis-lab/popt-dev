@@ -10,7 +10,7 @@ class Thread : public Task::Task {
 public:
     int tid;
     Thread(int _tid);
-    void to_str();
+    std::string to_str();
 };
 
 }  // namespace rts

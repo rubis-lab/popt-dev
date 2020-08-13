@@ -10,7 +10,7 @@ class TaskSet {
 public:
     std::vector<Task> tasks;
     TaskSet();
-    void to_str();
+    std::string to_str();
     void from_json();
 };    
 

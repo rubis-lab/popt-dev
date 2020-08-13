@@ -16,11 +16,10 @@ class Pt {
     Pt();
     Pt(Task _base_task);
     ~Pt();
-
     //void parse_pt_config(std::string fname);
     void populate_ts_table();
     void populate_ts_table_custom(std::vector<std::vector<int>>);
-    void to_str();
+    std::string to_str();
 };
 
 }  // namespace rts

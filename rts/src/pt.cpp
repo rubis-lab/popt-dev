@@ -19,8 +19,8 @@ void Pt::populate_ts_table(){
 }
 
 
-void Pt::to_str(){
-    std::cout << id << "\n";
-    base_task.to_str(); 
+std::string Pt::to_str(){
+    return std::to_string(id) + "\t" + base_task.to_str();
 }
+
 }  // namespace rts

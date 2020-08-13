@@ -5,6 +5,7 @@
 #include "task_set.hpp"
 #include "thread.hpp"
 #include "pt.hpp"
+#include <vector>
 
 namespace rts{
 
@@ -21,7 +22,7 @@ public:
     Pts();
     void populate_pt_list();
     void serialize_pts();
-    void to_str();
+    std::string to_str();
     void from_json();
 };
 
