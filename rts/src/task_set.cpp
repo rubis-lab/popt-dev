@@ -1,10 +1,13 @@
-#include "task_set.hpp"
+#include "rts/task_set.hpp"
 using json = nlohmann::json;
 using namespace std;
 namespace rts {
-    TaskSet::TaskSet(string fname, vector<int> popt){
+    TaskSet::TaskSet(){
+        task_set_print();
+    }
+    
+    TaskSet::TaskSet(string fname, vector<int> popt): popt_vec(popt){
         parse_config(fname);
-        popt_vec = popt;
         task_set_print();
     }
 
@@ -26,16 +29,40 @@ namespace rts {
         }
     } 
 
-    int TaskSet::task_set_print() {
-        cout << "Experiment name: " << exp_name << endl;
-        // cout << "Task Set Length: " << task_list.size() << 
-        //     " Total Utilization: " << sum_task_util() << endl;
-        for(int i(0); i < task_list.size(); i++){
-            task_list.at(i).task_print();
+    void TaskSet::task_set_print() {
+        if(task_list.size() == 0){
+            cout << "TaskSet attributes not yet initialized" << endl;
+        } else {
+            cout << "Experiment name: " << exp_name << endl;
+            // cout << "Task Set Length: " << task_list.size() << 
+            //     " Total Utilization: " << sum_task_util() << endl;
+            for(int i(0); i < task_list.size(); i++){
+                task_list.at(i).task_print();
+            }
         }
     }
 
     vector<Task> TaskSet::get_task_list(){
         return task_list;
+    }
+
+    vector<int> TaskSet::get_popt_vec(){
+        return popt_vec;
+    }
+
+    void TaskSet::set_task_list(vector<Task> tl){
+        if(tl.size() == 0){
+            cout << "Task vector is empty; not intialized" << endl;
+        } else {
+            task_list = tl;
+        }
+    }
+    
+    void TaskSet::set_popt_vec(vector<int> pv){
+        if(pv.size() == 0){
+            cout << "P.opt vector is empty; not intialized" << endl;
+        } else {
+            popt_vec = pv;
+        }
     }
 }

@@ -5,13 +5,14 @@
 namespace rts {
     class Task {
     private:
-        int task_id = -1;
+        int task_id;
         int popt;
         int exec_time;
         int deadline;
         int period; 
     public:
         Task();
+        Task(int id, int pt, int ext, int dl, int prd);
         void task_print();
         void set_task_id(int id);
         void set_popt(int pt);

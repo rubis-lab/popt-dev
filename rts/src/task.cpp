@@ -1,14 +1,21 @@
-#include "task.hpp"
+#include "rts/task.hpp"
 using namespace std;
 namespace rts {
-    Task::Task(){
+    Task::Task(): task_id(-1) {
         task_print();
+    }
+
+    Task::Task(int id, int pt, int ext, int dl, int prd){
+        task_id = id;
+        popt = pt;
+        exec_time = ext;
+        deadline = dl;
+        period = prd;
     }
 
     void Task::task_print(){
         if(task_id == -1){
-            cout << "task does not exist; create task_set object first" 
-                << endl;
+            cout << "task does not exist; create task_set object first or initialize the attributes" << endl;
         } else {
             cout << task_id << "\t" << exec_time << "\t" << 
             deadline << "\t" << period << "\t" << popt<< endl;
