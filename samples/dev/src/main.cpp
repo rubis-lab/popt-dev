@@ -2,9 +2,13 @@
 #include <rts/task.hpp>
 #include <rts/thread.hpp>
 #include <rts/pt.hpp>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 using namespace std;
 
 int main(int argc, char **argv) {
+    spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
+
     rts::Task temp;
     rts::Task temp2;
     // temp.set_task_id(1);

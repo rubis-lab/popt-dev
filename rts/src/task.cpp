@@ -3,11 +3,14 @@
 namespace rts {
 int Task::_count = 0;
 Task::Task() {
+    spdlog::info("spdlog info test");
+    spdlog::warn("spdlog warn test");
     id = _count++;
     return;
 }
 
 Task::Task(std::map<std::string, double> _tattr) {
+    spdlog::info("spdlog info test");
     id = _count++;
     exec_time = _tattr["exec_time"];
     deadline = _tattr["deadline"];
