@@ -30,7 +30,7 @@ find_package(Threads REQUIRED)
 include_directories(include)
 include_directories(lib/nlohmann_json/include)
 include_directories(/usr/include/spdlog)
-include_directories(/usr/include/fmt)
+# include_directories(/usr/include/fmt)
 
 # source (manual)
 # set(SOURCES src/main.cpp src/sched_deadline.cpp)
@@ -52,7 +52,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         "include/task.hpp;include/task_set.hpp;include/thread.hpp;include/pt.hpp;include/tsutil.hpp;include/gfb.hpp;include/exp.hpp")
 
 target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libspdlog.so)
-target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libfmt.a)
+# target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libfmt.a)
 
 configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
 target_include_directories(${PROJECT_NAME} PRIVATE .)

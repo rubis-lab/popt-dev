@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "task.hpp"
+#include "task_set.hpp"
 
 namespace rts {
 class TaskSet {
