@@ -41,8 +41,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     SOVERSION 1
     PUBLIC_HEADER include/task.hpp
     PUBLIC_HEADER include/task_set.hpp
-    PUBLIC_HEADER include/thread.hpp
-    PUBLIC_HEADER include/pt.hpp)
+    PUBLIC_HEADER include/thread.hpp)
+    #PUBLIC_HEADER include/pt.hpp
     #PUBLIC_HEADER include/pts.hpp
 
 
