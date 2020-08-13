@@ -6,8 +6,8 @@ namespace rts {
         count++;
         base_task = Task(id, 0, 1, 2, 3);
         TaskSet temp;
-        //temp.get_task_list().push_back(base_task);
-        //ts_table.push_back(temp);
+        temp.get_task_list().push_back(base_task);
+        ts_table.push_back(temp);
         rts_print();
     }
 
@@ -18,8 +18,8 @@ namespace rts {
         Pt();
     }
 
-    void rts_print(){
-
+    void Pt::rts_print(){
+        std::cout << id << std::endl;
     }
 
 

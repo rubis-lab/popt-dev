@@ -2,7 +2,7 @@
 #define __THR_H__
 
 #include <iostream>
-#include "rts/task.hpp"
+#include "task.hpp"
 
 namespace rts{
     class Thread : public Task::Task{

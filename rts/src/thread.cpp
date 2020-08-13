@@ -1,6 +1,4 @@
-#include "rts/thread.hpp"
-
-using namespace std;
+#include "thread.hpp"
 
 namespace rts {
     Thread::Thread(int thr_id){
@@ -8,7 +6,7 @@ namespace rts {
         thread_print();
     }    
     void Thread::thread_print(){
-        cout << "Thread id: " << tid << "\t";
+        std::cout << "Thread id: " << tid << "\t";
         this->task_print();
     }
 }

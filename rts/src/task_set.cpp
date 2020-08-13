@@ -1,24 +1,24 @@
-#include "rts/task_set.hpp"
+#include "task_set.hpp"
 using json = nlohmann::json;
-using namespace std;
+
 namespace rts {
     TaskSet::TaskSet(){
         task_set_print();
     }
     
-    TaskSet::TaskSet(string fname, vector<int> popt): popt_vec(popt){
+    TaskSet::TaskSet(std::string fname, std::vector<int> popt): popt_vec(popt){
         parse_config(fname);
         task_set_print();
     }
 
-    void TaskSet::parse_config(string fname){
-        ifstream inputFile(fname);
+    void TaskSet::parse_config(std::string fname){
+        std::ifstream inputFile(fname);
         json json;
         inputFile >> json;
 
         exp_name = json["exp_name"];
         int num_task = json["task_set"].size();
-        for(int i(0); i < num_task; i ++){
+        for(size_t i(0); i < num_task; i ++){
             Task temp;
             temp.set_task_id(i);
             temp.set_popt(popt_vec.at(i));
@@ -31,36 +31,36 @@ namespace rts {
 
     void TaskSet::task_set_print() {
         if(task_list.size() == 0){
-            cout << "TaskSet attributes not yet initialized" << endl;
+            std::cout << "TaskSet attributes not yet initialized" << std::endl;
         } else {
-            cout << "Experiment name: " << exp_name << endl;
+            std::cout << "Experiment name: " << exp_name << std::endl;
             // cout << "Task Set Length: " << task_list.size() << 
             //     " Total Utilization: " << sum_task_util() << endl;
-            for(int i(0); i < task_list.size(); i++){
+            for(size_t i(0); i < task_list.size(); i++){
                 task_list.at(i).task_print();
             }
         }
     }
 
-    vector<Task> TaskSet::get_task_list(){
+    std::vector<Task> TaskSet::get_task_list(){
         return task_list;
     }
 
-    vector<int> TaskSet::get_popt_vec(){
+    std::vector<int> TaskSet::get_popt_vec(){
         return popt_vec;
     }
 
-    void TaskSet::set_task_list(vector<Task> tl){
+    void TaskSet::set_task_list(std::vector<Task> tl){
         if(tl.size() == 0){
-            cout << "Task vector is empty; not intialized" << endl;
+            std::cout << "Task vector is empty; not intialized" << std::endl;
         } else {
             task_list = tl;
         }
     }
     
-    void TaskSet::set_popt_vec(vector<int> pv){
+    void TaskSet::set_popt_vec(std::vector<int> pv){
         if(pv.size() == 0){
-            cout << "P.opt vector is empty; not intialized" << endl;
+            std::cout << "P.opt vector is empty; not intialized" << std::endl;
         } else {
             popt_vec = pv;
         }

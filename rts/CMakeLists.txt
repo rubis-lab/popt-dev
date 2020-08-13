@@ -42,8 +42,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     PUBLIC_HEADER include/task.hpp
     PUBLIC_HEADER include/task_set.hpp
     PUBLIC_HEADER include/thread.hpp
-    PUBLIC_HEADER include/pt.hpp
-    PUBLIC_HEADER include/pts.hpp)
+    PUBLIC_HEADER include/pt.hpp)
+    #PUBLIC_HEADER include/pts.hpp
 
 
 configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)

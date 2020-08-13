@@ -1,7 +1,7 @@
 #ifndef __PT_H__
 #define __PT_H__
-#include "rts/task.hpp"
-#include "rts/task_set.hpp"
+#include "task.hpp"
+#include "task_set.hpp"
 
 namespace rts{
     class Pt{
