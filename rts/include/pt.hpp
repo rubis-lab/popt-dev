@@ -17,7 +17,6 @@ public:
     Pt();
     Pt(Task _base_task);
     ~Pt();
-    //void parse_pt_config(std::string fname);
     void populate_ts_table();
     void populate_ts_table_custom(std::vector<std::vector<int>>);
     std::string to_str();
