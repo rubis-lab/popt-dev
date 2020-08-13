@@ -1,6 +1,6 @@
 #include "pts.hpp"
 
-namespace rts{
+namespace rts {
 int Pts::_pts_cnt = 0;
 
 Pts::Pts() {
@@ -65,23 +65,3 @@ void Pts::from_json(std::string _fname) {
 
 
 } // namespace rts
-
-
-
-// #include <iostream>
-// #include <fstream>
-// #include <nlohmann/json.hpp>
-
-// int main(void) {
-//     using json = nlohmann::json;
-
-//     std::ifstream ifs("ts1.json");
-
-//     // std::map<std::string, std::vector<int>> m = { {"a", {1, 2}}, {"b", {2, 3}} };
-//     json j = json::parse(ifs);
-//     std::cout << j << std::endl;
-//     std::cout << j["name"] << std::endl;
-//     std::cout << j["task_set"]<< std::endl;
-//     std::cout << j["task_set"][0]["deadline"]<< std::endl;
-//     return 0;
-// }

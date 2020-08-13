@@ -6,7 +6,7 @@
 
 namespace rts {
 
-class TSUtil{
+class TSUtil {
 public:    
     double calc_utilization(Task _t);
     double sum_utilization(TaskSet _ts);
