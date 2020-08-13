@@ -1,6 +1,6 @@
 #ifndef __PT_H__
 #define __PT_H__
-#include "task.hpp"
+
 #include "task_set.hpp"
 
 namespace rts{

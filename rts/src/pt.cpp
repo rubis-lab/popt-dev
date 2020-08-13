@@ -18,9 +18,16 @@ namespace rts {
         Pt();
     }
 
-    void Pt::rts_print(){
-        std::cout << id << std::endl;
+    void Pt::populate_ts_table_custom(){
+        
     }
 
+    void Pt::populate_ts_table(){
 
+    }
+    
+    void Pt::rts_print(){
+        std::cout << id << "\t" << max_opt << "\t"
+            << overhead << "\t" << variance << std::endl;
+    }
 }

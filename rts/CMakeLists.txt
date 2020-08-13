@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 # no test for nlohmann
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 # no install
-set(JSON_Install OFF CACHE INTERNAL "")
+#set(JSON_Install OFF CACHE INTERNAL "")
 add_subdirectory(lib/nlohmann_json)
 
 # pthread
@@ -24,7 +24,7 @@ find_package(Threads REQUIRED)
 
 # headers
 include_directories(include)
-
+include_directories(lib/nlohmann_json/include)
 # source (manual)
 # set(SOURCES src/main.cpp src/sched_deadline.cpp)
 # source (global)
