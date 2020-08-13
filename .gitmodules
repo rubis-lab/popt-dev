@@ -1,3 +1,6 @@
 [submodule "eg1/nlohmann_json"]
 	path = eg1/nlohmann_json
 	url = https://github.com/nlohmann/json.git
+[submodule "rts/lib/nlohmann_json"]
+	path = rts/lib/nlohmann_json
+	url = https://github.com/nlohmann/json
