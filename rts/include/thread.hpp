@@ -4,15 +4,14 @@
 #include <iostream>
 #include "task.hpp"
 
-namespace rts{
-    class Thread : public Task::Task{
-    private:
-        int tid;
-    public:
-        Thread(int thr_id);
-        int get_thr_id();
-        void thread_print();
-    };
-}
+namespace rts {
 
-#endif
+class Thread : public Task::Task {
+public:
+    int tid;
+    Thread(int _tid);
+    void to_str();
+};
+
+}  // namespace rts
+#endif  // __THR_H__

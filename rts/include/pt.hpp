@@ -3,26 +3,25 @@
 
 #include "task_set.hpp"
 #include "thread.hpp"
+#include <map>
+#include <vector>
 
-namespace rts{
-    class Pt{
-    private:
-        int id;
-        static int count;
-        int max_opt;
-        double overhead;
-        double variance;
-        Task base_task;
-        std::vector<TaskSet> ts_table;
-    public:
-        Pt();
-        ~Pt();
-        Pt(int max_opt, double overhead, double variance);
-        //void parse_pt_config(std::string fname);
-        void populate_ts_table();
-        void populate_ts_table_custom(std::vector<std::vector<int>>);
-        void pt_print();
-        void set_base_task(Task);
-    };
-}
-#endif
+namespace rts {
+
+class Pt {
+    int id;
+    std::map<int, std::vector<Thread>> tsdict;
+    static int _pt_cnt;
+    Task base_task;
+    Pt();
+    Pt(Task _base_task);
+    ~Pt();
+
+    //void parse_pt_config(std::string fname);
+    void populate_ts_table();
+    void populate_ts_table_custom(std::vector<std::vector<int>>);
+    void to_str();
+};
+
+}  // namespace rts
+#endif  // __PT_H__

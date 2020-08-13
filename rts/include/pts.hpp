@@ -7,29 +7,23 @@
 #include "pt.hpp"
 
 namespace rts{
-    class Pts{
-    private:
-        Pts::~Pts();
-        int max_opt;
-        double overhead;
-        double variance;
-        static int count;
-        int id;
-        std::string popt_strategy;
-        int popt_list[];
-        Task base_task;
-        TaskSet base_task_set;
-        std::vector<Pt> pt_list;
-        std::vector<Thread> pts_serialized;
-    public:
-        Pts::Pts();
-        void populate_pt_list();
-        void serialize_pts();
-        void pts_print();
-        void set_pts_item(Thread, int);
-        Thread get_pts_item(int);
-        void clear();
-    };
-}
 
-#endif
+class Pts{
+public:
+    ~Pts();
+    static int pts_cnt;
+    int id;
+    std::string popt_strategy;
+    std::vector<int> popt_list;
+    TaskSet base_ts;
+    std::vector<Pt> pt_list;
+    std::vector<Thread> pts_serialized;
+    Pts();
+    void populate_pt_list();
+    void serialize_pts();
+    void to_str();
+    void from_json();
+};
+
+}  // namespace rts
+#endif  // __PTS_H__
