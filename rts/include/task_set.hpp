@@ -10,8 +10,8 @@ class TaskSet {
 public:
     std::vector<Task> tasks;
     TaskSet();
+    void addtask(Task _task);
     std::string to_str();
-    void from_json();
 };    
 
 }  // namespace rts

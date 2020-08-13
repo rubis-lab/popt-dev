@@ -11,4 +11,8 @@ std::string TaskSet::to_str() {
         t+=tasks.at(i).to_str();
     }
 }
+
+void TaskSet::addtask(Task _task) {
+    tasks.push_back(_task);
+}
 }  // namespace rts
