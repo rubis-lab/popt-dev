@@ -43,7 +43,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
     PUBLIC_HEADER
-        "include/task.hpp;include/task_set.hpp;include/thread.hpp;include/pt.hpp;include/tsutil.hpp;include/gfb.hpp;include/exp.hpp")
+        "include/task.hpp;include/task_set.hpp;include/thread.hpp;include/pt.hpp;include/tsutil.hpp;include/gfb.hpp;include/exp.hpp;include/stat.hpp";)
 
 
 
@@ -54,7 +54,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE .)
 # target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
-target_link_libraries(${PROJECT_NAME} fmt::fmt-header-only)
+#target_link_libraries(${PROJECT_NAME} fmt::fmt-header-only)
 
 file(GLOB LIB_FMT_OSX "/usr/local/lib/libfmt.dylib")
 target_link_libraries(${PROJECT_NAME} ${LIB_FMT_OSX})
