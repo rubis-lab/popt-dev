@@ -3,9 +3,14 @@
 
 #include <iostream>
 #include <map>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 namespace rts {
 
 class Task {
+private: 
+    static int _count;
 public:
     int id;
     double exec_time;
@@ -13,7 +18,7 @@ public:
     double period;
     Task();
     Task(std::map<std::string, double> _tattr);
-    void to_str();
+    std::string to_str();
 };
 
 }  // namespace rts

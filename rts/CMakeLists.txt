@@ -18,9 +18,10 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 #set(JSON_Install OFF CACHE INTERNAL "")
 add_subdirectory(lib/nlohmann_json)
 
-# pthread
+# packages
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+find_package(spdlog REQUIRED)
 
 # headers
 include_directories(include)
@@ -29,6 +30,8 @@ include_directories(lib/nlohmann_json/include)
 # set(SOURCES src/main.cpp src/sched_deadline.cpp)
 # source (global)
 file(GLOB SOURCES "src/*.cpp")
+# osx(brew) headers
+# include_directories(/usr/local/Cellar)
 
 # executable
 # add_executable(${PROJECT_NAME} ${SOURCES})
@@ -49,6 +52,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE .)
 # libraries
 # target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} fmt::fmt-header-only)
+
+file(GLOB LIB_FMT_OSX "/usr/local/lib/libfmt.dylib")
+target_link_libraries(${PROJECT_NAME} ${LIB_FMT_OSX})
 
 # Shared library
 install(TARGETS ${PROJECT_NAME}

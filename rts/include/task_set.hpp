@@ -10,8 +10,8 @@ class TaskSet {
 public:
     std::vector<Task> tasks;
     TaskSet();
-    void to_str();
     void addtask(Task _task);
+    std::string to_str();
 };    
 
 }  // namespace rts

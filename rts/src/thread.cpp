@@ -6,8 +6,8 @@ Thread::Thread(int _tid) {
     to_str();
 }
 
-void Thread::to_str(){
-    std::cout << "Thread id: " << tid << "\t";
+std::string Thread::to_str(){
+    return std::to_string(tid) + "\t" + Task::to_str();
 }
 
 }  // namespace rts

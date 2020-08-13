@@ -6,13 +6,14 @@
 #include "pt.hpp"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <vector>
 
 namespace rts{
 
 class Pts{
 public:
     ~Pts();
-    static int pts_cnt;
+    static int _pts_cnt;
     int id;
     std::string popt_strategy;
     std::vector<int> popt_list;
@@ -22,7 +23,7 @@ public:
     Pts();
     void populate_pt_list();
     void serialize_pts();
-    void to_str();
+    std::string to_str();
     void from_json();
 };
 
