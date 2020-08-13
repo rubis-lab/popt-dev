@@ -8,9 +8,9 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-namespace rts{
+namespace rts {
 
-class Pts{
+class Pts {
 public:
     ~Pts();
     static int _pts_cnt;

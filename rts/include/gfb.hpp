@@ -5,14 +5,14 @@
 #include "pt.hpp"
 #include "tsutil.hpp"
 
-namespace rts{
+namespace rts {
 
-class Gfb{
+class Gfb {
 public:
     Gfb();
     int num_cores;
-    bool Gfb_schedulable(TaskSet _task_set);
-    bool Gfb_schedulable(Pt _para_task, std::vector<int> popt_list);
+    bool is_schedulable(TaskSet _task_set);
+    bool is_schedulable(Pt _para_task, std::vector<int> popt_list);
 };
 
 } // namespace rts

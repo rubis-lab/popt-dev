@@ -43,7 +43,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
     PUBLIC_HEADER
-        "include/task.hpp;include/task_set.hpp;include/thread.hpp;include/pt.hpp;include/tsutil.hpp;include/gfb.hpp")
+        "include/task.hpp;include/task_set.hpp;include/thread.hpp;include/pt.hpp;include/tsutil.hpp;include/gfb.hpp;include/exp.hpp")
 
 
 
