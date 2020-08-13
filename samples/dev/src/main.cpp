@@ -5,8 +5,8 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-    rts::Pt temp;
-    rts::Pt temp2;
+    rts::Task temp;
+    rts::Task temp2;
     // temp.set_task_id(1);
     // temp.set_popt(5);
     // temp.set_exec_time(10);

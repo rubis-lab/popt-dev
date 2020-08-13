@@ -9,6 +9,7 @@
 namespace rts {
 
 class Pt {
+public:
     int id;
     std::map<int, std::vector<Thread>> tsdict;
     static int _pt_cnt;

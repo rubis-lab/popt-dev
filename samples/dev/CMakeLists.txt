@@ -23,6 +23,6 @@ file(GLOB SOURCES "src/*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # libraries
-file(GLOB LIBRARIES_OSX "/usr/loca/lib/librts*.dylib")
+file(GLOB LIBRARIES_OSX "/usr/local/lib/librts*.dylib")
 file(GLOB LIBRARIES "/usr/local/lib/librts*.so")
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES} ${LIBRARIES_OSX})

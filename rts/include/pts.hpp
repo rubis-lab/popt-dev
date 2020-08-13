@@ -12,7 +12,7 @@ namespace rts{
 class Pts{
 public:
     ~Pts();
-    static int pts_cnt;
+    static int _pts_cnt;
     int id;
     std::string popt_strategy;
     std::vector<int> popt_list;

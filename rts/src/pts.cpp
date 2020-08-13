@@ -1,13 +1,14 @@
 #include "pts.hpp"
 
 namespace rts{
-
+int Pts::_pts_cnt = 0;
 
 Pts::Pts() {
+    id = _pts_cnt++;
 }
 
 Pts::~Pts(){
-    pts_cnt--;
+    _pts_cnt--;
 }
 
 void Pts::populate_pt_list()
