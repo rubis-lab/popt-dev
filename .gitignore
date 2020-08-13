@@ -12,3 +12,4 @@
 /.eggs/
 /dist/
 /build/
+.pylintrc
