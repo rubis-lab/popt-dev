@@ -79,7 +79,7 @@
      <string>make</string>
     </property>
    </widget>
-   <widget class="QTreeView" name="eg1_sample_cfg_treeview">
+   <widget class="QTreeView" name="eg1_ts_cfg_treeview">
     <property name="geometry">
      <rect>
       <x>30</x>

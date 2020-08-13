@@ -23,20 +23,20 @@ class RTPFuncs(QMainWindow, rtp_ui):
 
         self.check_sys()
 
-        # eg1_sample_cfg_treeview browser
-        eg1_sample_cfg_root_dir = os.path.join(self.data_dir, 'ts')
-        eg1_sample_cfg_filter = ['*.json']
-        self.eg1_sample_cfg_file_browser_model = QFileSystemModel()
-        self.eg1_sample_cfg_file_browser_model.setRootPath(
-            eg1_sample_cfg_root_dir)
-        self.eg1_sample_cfg_file_browser_model.setNameFilters(
-            eg1_sample_cfg_filter)
-        self.eg1_sample_cfg_treeview.setModel(
-            self.eg1_sample_cfg_file_browser_model)
-        self.eg1_sample_cfg_treeview.setRootIndex(
-            self.eg1_sample_cfg_file_browser_model.index(
-                eg1_sample_cfg_root_dir))
-        self.eg1_sample_cfg_treeview.setContextMenuPolicy(
+        # eg1_ts_cfg_treeview browser
+        eg1_ts_cfg_root_dir = os.path.join(self.data_dir, 'ts')
+        eg1_ts_cfg_filter = ['*.json']
+        self.eg1_ts_cfg_file_browser_model = QFileSystemModel()
+        self.eg1_ts_cfg_file_browser_model.setRootPath(
+            eg1_ts_cfg_root_dir)
+        self.eg1_ts_cfg_file_browser_model.setNameFilters(
+            eg1_ts_cfg_filter)
+        self.eg1_ts_cfg_treeview.setModel(
+            self.eg1_ts_cfg_file_browser_model)
+        self.eg1_ts_cfg_treeview.setRootIndex(
+            self.eg1_ts_cfg_file_browser_model.index(
+                eg1_ts_cfg_root_dir))
+        self.eg1_ts_cfg_treeview.setContextMenuPolicy(
             QtCore.Qt.CustomContextMenu)
 
         # eg1_exp_cfg_treeview browser
@@ -100,19 +100,19 @@ class RTPFuncs(QMainWindow, rtp_ui):
             return False
 
     def eg1_func(self):
-        index = self.eg1_sample_cfg_treeview.currentIndex()
-        eg1_sample_cfg_path = \
-            self.eg1_sample_cfg_file_browser_model.filePath(index)
-        self.log.info('selected: ' + str(eg1_sample_cfg_path))
-        if eg1_sample_cfg_path == '':
-            QMessageBox.information(self, 'Alarm', 'Select eg1_sample_cfg!')
+        index = self.eg1_ts_cfg_treeview.currentIndex()
+        eg1_ts_cfg_path = \
+            self.eg1_ts_cfg_file_browser_model.filePath(index)
+        self.log.info('selected: ' + str(eg1_ts_cfg_path))
+        if eg1_ts_cfg_path == '':
+            QMessageBox.information(self, 'Alarm', 'Select eg1_ts_cfg!')
             return False
 
         if not self.is_rt:
             self.log.info('cannot run in non-rt')
         if os.path.isfile(os.path.join(self.build_dir, self.target_name)):
             self.log.info('opening eg1.')
-            subprocess.Popen(['sudo', './EG1', str(eg1_sample_cfg_path)],
+            subprocess.Popen(['sudo', './EG1', str(eg1_ts_cfg_path)],
                 cwd=self.build_dir)
             return True
         else:
