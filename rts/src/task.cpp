@@ -2,7 +2,7 @@
 
 namespace rts {
     Task::Task(): task_id(-1) {
-        task_print();
+        //task_print();
     }
 
     Task::Task(int id, int pt, int ext, int dl, int prd){
@@ -14,6 +14,7 @@ namespace rts {
     }
 
     void Task::task_print(){
+        std::cout << "task_print()" << std::endl;
         if(task_id == -1){
             std::cout << "task does not exist; create task_set object first or initialize the attributes" << std::endl;
         } else {

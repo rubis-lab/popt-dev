@@ -3,12 +3,12 @@ using json = nlohmann::json;
 
 namespace rts {
     TaskSet::TaskSet(){
-        task_set_print();
+        //task_set_print();
     }
     
     TaskSet::TaskSet(std::string fname, std::vector<int> popt): popt_vec(popt){
-        parse_config(fname);
-        task_set_print();
+        // parse_config(fname);
+        // task_set_print();
     }
 
     void TaskSet::parse_config(std::string fname){
@@ -30,6 +30,7 @@ namespace rts {
     } 
 
     void TaskSet::task_set_print() {
+        std::cout << "task_set_print()" << std::endl;
         if(task_list.size() == 0){
             std::cout << "TaskSet attributes not yet initialized" << std::endl;
         } else {
