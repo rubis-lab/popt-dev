@@ -7,8 +7,7 @@
 
 namespace rts {
 
-class Gen {
-public:
+struct gen_attr {
     int num_task;
     double min_exec_time;
     double max_exec_time;
@@ -18,16 +17,19 @@ public:
     double max_period;
     int implicit_deadline;      //0: False, 1: True
     int constrained_deadline;   //0: False, 1: True
+};
 
+class Gen {
+public:
+    
+
+    gen_attr _gattr;
     Gen();
-    Gen(int _num_task, double _min_exec_time, double _max_exec_time,
-        double _min_deadline, double _max_deadline, double _min_period, double _max_period,
-        int _implicit_deadline, int _constrained_deadline);
-    ~Gen();
+    Gen(gen_attr gattr);
     std::string to_str();
     Task next_task();
     TaskSet next_task_set();
-    int get_random_number(int min, int max);
+    double get_random_number(double min, double max);
 };
 
 }  // namespace rts
