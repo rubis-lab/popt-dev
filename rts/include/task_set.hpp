@@ -11,7 +11,7 @@ public:
     std::vector<Task> tasks;
     TaskSet();
     void to_str();
-    void from_json();
+    void addtask(Task _task);
 };    
 
 }  // namespace rts

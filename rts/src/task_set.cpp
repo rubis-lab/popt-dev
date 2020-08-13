@@ -16,4 +16,8 @@ void TaskSet::to_str() {
         }
     }
 }
+
+void TaskSet::addtask(Task _task) {
+    tasks.push_back(_task);
+}
 }  // namespace rts
