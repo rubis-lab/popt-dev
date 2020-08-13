@@ -1,33 +1,26 @@
 #include "pt.hpp"
 
 namespace rts {
-    int Pt::count = 1;
-    Pt::Pt(): id(count), max_opt(1), overhead(0.0), variance(1.0) {        count ++;
-        count++;
-        base_task = Task(id, 0, 1, 2, 3);
-        TaskSet temp;
-        temp.get_task_list().push_back(base_task);
-        ts_table.push_back(temp);
-        rts_print();
-    }
+int Pt::_pt_cnt = 1;
 
-    Pt::Pt(int mopt, double ovhd, double var){
-        max_opt = mopt;
-        overhead = ovhd;
-        variance = var;
-        Pt();
-    }
-
-    void Pt::populate_ts_table_custom(){
-        
-    }
-
-    void Pt::populate_ts_table(){
-
-    }
-    
-    void Pt::rts_print(){
-        std::cout << id << "\t" << max_opt << "\t"
-            << overhead << "\t" << variance << std::endl;
-    }
+Pt::Pt() {
+    return;
 }
+Pt::Pt(Task _base_task) {
+    base_task = _base_task;
+}
+
+Pt::~Pt(){
+    _pt_cnt--;
+}
+
+void Pt::populate_ts_table(){
+    //TODO
+}
+
+
+void Pt::to_str(){
+    std::cout << id << "\n";
+    base_task.to_str(); 
+}
+}  // namespace rts

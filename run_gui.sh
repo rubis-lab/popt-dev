@@ -8,4 +8,4 @@
 #     python3 start.py $1
 #     exit
 # fi
-python3 popt_dev/gui/gui.py
+python3 pypopt/gui/gui.py

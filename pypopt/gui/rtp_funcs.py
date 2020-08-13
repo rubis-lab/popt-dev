@@ -2,8 +2,8 @@ from PyQt5.QtWidgets import QMessageBox, QFileSystemModel, QMainWindow
 from PyQt5 import uic, QtCore
 import subprocess
 import os
-from popt_dev.core.log import new_logger
-rtp_ui = uic.loadUiType('popt_dev/gui/rtp.ui')[0]
+from pypopt.core.log import new_logger
+rtp_ui = uic.loadUiType('pypopt/gui/rtp.ui')[0]
 
 
 class RTPFuncs(QMainWindow, rtp_ui):

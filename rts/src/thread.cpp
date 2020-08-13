@@ -1,12 +1,13 @@
 #include "thread.hpp"
 
 namespace rts {
-    Thread::Thread(int thr_id){
-        tid = thr_id;
-        thread_print();
-    }    
-    void Thread::thread_print(){
-        std::cout << "Thread id: " << tid << "\t";
-        this->task_print();
-    }
+Thread::Thread(int _tid) {
+    tid = _tid;
+    to_str();
 }
+
+void Thread::to_str(){
+    std::cout << "Thread id: " << tid << "\t";
+}
+
+}  // namespace rts
