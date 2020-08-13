@@ -5,6 +5,7 @@ int Pts::_pts_cnt = 0;
 
 Pts::Pts() {
     id = _pts_cnt++;
+    base_ts = TaskSet();
 }
 
 Pts::~Pts(){
@@ -27,30 +28,34 @@ std::string Pts::to_str(){
     return t;
 }
 
-void Pts::from_json() {
+void Pts::from_json(std::string _fname) {
     using json = nlohmann::json;
-    std::ifstream ifs("filename.json");
+    std::ifstream json_file(_fname);
     
-    json j = json::parse(ifs);
-    std::string tname = j["name"];
-    std::map<std::string, double> task_input;
+    json jf = json::parse(json_file);
+    std::string ts_name = jf["name"];
 
-    for(int i=0; i<j["task_set"]->size(); i++) { 
-        // j["task_set"][i] = { "name" : "", "options" : [], "deadline" : "", "period" : ""}
-        double temp_deadline = j["task_set"][i]["deadline"];
-        double temp_period = j["task_set"][i]["period"];
+    json ts_dict = jf["task_set"];
+    for(int i = 0; i < jf["task_set"].size(); i++) {
+        json task_info = jf["task_set"][i];
+        // task_info = 
+        //      { "name" : "", "options" : [], "deadline" : "", "period" : ""}
+        std::string t_name = task_info["name"];
+        double t_deadline = task_info["deadline"];
+        double t_period = task_info["period"];
 
-        for(int k=0; k<j["task_set"][i]["options"]->size(); k++]) {
-            //j["task_set"][i]["options"][k] =  { "option": 1, "runtimes": [100000] }
-            
-            for(int m=0; m<j["task_set"][i]["options"][k]["runtimes"]->size(); m++) {
-                //j["task_set"][i]["options"][k]["runtimes"][m] =  "33333 33335 33337"
-                task_input["deadline"] = j["task_set"][i]["deadline"];
-                task_input["period"] = j["task_set"][i]["period"];
-                task_input["exec_time"] = j["task_set"][i]["options"][k]["runtimes"][m];
-                Task temptask = Task(task_input);
-                base_ts.addtask(temptask);
-
+        for(int k = 0; k < task_info["options"].size(); k++) {
+            json thr_info = task_info["options"][k];
+            // thr_info = 
+            //      { "option": 1, "runtimes": [100000] }
+            for(int m = 0; m < thr_info["runtimes"].size(); m++) {
+                //thr_info["runtimes"][m] =  "33333 33335 33337"
+                std::map<std::string, double> tattr;
+                tattr["deadline"] = task_info["deadline"];
+                tattr["period"] = task_info["period"];
+                tattr["exec_time"] = thr_info["runtimes"][m];
+                Task t = Task(tattr);
+                base_ts.append(t);
             }
         }
     }

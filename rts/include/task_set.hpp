@@ -10,7 +10,7 @@ class TaskSet {
 public:
     std::vector<Task> tasks;
     TaskSet();
-    void addtask(Task _task);
+    void append(Task _task);
     std::string to_str();
 };    
 

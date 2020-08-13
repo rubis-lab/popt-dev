@@ -24,7 +24,7 @@ public:
     void populate_pt_list();
     void serialize_pts();
     std::string to_str();
-    void from_json();
+    void from_json(std::string _fname);
 };
 
 }  // namespace rts
