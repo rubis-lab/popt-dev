@@ -3,5 +3,16 @@
     "scheduler": "GEDF",
     "duration": 1000000,
     "strategy": "custom",
-    "custom_option": [1, 2, 3, 4, 3, 2, 1]
+    "custom_option": [1, 2, 3, 4, 3, 2, 1],
+    "generator": {
+    	"name": "default",
+    	"num_task": 4,
+    	"seed": 0,
+    	"min_exec_time": 10,
+    	"max_exec_time": 20,
+    	"min_deadline": 12,
+    	"max_deadline": 22,
+    	"implicit_deadline": 0,
+    	"contrained_deadline": 0
+    }
 }
