@@ -1,11 +1,13 @@
-#include <iostream>
+#include <rts/gen.hpp>
+#include <rts/gfb.hpp>
 #include <rts/task.hpp>
 #include <rts/task_set.hpp>
 #include <rts/thread.hpp>
 #include <rts/pt.hpp>
 #include <rts/pts.hpp>
 #include <rts/stat.hpp>
-#include <rts/gen.hpp>
+
+#include <iostream>
 #include "spdlog/spdlog.h"
 //#include "spdlog/sinks/basic_file_sink.h"
 using namespace std;
@@ -29,14 +31,20 @@ int main(int argc, char **argv) {
     rts::Gen gen(gattr);
     cout << gen.to_str() << endl;
 
+    // set GFB
+
+    rts::GFB gfb;
+    
+
 
     for(int iter = 0; iter < 10; iter++) {
         // generate task set
-        cout << "iter: " << iter << endl;
         rts::TaskSet ts = gen.next_task_set();
         cout << ts.to_str() << endl;
-        // apply schedulability test
 
+        // apply schedulability test
+        bool sched_gfb = gfb.is_schedulable(ts);
+        cout << sched_gfb << endl;
         // crunch output
     }
     return 0;

@@ -7,10 +7,11 @@
 
 namespace rts {
 
-class Gfb {
+class GFB {
 public:
-    Gfb();
+    GFB();
     int num_cores;
+    TSUtil tsutil;
     bool is_schedulable(TaskSet _task_set);
     bool is_schedulable(Pt _para_task, std::vector<int> popt_list);
 };
