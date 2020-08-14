@@ -1,4 +1,5 @@
 #include <rts/gen.hpp>
+#include <rts/egen.hpp>
 #include <rts/gfb.hpp>
 #include <rts/bcl.hpp>
 #include <rts/task.hpp>
@@ -21,8 +22,10 @@ int main(int argc, char **argv) {
     string j_in = "../data/exp/exp1.json";
     rts::Exp e(j_in);
     cout << e.to_str() << endl;
-    rts::Gen gen(e.gen_attr);
-    cout << gen.to_str() << endl;
+    // rts::Gen gen(e.gen_attr);
+    // cout << gen.to_str() << endl;
+    rts::Egen egen(e.gen_attr);
+    cout << egen.to_str() << endl;
     rts::GFB gfb(e.sched_test_attr);
     cout << gfb.to_str() << endl;
     rts::BCL bcl(e.sched_test_attr);
@@ -36,7 +39,8 @@ int main(int argc, char **argv) {
 
     for(int iter = 0; iter < e.iteration; iter++) {
         // generate task set
-        rts::TaskSet ts = gen.next_task_set();
+        // rts::TaskSet ts = gen.next_task_set();
+        rts::TaskSet ts = egen.next_task_set();
         double sum_util = tsu.sum_utilization(ts);
 
         // apply schedulability test
