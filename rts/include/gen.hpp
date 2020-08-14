@@ -1,14 +1,16 @@
 #ifndef __GEN_H__
 #define __GEN_H__
 
+#include "task.hpp"
 #include "task_set.hpp"
 #include <cstdlib>
-#include <random>
+#include <string>
 
 namespace rts {
 
 struct gen_attr {
     int num_task;
+    unsigned int seed;
     double min_exec_time;
     double max_exec_time;
     double min_deadline;
@@ -21,15 +23,13 @@ struct gen_attr {
 
 class Gen {
 public:
-    
-
     gen_attr _gattr;
     Gen();
     Gen(gen_attr gattr);
     std::string to_str();
     Task next_task();
     TaskSet next_task_set();
-    double get_random_number(double min, double max);
+    double frand(double min, double max);
 };
 
 }  // namespace rts

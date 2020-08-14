@@ -1,10 +1,8 @@
 #ifndef __TASK_H__
 #define __TASK_H__
 
-#include <iostream>
 #include <map>
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
+#include <string>
 
 namespace rts {
 
