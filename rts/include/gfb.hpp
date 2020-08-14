@@ -2,7 +2,7 @@
 #define __GFB_H__
 
 #include "task_set.hpp"
-#include "pt.hpp"
+#include "pts.hpp"
 #include "tsutil.hpp"
 #include <nlohmann/json.hpp>
 
@@ -16,7 +16,7 @@ public:
     GFB(nlohmann::json _js);
     std::string to_str();
     bool is_schedulable(TaskSet _task_set);
-    bool is_schedulable(Pt _para_task, std::vector<int> popt_list);
+    bool is_schedulable(Pts _para_tasks);
 };
 
 } // namespace rts

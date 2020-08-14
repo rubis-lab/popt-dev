@@ -25,11 +25,11 @@ std::string Stat::to_str() {
     return ret;
 }
 
-int Stat::conv_idx(double _x){
+int Stat::conv_idx(double _x) {
     return (int)(floor((_x - x_min)/x_inc));
 }
 
-void Stat::add(double _x, bool _sched){
+void Stat::add(double _x, bool _sched) {
     unsigned int x_idx = conv_idx(_x);
     if(x_idx < x_size) {
         raw_data[x_idx].num_tot += 1;
@@ -42,7 +42,7 @@ void Stat::add(double _x, bool _sched){
     return;
 }
 
-void Stat::normalize(){
+void Stat::normalize() {
     normalized_data.clear();
     for(unsigned int i = 0; i < x_size; i ++) {
         if(raw_data[i].num_tot == 0) {
@@ -61,11 +61,11 @@ void Stat::normalize(){
 //     }
 // }
 
-std::string Stat::crunch_minimal(){
+std::string Stat::crunch_minimal() {
     normalize();
     std::string ret;
     for(unsigned int i = 0; i < x_size; i++){
-        ret +=  std::to_string(normalized_data[i]) + "\n";
+        ret += std::to_string(normalized_data[i]) + "\n";
     }
     return ret;
 }

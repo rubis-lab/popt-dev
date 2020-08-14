@@ -23,13 +23,11 @@ bool GFB::is_schedulable(TaskSet _ts){
     return tot_density <= rhs;
 }
 
-bool GFB::is_schedulable(Pt _para_task, std::vector<int> popt_list){
-    TaskSet ts;
-    for(size_t i(0); i < popt_list.size(); i ++){
-        std::vector<Thread> temp = _para_task.tsdict.at(popt_list.at(i));
-        ts.tasks.insert(ts.tasks.end(), temp.begin(), temp.end());
-    }
-    return is_schedulable(ts);
+bool GFB::is_schedulable(Pts _para_tasks){
+    TaskSet temp;
+    temp.tasks.assign(_para_tasks.pts_serialized.begin(), _para_tasks.pts_serialized.end());
+    is_schedulable(temp);
+    return false;
 }
 
 }  // namespace rts

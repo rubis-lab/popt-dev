@@ -8,7 +8,7 @@ TaskSet::TaskSet() {
 
 std::string TaskSet::to_str() {
     std::string ret;
-    for(unsigned int i = 0; i < tasks.size(); i++) {
+    for(size_t i = 0; i < tasks.size(); i++) {
         ret += tasks[i].to_str() + '\n';
     }
     return ret;

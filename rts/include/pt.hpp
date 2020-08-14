@@ -2,6 +2,7 @@
 #define __PT_H__
 
 #include "task_set.hpp"
+#include "task.hpp"
 #include "thread.hpp"
 #include <map>
 #include <vector>
@@ -11,14 +12,14 @@ namespace rts {
 class Pt {
 public:
     int id;
+    int max_opt;
     std::map<int, std::vector<Thread>> tsdict;
     static int _pt_cnt;
     Task base_task;
     Pt();
     Pt(Task _base_task);
     ~Pt();
-    void populate_ts_table();
-    void populate_ts_table_custom(std::vector<std::vector<int>>);
+    void populate_ts_dict();
     std::string to_str();
 };
 

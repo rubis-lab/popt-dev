@@ -17,6 +17,8 @@ public:
     Task();
     Task(std::map<std::string, double> _tattr);
     std::string to_str();
+    bool operator==(const Task&);
+    bool operator!=(const Task&);
 };
 
 }  // namespace rts

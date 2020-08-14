@@ -3,6 +3,7 @@
 
 #include "task.hpp"
 #include "task_set.hpp"
+#include <math.h>
 
 namespace rts {
 
@@ -14,7 +15,7 @@ public:
     double sum_density(TaskSet _ts);
     double max_utilization(TaskSet _ts);
     double max_density(TaskSet _ts);
-    //TODO ~ workload funcs
+    double workload_in_interval_edf(Task _t, double _interval);
 };
 
 } // namespace rts
