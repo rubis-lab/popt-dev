@@ -15,17 +15,14 @@ using namespace std;
 
 int main(int argc, char **argv) {
     spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^-%L-%$] [thread %t] %v");
+
     string j_in = "../data/exp/exp1.json";
-    rts::Exp e(j_in);    
+    rts::Exp e(j_in);
+    cout << e.to_str() << endl;
     rts::Gen gen(e.gen_attr);
     cout << gen.to_str() << endl;
-
-    // set GFB
-    return 0;
-
-    rts::GFB gfb;
-    
-
+    rts::GFB gfb(e.sched_test_attr);
+    cout << gfb.to_str() << endl;
 
     for(int iter = 0; iter < 10; iter++) {
         // generate task set

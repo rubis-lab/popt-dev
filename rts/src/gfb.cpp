@@ -1,14 +1,25 @@
 #include "gfb.hpp"
 
 namespace rts{
-GFB::GFB(): num_cores(4){
+GFB::GFB() {
+    return;
+}
 
+GFB::GFB(nlohmann::json _js) {
+    num_core = _js["num_core"];
+    return;
+}
+
+std::string GFB::to_str() {
+    std::string ret;
+    ret += "num_core = " + std::to_string(num_core) + "\n";
+    return ret;
 }
 
 bool GFB::is_schedulable(TaskSet _ts){
     double max_density = tsutil.max_density(_ts);
     double tot_density = tsutil.sum_utilization(_ts);
-    double rhs = num_cores * (1 - max_density) + max_density;
+    double rhs = num_core * (1 - max_density) + max_density;
     return tot_density <= rhs;
 }
 
