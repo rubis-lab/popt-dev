@@ -13,7 +13,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O0")
 
 # packages
-find_package(spdlog REQUIRED)
+if(APPLE)
+    find_package(spdlog REQUIRED)
+endif()
 
 # headers
 include_directories(include)
@@ -26,12 +28,18 @@ file(GLOB SOURCES "src/*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # libraries
-file(GLOB LIBRARIES_OSX "/usr/local/lib/librts*.dylib")
-file(GLOB LIBRARIES "/usr/local/lib/librts*.so")
-target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ${LIBRARIES_OSX})
+if(APPLE)
+    file(GLOB LIBRARIES_OSX "/usr/local/lib/librts*.dylib")
+    target_link_libraries(${PROJECT_NAME} ${LIBRARIES_OSX})
+    target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+    file(GLOB LIB_FMT_OSX "/usr/local/lib/libfmt.dylib")
+    target_link_libraries(${PROJECT_NAME} ${LIB_FMT_OSX})
+endif()
+if(UNIX AND NOT APPLE)
+    file(GLOB LIBRARIES "/usr/local/lib/librts*.so")
+    target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
+endif()
 
-target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
 
-file(GLOB LIB_FMT_OSX "/usr/local/lib/libfmt.dylib")
-target_link_libraries(${PROJECT_NAME} ${LIB_FMT_OSX})
+
+

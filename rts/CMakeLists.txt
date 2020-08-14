@@ -21,13 +21,17 @@ add_subdirectory(lib/nlohmann_json)
 # packages
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-find_package(spdlog REQUIRED)
+if(APPLE)
+    find_package(spdlog REQUIRED)
+endif()
 
 
 # headers
 include_directories(include)
 include_directories(lib/nlohmann_json/include)
-include_directories(/usr/include/spdlog)
+if(UNIX AND NOT APPLE)
+    include_directories(/usr/include/spdlog)
+endif()
 # include_directories(/usr/include/fmt)
 
 # source (manual)
@@ -59,11 +63,15 @@ target_include_directories(${PROJECT_NAME} PRIVATE .)
 # target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
-target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+if(APPLE)
+    target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+endif()
 # target_link_libraries(${PROJECT_NAME} fmt::fmt-header-only)
 
-file(GLOB LIB_FMT_OSX "/usr/local/lib/libfmt.dylib")
-target_link_libraries(${PROJECT_NAME} ${LIB_FMT_OSX})
+if(APPLE)
+    file(GLOB LIB_FMT_OSX "/usr/local/lib/libfmt.dylib")
+    target_link_libraries(${PROJECT_NAME} ${LIB_FMT_OSX})
+endif()
 
 # Shared library
 install(TARGETS ${PROJECT_NAME}
