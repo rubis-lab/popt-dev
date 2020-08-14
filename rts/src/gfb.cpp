@@ -5,20 +5,18 @@ GFB::GFB(): num_cores(4){
 
 }
 
-bool GFB::is_schedulable(TaskSet _ts){
-    double max_density = tsutil.max_density(_ts);
-    double tot_density = tsutil.sum_utilization(_ts);
-    double rhs = num_cores * (1 - max_density) + max_density;
-    return tot_density <= rhs;
+bool GFB::is_schedulable(TaskSet _task_set){
+    TSUtil tsutil;
+    double max_density = tsutil.max_density(_task_set);
+    double tot_density = tsutil.sum_utilization(_task_set);
+    return tot_density <= (num_cores*(1-max_density) + max_density);
 }
 
-bool GFB::is_schedulable(Pt _para_task, std::vector<int> popt_list){
-    TaskSet ts;
-    for(size_t i(0); i < popt_list.size(); i ++){
-        std::vector<Thread> temp = _para_task.tsdict.at(popt_list.at(i));
-        ts.tasks.insert(ts.tasks.end(), temp.begin(), temp.end());
-    }
-    return is_schedulable(ts);
+bool GFB::is_schedulable(Pts _para_tasks){
+    TaskSet temp;
+    temp.tasks.assign(_para_tasks.pts_serialized.begin(), _para_tasks.pts_serialized.end());
+    is_schedulable(temp);
+    return false;
 }
 
 }  // namespace rts
