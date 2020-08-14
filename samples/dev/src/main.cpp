@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         gfb_st.add(sum_util, sched_gfb);
 
         bool sched_bcl = bcl.is_schedulable(ts);
-        bcl_st.add(sum_util, sched_gfb);
+        bcl_st.add(sum_util, sched_bcl);
     }
 
     // crunch output

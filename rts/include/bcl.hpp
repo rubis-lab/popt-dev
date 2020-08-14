@@ -13,8 +13,8 @@ public:
     BCL(nlohmann::json _js);
     std::string to_str();
     double calc_interference(Task _base_task, Task _inter_task);
-    double sum_interference(TaskSet _ts, Task _base_task, int _num_core);
-    bool is_schedulable(TaskSet _ts, int _num_cores);
+    double sum_interference(TaskSet _ts, Task _base_task);
+    bool is_schedulable(TaskSet _ts);
 };
 
 }  // namespace rts
