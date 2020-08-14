@@ -26,4 +26,18 @@ std::string Task::to_str() {
     ret += std::to_string(period);
     return ret;
 }
+
+bool Task::operator==(const Task& other){
+    if(id == other.id && exec_time == other.exec_time &&
+        deadline == other.deadline && period == other.period){
+            return true;
+        } else {
+            return false;
+        }
+}
+
+bool Task::operator!=(const Task& other){
+    return !(*this == other);
+}
+
 }  // namespace rts
