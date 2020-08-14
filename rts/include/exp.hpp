@@ -12,6 +12,7 @@ public:
     int iteration;
     nlohmann::json gen_attr;
     nlohmann::json sched_test_attr;
+    nlohmann::json stat_attr;
     Exp();
     Exp(std::string _fname);
     std::string to_str();

@@ -14,6 +14,7 @@ Exp::Exp(std::string _fname) {
     iteration = jf["iteration"];
     gen_attr = jf["generator"];
     sched_test_attr = jf["sched_test"];
+    stat_attr = jf["stat"];
     return;
 }
 

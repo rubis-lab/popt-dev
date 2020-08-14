@@ -1,31 +1,35 @@
 #ifndef __STAT_H__
 #define __STAT_H__
 
-#include <math.h>
-#include <iomanip>
-#include <iostream>
 #include "task.hpp"
 #include "task_set.hpp"
-namespace rts{
+#include <math.h>
+#include <iomanip>
+#include <nlohmann/json.hpp>
+#include "spdlog/spdlog.h"
+namespace rts {
 
-class Stat{
+class Stat {
 public:
+    struct sched_data {
+        int num_tot;
+        int num_sched;
+    };
+    double x_min;
+    double x_max;
+    double x_inc;
+    unsigned int x_size;
+    std::vector<sched_data> raw_data;
+    std::vector<double> normalized_data;
     Stat();
-    Stat(TaskSet _ts);
-    double min;
-    double max;
-    double inc;
-    int size;
-    std::vector<Task> _tasks;
-    std::vector<std::tuple<int, int>> raw_data;
-    std::vector<double> norm_data;
+    Stat(nlohmann::json _js);
+    std::string to_str();
     int conv_idx(double _idx);
     void add(double _idx, bool _data);
     void normalize();
-    std::string to_str();
-    void print_short();
-    void print_minimal();
+    // void print_short();
+    std::string crunch_minimal();
 };
 
-} //namespace rts
-#endif // __STAT_H__
+}  //namespace rts
+#endif  // __STAT_H__
