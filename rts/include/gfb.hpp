@@ -4,6 +4,7 @@
 #include "task_set.hpp"
 #include "pts.hpp"
 #include "tsutil.hpp"
+#include <string>
 #include <nlohmann/json.hpp>
 
 namespace rts {
