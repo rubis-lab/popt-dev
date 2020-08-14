@@ -6,6 +6,7 @@
 #include <rts/pt.hpp>
 #include <rts/pts.hpp>
 #include <rts/stat.hpp>
+#include <rts/exp.hpp>
 
 #include <iostream>
 #include "spdlog/spdlog.h"
@@ -14,28 +15,14 @@ using namespace std;
 
 int main(int argc, char **argv) {
     spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^-%L-%$] [thread %t] %v");
-    
-    // set generator
-    rts::gen_attr gattr;
-    gattr.num_task = 4;
-    gattr.seed = 0;
-    gattr.min_exec_time = 10.0;
-    gattr.max_exec_time = 20.0;
-    gattr.min_deadline = 12.0;
-    gattr.max_deadline = 22.0;
-    gattr.min_period = 14.0;
-    gattr.max_period = 24.0;
-    gattr.implicit_deadline = 0;
-    gattr.constrained_deadline = 0;
 
-    rts::Gen gen(gattr);
+    string j_in = "../data/exp/exp1.json";
+    rts::Exp e(j_in);
+    cout << e.to_str() << endl;
+    rts::Gen gen(e.gen_attr);
     cout << gen.to_str() << endl;
-
-    // set GFB
-
-    rts::GFB gfb;
-    
-
+    rts::GFB gfb(e.sched_test_attr);
+    cout << gfb.to_str() << endl;
 
     for(int iter = 0; iter < 10; iter++) {
         // generate task set

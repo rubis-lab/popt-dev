@@ -9,10 +9,19 @@ Exp::Exp(std::string _fname) {
     using json = nlohmann::json;
     std::ifstream json_file(_fname);
     json jf = json::parse(json_file);
-    std::string name = jf["name"];
-    std::string scheduler = jf["scheduler"];
-    std::string iteration = jf["iteration"];
+    name = jf["name"];
+    scheduler = jf["scheduler"];
+    iteration = jf["iteration"];
+    gen_attr = jf["generator"];
+    sched_test_attr = jf["sched_test"];
     return;
 }
 
+std::string Exp::to_str() {
+    std::string ret;
+    ret += "name = " + name + "\n";
+    ret += "scheduler = " + scheduler + "\n";
+    ret += "iteration = " + std::to_string(iteration) + "\n";
+    return ret;
+}
 }  // namespace rts

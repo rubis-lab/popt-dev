@@ -4,11 +4,15 @@
 #include "task.hpp"
 #include "task_set.hpp"
 #include <cstdlib>
+#include <cmath>
+#include <ctime>
 #include <string>
+#include <nlohmann/json.hpp>
 
 namespace rts {
 
-struct gen_attr {
+class Gen {
+public:
     int num_task;
     unsigned int seed;
     double min_exec_time;
@@ -19,17 +23,12 @@ struct gen_attr {
     double max_period;
     int implicit_deadline;      //0: False, 1: True
     int constrained_deadline;   //0: False, 1: True
-};
-
-class Gen {
-public:
-    gen_attr _gattr;
     Gen();
-    Gen(gen_attr gattr);
+    Gen(nlohmann::json _js);
     std::string to_str();
     Task next_task();
     TaskSet next_task_set();
-    double frand(double min, double max);
+    double frand(double _min, double _max);
 };
 
 }  // namespace rts
