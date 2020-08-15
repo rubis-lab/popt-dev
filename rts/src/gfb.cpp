@@ -18,7 +18,7 @@ std::string GFB::to_str() {
 
 bool GFB::is_schedulable(TaskSet _ts){
     double max_density = tsutil.max_density(_ts);
-    double tot_density = tsutil.sum_utilization(_ts);
+    double tot_density = tsutil.sum_density(_ts);
     double rhs = num_core * (1 - max_density) + max_density;
     return tot_density <= rhs;
 }
