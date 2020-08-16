@@ -3,12 +3,11 @@
 
 #include "gen.hpp"
 #include "tsutil.hpp"
-#include <iostream>
 #include <nlohmann/json.hpp>
 #include "spdlog/spdlog.h"
 
 namespace rts {
-class Egen : public Gen::Gen{
+class Egen : public Gen::Gen {
 public:
     int utilization_overflow;  // 1: True 0: False
     int last_id;
