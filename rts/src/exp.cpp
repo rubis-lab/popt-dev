@@ -9,13 +9,27 @@ Exp::Exp(std::string _fname) {
     using json = nlohmann::json;
     std::ifstream json_file(_fname);
     json jf = json::parse(json_file);
-    name = jf["name"];
-    scheduler = jf["scheduler"];
-    iteration = jf["iteration"];
-    gen_attr = jf["generator"];
-    sched_test_attr = jf["sched_test"];
-    stat_attr = jf["stat"];
-    para_attr = jf["para"];
+    if(jf.contains("name")) {
+        name = jf["name"];
+    }
+    if(jf.contains("scheduler")) {
+        scheduler = jf["scheduler"];
+    }
+    if(jf.contains("iteration")) {
+        iteration = jf["iteration"];
+    }
+    if(jf.contains("generator")) {
+        gen_attr = jf["generator"];
+    }
+    if(jf.contains("sched_test")) {
+        sched_test_attr = jf["sched_test"];
+    }
+    if(jf.contains("stat")) {
+        stat_attr = jf["stat"];
+    }
+    if(jf.contains("para")) {
+        para_attr = jf["para"];
+    }
     return;
 }
 

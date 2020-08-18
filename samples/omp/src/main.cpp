@@ -1,5 +1,6 @@
+#include "sched_core.hpp"
+#include <rts/exp.hpp>
 #include <iostream>
-#include "sched_exp.hpp"
 using namespace std;
 
 int main(int argc, char **argv) {
@@ -9,8 +10,9 @@ int main(int argc, char **argv) {
     }
     cout << "main thread id: " << gettid() << endl;
 
-    SchedExp se(argv[1], argv[2]);
-    se.run();
+    rts::Exp e(argv[1]);
+    cout << e.to_str() << endl;
+
     cout << "main dies: " << gettid() << endl;
     return 0;
 }

@@ -16,12 +16,11 @@ private:
     int num_task;
     std::string popt;
     std::vector<int> popt_vec;
-    std::string fileName; 
     std::vector<std::thread> thread_set;
     std::vector<task_arg> task_set;
     void parse_config(std::string fname);
 public:
-    SchedExp(std::string fname, std::vector<int> popt);
+    SchedExp(std::string _exp_cfg_file, std::string _ts_cfg_file);
     bool run();
 };
 #endif

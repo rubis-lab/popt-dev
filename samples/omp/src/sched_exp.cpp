@@ -4,21 +4,21 @@
 using namespace std;
 using json = nlohmann::json;
 
-SchedExp::SchedExp(string fname, vector<int> popt) {
-    fileName = fname;
+SchedExp::SchedExp(string _exp_cfg_file, string _ts_cfg_file) {
+    fileName = exp_cfg_file;
     popt_vec = popt;
     parse_config(fileName);
 }
 
-void SchedExp::parse_config(string fname) {
-    ifstream inputFile(fname);
+void SchedExp::parse_config(string exp_cfg_file) {
+    ifstream inputFile(exp_cfg_file);
     json json;
     inputFile >> json;
     exp_name = json["exp_name"];
     num_task = json["task_set"].size();
     
 
-    for(int i(0); i < num_task; i++){
+    for(int i(0); i < num_task; i++) {
         // Initialize task-specific arguments
         struct task_arg temp;
         temp.option = popt_vec.at(i);
