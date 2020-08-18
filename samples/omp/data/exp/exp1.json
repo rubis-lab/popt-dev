@@ -1,0 +1,8 @@
+{
+    "name": "exp1",
+    "scheduler": "GEDF",
+    "iteration": 10000,
+    "para": {
+        "max_opt": 4
+    }
+}
