@@ -21,14 +21,14 @@ void Cho::create_tolerance_table(Pts _pts) {
     tolerance_table.clear();
     unsigned int num_task = _pts.base_ts.tasks.size();
     for(unsigned int i = 0; i < num_task; i++) {
-        std::unordered_map<int, double> thr_tolerance;
+        std::unordered_map<unsigned int, double> thr_tolerance;
         for(unsigned int j = 1; j <= (unsigned int) max_opt; j++) {
             // only need to calculate once with thread of longest exec_time
             Thread thr = _pts.pt_list[i].tsdict[j][0];
             // calculate d - c for the first thread
             double lax = thr.deadline - thr.exec_time;
             // populate laxity dictionary 
-            thr_tolerance.insert(std::pair<int,double>(j, lax));
+            thr_tolerance.insert(std::pair<unsigned int,double>(j, lax));
         }
         tolerance_table.push_back(thr_tolerance);
     }
@@ -43,7 +43,7 @@ bool Cho::is_schedulable(Pts _pts) {
     int num_task = _pts.pts_serialized.size();
     // popt starts with 1
     std::vector<int> selected_opt;
-    for(unsigned int i(0); i < (unsigned int) num_task; i++){
+    for(unsigned int i= 0; i < (unsigned int) num_task; i++){
         selected_opt.push_back(1);
     }
     
@@ -68,7 +68,7 @@ bool Cho::is_schedulable(Pts _pts) {
 
         std::vector<int> selected_opt_copy(selected_opt);
         // Increment popt
-        for(unsigned int i(0); i < (unsigned int) num_task; i++){
+        for(unsigned int i = 0; i < (unsigned int) num_task; i++){
             while(selected_opt.at(i) < max_opt){
                 if(i_sum_list.at(i) > tolerance_table.at(i)[selected_opt.at(i)] + 0.1){
                     selected_opt.at(i) += 1;

@@ -16,7 +16,7 @@ public:
     int num_core;
     int max_opt;
     TSUtil tsutil;
-    std::vector<std::unordered_map<int, double>> tolerance_table;
+    std::vector<std::unordered_map<unsigned int, double>> tolerance_table;
     Cho();
     Cho(int _max_opt, nlohmann::json _js);
     void create_tolerance_table(Pts _pts);
