@@ -15,10 +15,10 @@ public:
     int num_core;
     int max_opt;
     TSUtil tsutil;
-    std::vector<std::vector<double>> ip_table;
+    std::vector<std::vector<double>> tolerance_table;
     Cho();
     Cho(nlohmann::json _js);
-    void create_ip_table(Pts _pts);
+    void create_tolerance_table(Pts _pts);
     bool is_schedulable(Pts _pts);
     std::string to_str();
 };

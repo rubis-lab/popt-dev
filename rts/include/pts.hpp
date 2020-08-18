@@ -4,25 +4,28 @@
 #include "task_set.hpp"
 #include "thread.hpp"
 #include "pt.hpp"
-#include "spdlog/spdlog.h"
 #include <fstream>
-#include <nlohmann/json.hpp>
 #include <vector>
+#include <nlohmann/json.hpp>
+#include "spdlog/spdlog.h"
 
 namespace rts {
 
 class Pts {
 public:
-    ~Pts();
-    static int _pts_cnt;
     int id;
+    static int _pts_cnt;
     int max_opt;
+    TaskSet base_ts;
+
     std::string popt_strategy;
     std::vector<int> popt_list;
-    TaskSet base_ts;
+
     std::vector<Pt> pt_list;
     std::vector<Thread> pts_serialized;
     Pts();
+    ~Pts();
+    Pts(int _max_opt, TaskSet _base_ts);
     void populate_pt_list();
     void serialize_pts();
     std::string to_str();

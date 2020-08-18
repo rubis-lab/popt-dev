@@ -6,10 +6,10 @@
 #include <rts/stat.hpp>
 #include <rts/exp.hpp>
 #include <rts/cho.hpp>
-
 #include <iostream>
 #include "spdlog/spdlog.h"
 //#include "spdlog/sinks/basic_file_sink.h"
+#include <nlohmann/json.hpp>
 using namespace std;
 
 int main(int argc, char **argv) {
@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
     string j_in = "../data/exp/exp1.json";
     rts::Exp e(j_in);
     cout << e.to_str() << endl;
+    int max_opt = e.para_attr["max_opt"];
     // rts::Gen gen(e.gen_attr);
     // cout << gen.to_str() << endl;
     rts::Egen egen(e.gen_attr);
@@ -40,20 +41,17 @@ int main(int argc, char **argv) {
     for(int iter = 0; iter < e.iteration; iter++) {
         // generate task set
         // rts::TaskSet ts = gen.next_task_set();
-	cout << "generating task: " << iter << endl;
+        cout << "generating task: " << iter << endl;
         rts::TaskSet ts = egen.next_task_set();
         double sum_util = tsu.sum_utilization(ts);
-	cout << "generated. " << sum_util << endl;
+        cout << "generated. " << sum_util << endl;
         
-        rts::Pts pts;
-        pts.base_ts = ts;
-	cout << "populate_pt_list" << endl;
-        pts.populate_pt_list();
-	cout << "check 1" << endl;
+        rts::Pts pts(max_opt, ts);
+        cout << "check 1" << endl;
         pts.popt_strategy = "single";
-	cout << "check 2" << endl;
+        cout << "check 2" << endl;
         pts.serialize_pts();
-	cout << "check 3" << endl;
+        cout << "check 3" << endl;
         // apply schedulability test
         bool sched_gfb = gfb.is_schedulable(ts);
         gfb_st.add(sum_util, sched_gfb);
@@ -62,7 +60,7 @@ int main(int argc, char **argv) {
         cho_st.add(sum_util, sched_cho);
         cout << "check 5" << endl;
         bool sched_bcl = bcl.is_schedulable(ts);
-	cout << "check 6" << endl;
+        cout << "check 6" << endl;
         bcl_st.add(sum_util, sched_bcl);
     }
 

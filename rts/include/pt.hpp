@@ -17,7 +17,7 @@ public:
     static int _pt_cnt;
     Task base_task;
     Pt();
-    Pt(Task _base_task);
+    Pt(int _max_opt, Task _base_task);
     ~Pt();
     void populate_ts_dict();
     std::string to_str();

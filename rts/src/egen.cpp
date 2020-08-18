@@ -16,7 +16,6 @@ Task Egen::next_task() {
     tattr["deadline"] = frand(min_deadline, max_deadline);
     tattr["period"] = frand(min_period, max_period);
     tattr["exec_time"] = frand(min_exec_time, max_exec_time);
-    std::cout << "param generated" << std::endl;
     // retry until exec_time > period (utilization > 1)
     if (utilization_overflow == 0) {
         while (tattr["exec_time"] > tattr["period"] + 0.1) {
@@ -24,7 +23,6 @@ Task Egen::next_task() {
             tattr["exec_time"] = frand(min_exec_time, max_exec_time);
         }
     }
-    std::cout << "utilization chedked" << std::endl;
     return Task(tattr);
 }
 
@@ -44,7 +42,6 @@ TaskSet Egen::next_task_set() {
 }
 
 TaskSet Egen::create_new_task_set(Task _t) {
-    std::cout << "creating new task set" << std::endl;
     ts.tasks.clear();
 
     // new task (just one) may exceed nec bound.
@@ -52,7 +49,6 @@ TaskSet Egen::create_new_task_set(Task _t) {
         last_id = 0;
         _t.id = 0;
         ts.tasks.push_back(_t);
-        std::cout << "ts created. " << ts.to_str() << std::endl;
         return ts;
     } else {
         spdlog::error("Cannot create new task set, tried utilization: {}", tsu.calc_utilization(_t));

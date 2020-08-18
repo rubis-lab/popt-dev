@@ -17,36 +17,45 @@ std::string Cho::to_str() {
     return ret;
 }
 
-void Cho::create_ip_table(Pts _pts) {
+void Cho::create_tolerance_table(Pts _pts) {
+    std::cout << "check a0" << std::endl;
+    tolerance_table.clear();
     unsigned int num_task = _pts.base_ts.tasks.size();
-    for(unsigned int i(0); i < num_task; i++){
-        //option 0
-        std::vector<double> temp;
-        temp.push_back(-1.0);
-        ip_table.push_back(temp);
-        for(unsigned int j(0); j < (unsigned int) max_opt; j++) {
-            std::cout << "hi" << std::endl;
-            std::vector<Thread> thrs_i_oj = _pts.pt_list.at(i).tsdict.at(j+1);
-            std::vector<double> lax;
-            for(unsigned int k(0); k < thrs_i_oj.size(); k++) {
-                lax.push_back(thrs_i_oj.at(k).deadline - thrs_i_oj[k].exec_time);
-            }
-            ip_table.at(i).push_back(*std::min_element(lax.begin(), lax.end()));
+    std::cout << "num_task: " << num_task << std::endl;
+    for(unsigned int i = 0; i < num_task; i++) {
+        std::cout << "i: " << i << std::endl;
+        std::vector<double> thr_tolerance;
+        //option 0 not used
+        thr_tolerance.push_back(-1.0);
+        for(unsigned int j = 0; j < (unsigned int) max_opt; j++) {
+            std::cout << "j: " << j << std::endl;
+            // 
+            Thread thr = _pts.pt_list[i].tsdict[j + 1][0];
+            std::cout << "thr: " << thr.to_str() << std::endl;
+            // calculate d - c for the first thread
+            double lax = thr.deadline - thr.exec_time;
+            thr_tolerance.push_back(lax);
         }
+        std::cout << "check a1" << std::endl;
+        tolerance_table.push_back(thr_tolerance);
+        std::cout << "check a2" << std::endl;
     }
+    return;
 }
 
 bool Cho::is_schedulable(Pts _pts) {
-    create_ip_table(_pts);
-    
+    create_tolerance_table(_pts);
     // Init
+    std::cout << "check a" << std::endl;
     _pts.popt_strategy = "single";
     _pts.serialize_pts();
+    std::cout << "check b" << std::endl;
     int num_task = _pts.pts_serialized.size();
     std::vector<int> selected_opt;
     for(unsigned int i(0); i < (unsigned int) num_task; i++){
         selected_opt.push_back(1);
     }
+    std::cout << "check c" << std::endl;
 
     while(true){
         std::vector<double> i_sum_list;
@@ -64,11 +73,11 @@ bool Cho::is_schedulable(Pts _pts) {
             i_sum = floor(i_sum/num_core);
             i_sum_list.push_back(i_sum);
         }
-
-        std::vector<int> selected_opt_copy = selected_opt;
+        std::cout << "first part done" << std::endl;
+        std::vector<int> selected_opt_copy(selected_opt);
         for(unsigned int i(0); i < (unsigned int) num_task; i++){
             while(selected_opt.at(i) < max_opt){
-                if(i_sum_list.at(i) > ip_table.at(i).at(selected_opt.at(i)) + 0.1){
+                if(i_sum_list.at(i) > tolerance_table.at(i).at(selected_opt.at(i)) + 0.1){
                     selected_opt.at(i) += 1;
                 } else {
                     break;
@@ -76,19 +85,30 @@ bool Cho::is_schedulable(Pts _pts) {
             }
         }
         //break condition
+        std::cout << (selected_opt == selected_opt_copy)<< std::endl;
+        for(unsigned int i = 0; i < selected_opt.size(); i ++){
+            std::cout << selected_opt_copy.at(i) << " " << selected_opt.at(i) << std::endl;
+        }
         if(selected_opt == selected_opt_copy){
             for(unsigned int i(0); i < (unsigned int) num_task; i++){
+                std::cout << "check 10: " << i << std::endl;  
                 if(selected_opt.at(i) == max_opt){
-                    if(i_sum_list.at(i) > ip_table.at(i).at(selected_opt.at(i)) + 0.1){
+                    std::cout << "check 11: " << std::endl;
+                    if(i_sum_list.at(i) > tolerance_table.at(i).at(selected_opt.at(i)) + 0.1){
+                        std::cout << "returning false" << std::endl;
                         return false;
                     }
                 }
+
             }
+            std::cout << "returning true" << std::endl;
+            _pts.popt_strategy = "custom";
+            _pts.popt_list = selected_opt;
+            _pts.serialize_pts();
+            std::cout << "info" << std::endl;
+            return true;
         }
-        _pts.popt_strategy = "custom";
-        _pts.popt_list = selected_opt;
-        _pts.serialize_pts();
-        return true;
     }
+
 }
 } // namespace rts
