@@ -1,18 +1,32 @@
 {
-    "exp_name": "exp1",
+    "name": "exp1",
     "scheduler": "GEDF",
-    "duration": 1000000,
+    "iteration": 10000,
     "strategy": "custom",
     "custom_option": [1, 2, 3, 4, 3, 2, 1],
     "generator": {
-    	"name": "default",
-    	"num_task": 4,
-    	"seed": 0,
-    	"min_exec_time": 10,
-    	"max_exec_time": 20,
-    	"min_deadline": 12,
-    	"max_deadline": 22,
-    	"implicit_deadline": 0,
-    	"contrained_deadline": 0
+        "name": "default",
+        "num_task": 4,
+        "seed": 0,
+        "min_exec_time": 10,
+        "max_exec_time": 20,
+        "min_deadline": 30,
+        "max_deadline": 40,
+        "min_period": 50,
+        "max_period": 60,
+        "implicit_deadline": 0,
+        "constrained_deadline": 0,
+        "num_core": 4
+    },
+    "para": {
+        "max_opt": 4
+    },
+    "sched_test": {
+        "num_core": 4
+    },
+    "stat": {
+        "x_min": 0.0,
+        "x_max": 4.0,
+        "x_inc": 0.1
     }
 }
