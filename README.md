@@ -17,14 +17,6 @@ mv ./spdlog /usr/local/include/
 
 ## Installation
 
-## popt-gui
-
-```shell
-git clone --recurse-submodules https://github.com/upoque/popt-dev.git
-cd popt-dev
-pip3 install -e .
-```
-
 ## rts shared library
 
 ```shell
@@ -46,4 +38,12 @@ cd build
 cmake ..
 make
 ./dev
+```
+
+## popt-gui
+
+```shell
+git clone --recurse-submodules https://github.com/upoque/popt-dev.git
+cd popt-dev
+pip3 install -e .
 ```
