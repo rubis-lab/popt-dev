@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # project name / version
-project(eg1 VERSION 1.0)
+project(omp VERSION 1.0)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
