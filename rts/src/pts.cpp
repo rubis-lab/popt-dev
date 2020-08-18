@@ -21,6 +21,7 @@ Pts::Pts(int _max_opt, TaskSet _base_ts) {
 }
 
 void Pts::populate_pt_list() {
+    // add tasks to pt_list to be serialized
     for(Task t: base_ts.tasks) {
         Pt p(max_opt, t);
         pt_list.push_back(p);
