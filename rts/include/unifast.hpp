@@ -1,19 +1,30 @@
-// #ifndef __UNI_H__
-// #define __UNI_H__
+#ifndef __UNIFAST_H__
+#define __UNIFAST_H__
 
-// #include "gen.hpp"
-// #include "tsutil.hpp"
-// #include <nlohmann/json.hpp>
-// #include "spdlog/spdlog.h"
 
-// namespace rts{
-// class Uni{
-// public:
-//     Uni();
-//     Uni(nlohmann::json _js);
-//     std::vector<int> divided_util;
-//     void next_task();
-//     void next_task_set();
-// };
-// }  // namespace rts
-// #endif // __UNI_H__
+#include <random>
+#include <math.h>
+#include <cstdlib>
+#include "gen.hpp"
+#include "task.hpp"
+#include "tsutil.hpp"
+#include <nlohmann/json.hpp>
+#include "spdlog/spdlog.h"
+
+namespace rts{
+class Uni: public Gen::Gen{
+public:
+    double min_period;
+    double max_period;
+    int num_task;
+    double max_util;
+    std::vector<double> divided_util;
+    TaskSet ts;
+    Uni();
+    Uni(nlohmann::json _js);
+    void unifast_divide(int _num_task, double _tot_util);
+    Task next_task(double _util_candidate);
+    TaskSet next_task_set();
+};
+}  // namespace rts
+#endif // __UNIFAST_H__
