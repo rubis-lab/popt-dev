@@ -6,8 +6,13 @@
 [spdlog](https://github.com/gabime/spdlog)
 
 ```shell
-brew install spdlog (osx)
-sudo apt-get install libspdlog-dev (ubuntu)
+(osx) brew install spdlog
+(ubuntu)
+git clone https://github.com/gabime/spdlog.git
+cd spdlog && mkdir build && cd build
+cmake .. && make -j8
+cd ..
+mv ./spdlog /usr/local/include/
 ```
 
 ## Installation
