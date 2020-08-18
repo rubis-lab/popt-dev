@@ -18,6 +18,8 @@ Pt::~Pt(){
 }
 
 void Pt::populate_ts_dict() {
+    // ts_dict holds a map of vector of threads
+    // vector is initialized by parallelizing the task according to the popt
     for(unsigned int i = 1; i <= (unsigned int) max_opt; i++){
         std::vector<Thread> thrs_opt_i;
         //TODO: assigning meaningfull exec_time

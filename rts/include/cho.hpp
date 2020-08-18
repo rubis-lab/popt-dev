@@ -5,6 +5,7 @@
 #include "pts.hpp"
 #include "thread.hpp"
 #include "tsutil.hpp"
+#include <unordered_map>
 #include <string>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -15,9 +16,9 @@ public:
     int num_core;
     int max_opt;
     TSUtil tsutil;
-    std::vector<std::vector<double>> tolerance_table;
+    std::vector<std::unordered_map<unsigned int, double>> tolerance_table;
     Cho();
-    Cho(nlohmann::json _js);
+    Cho(int _max_opt, nlohmann::json _js);
     void create_tolerance_table(Pts _pts);
     bool is_schedulable(Pts _pts);
     std::string to_str();

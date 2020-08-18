@@ -21,6 +21,7 @@ Pts::Pts(int _max_opt, TaskSet _base_ts) {
 }
 
 void Pts::populate_pt_list() {
+    // add tasks to pt_list to be serialized
     for(Task t: base_ts.tasks) {
         Pt p(max_opt, t);
         pt_list.push_back(p);
@@ -61,7 +62,7 @@ void Pts::serialize_pts() {
 
 std::string Pts::to_str(){
     std::string t;
-    for(size_t i(0); i < (size_t) pts_serialized.size(); i++) {
+    for(unsigned int i =0; i < (unsigned int) pts_serialized.size(); i++) {
         t += pts_serialized.at(i).to_str();
     }
     return t;
@@ -75,7 +76,7 @@ void Pts::from_json(std::string _fname) {
     std::string ts_name = jf["name"];
 
     json ts_dict = jf["task_set"];
-    for(size_t i = 0; i < jf["task_set"].size(); i++) {
+    for(unsigned int i = 0; i < jf["task_set"].size(); i++) {
         json task_info = jf["task_set"][i];
         // task_info = 
         //      { "name" : "", "options" : [], "deadline" : "", "period" : ""}
@@ -83,15 +84,15 @@ void Pts::from_json(std::string _fname) {
         double t_deadline = task_info["deadline"];
         double t_period = task_info["period"];
 
-        for(size_t k = 0; k < task_info["options"].size(); k++) {
+        for(unsigned int k = 0; k < task_info["options"].size(); k++) {
             json thr_info = task_info["options"][k];
             // thr_info = 
             //      { "option": 1, "runtimes": [100000] }
-            for(size_t m = 0; m < thr_info["runtimes"].size(); m++) {
+            for(unsigned int m = 0; m < thr_info["runtimes"].size(); m++) {
                 //thr_info["runtimes"][m] =  "33333 33335 33337"
                 std::unordered_map<std::string, double> tattr;
-                tattr["deadline"] = task_info["deadline"];
-                tattr["period"] = task_info["period"];
+                tattr["deadline"] = t_deadline;
+                tattr["period"] = t_period;
                 tattr["exec_time"] = thr_info["runtimes"][m];
                 Task t = Task(tattr);
                 base_ts.append(t);
