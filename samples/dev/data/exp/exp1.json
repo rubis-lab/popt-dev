@@ -16,7 +16,8 @@
     	"max_period": 60,
     	"implicit_deadline": 0,
     	"constrained_deadline": 0,
-    	"num_core": 4
+		"num_core": 4,
+		"max_opt": 4
     },
     "sched_test": {
     	"num_core": 4

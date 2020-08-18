@@ -1,8 +1,9 @@
 #ifndef __TASK_H__
 #define __TASK_H__
 
-#include <map>
+#include <unordered_map>
 #include <string>
+#include <iostream>
 
 namespace rts {
 
@@ -15,7 +16,7 @@ public:
     double deadline;
     double period;
     Task();
-    Task(std::map<std::string, double> _tattr);
+    Task(std::unordered_map<std::string, double> _tattr);
     std::string to_str();
     bool operator==(const Task&);
     bool operator!=(const Task&);

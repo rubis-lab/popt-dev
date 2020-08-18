@@ -4,6 +4,7 @@
 #include "task.hpp"
 #include "task_set.hpp"
 #include <cstdlib>
+#include <unordered_map>
 #include <cmath>
 #include <ctime>
 #include <string>

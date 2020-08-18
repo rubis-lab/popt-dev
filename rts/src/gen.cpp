@@ -40,7 +40,7 @@ std::string Gen::to_str() {
 }
 
 Task Gen::next_task() {
-    std::map<std::string, double> tattr;
+    std::unordered_map<std::string, double> tattr;
     tattr["deadline"] = frand(min_deadline, max_deadline);
     tattr["period"] = frand(min_period, max_period);
     tattr["exec_time"] = frand(min_exec_time, max_exec_time);

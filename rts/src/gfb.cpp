@@ -12,7 +12,7 @@ GFB::GFB(nlohmann::json _js) {
 
 std::string GFB::to_str() {
     std::string ret;
-    ret += "num_core = " + std::to_string(num_core) + "\n";
+    ret += "GFB: num_core = " + std::to_string(num_core) + "\n";
     return ret;
 }
 

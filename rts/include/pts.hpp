@@ -4,6 +4,7 @@
 #include "task_set.hpp"
 #include "thread.hpp"
 #include "pt.hpp"
+#include "spdlog/spdlog.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <vector>
@@ -15,6 +16,7 @@ public:
     ~Pts();
     static int _pts_cnt;
     int id;
+    int max_opt;
     std::string popt_strategy;
     std::vector<int> popt_list;
     TaskSet base_ts;

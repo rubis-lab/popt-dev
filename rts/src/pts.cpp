@@ -4,26 +4,48 @@ namespace rts {
 int Pts::_pts_cnt = 0;
 
 Pts::Pts() {
+    max_opt = 4;
     id = _pts_cnt++;
     base_ts = TaskSet();
 }
 
-Pts::~Pts(){
+Pts::~Pts() {
     _pts_cnt--;
 }
 
-void Pts::populate_pt_list()
-{
-    for(Task t: base_ts.tasks){
+void Pts::populate_pt_list() {
+    for(Task t: base_ts.tasks) {
         Pt temp(t);
         pt_list.push_back(temp);
     }
 }
 
-void Pts::serialize_pts(){
-    for(size_t i(0); i < (size_t) popt_list.size(); i ++){
-        std::vector<Thread> temp = pt_list.at(i).tsdict.at(popt_list.at(i));
-        pts_serialized.insert(pts_serialized.end(), temp.begin(), temp.end());
+void Pts::serialize_pts() {
+    popt_list.clear();
+    pts_serialized.clear();
+    if(popt_strategy == "single") {
+        for(unsigned int i(0); i < pt_list.size(); i++) {
+            popt_list.push_back(1);
+        }
+    } else if(popt_strategy == "max") {
+        for(unsigned int i(0); i < pt_list.size(); i++) {
+            popt_list.push_back(max_opt);
+        }
+    } else if(popt_strategy == "random") {
+        for(unsigned int i(0); i < pt_list.size(); i++) {
+            int rand = std::rand() % max_opt + 1;
+            popt_list.push_back(rand);
+        }
+    } else if(popt_strategy == "custom") {
+        // Assume popt is initialized.
+    } else{
+        spdlog::error("Parallelization strategy not defined");
+    }
+    for(unsigned int i = 0; i < popt_list.size(); i++) {
+	int popt_i = popt_list[i];
+	std::cout << "popt_i: " << popt_list[i] << std::endl;
+	std::vector<Thread> tmp = pt_list[i].tsdict[popt_i];
+	pts_serialized.insert(pts_serialized.end(), tmp.begin(), tmp.end());
     }
 }
 
@@ -57,7 +79,7 @@ void Pts::from_json(std::string _fname) {
             //      { "option": 1, "runtimes": [100000] }
             for(size_t m = 0; m < thr_info["runtimes"].size(); m++) {
                 //thr_info["runtimes"][m] =  "33333 33335 33337"
-                std::map<std::string, double> tattr;
+                std::unordered_map<std::string, double> tattr;
                 tattr["deadline"] = task_info["deadline"];
                 tattr["period"] = task_info["period"];
                 tattr["exec_time"] = thr_info["runtimes"][m];

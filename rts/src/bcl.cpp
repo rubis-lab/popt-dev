@@ -12,7 +12,7 @@ BCL::BCL(nlohmann::json _js) {
 
 std::string BCL::to_str() {
     std::string ret;
-    ret += "num_core = " + std::to_string(num_core) + "\n";
+    ret += "BCL: num_core = " + std::to_string(num_core) + "\n";
     return ret;
 }
 

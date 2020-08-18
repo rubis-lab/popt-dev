@@ -11,6 +11,8 @@ public:
     int tid;
     Thread(int _tid);
     std::string to_str();
+    bool operator==(const Thread&);
+    bool operator!=(const Thread&);
 };
 
 }  // namespace rts

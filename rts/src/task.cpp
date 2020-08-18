@@ -7,11 +7,15 @@ Task::Task() {
     return;
 }
 
-Task::Task(std::map<std::string, double> _tattr) {
+Task::Task(std::unordered_map<std::string, double> _tattr) {
     id = _count++;
+    std::cout << "hi" << std::endl;
     exec_time = _tattr["exec_time"];
+    std::cout << "exec_time: " << exec_time << std::endl;
     deadline = _tattr["deadline"];
+    std::cout << "deadline: " << deadline << std::endl;
     period = _tattr["period"];
+    std::cout << "period: " << period << std::endl;
     return;
 }
 
