@@ -5,6 +5,7 @@
 #include "tsutil.hpp"
 #include <nlohmann/json.hpp>
 #include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 namespace rts {
 class Egen : public Gen::Gen {

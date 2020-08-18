@@ -7,6 +7,8 @@
 #include <iomanip>
 #include <nlohmann/json.hpp>
 #include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 namespace rts {
 
 class Stat {
