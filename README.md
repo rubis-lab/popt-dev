@@ -35,10 +35,10 @@ sudo make install (ubuntu)
 ## Examples
 
 ```shell
-cd eg1
+cd samples/dev
 mkdir build
 cd build
 cmake ..
 make
-./EG1
+./dev
 ```
