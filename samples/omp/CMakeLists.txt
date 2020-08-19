@@ -20,6 +20,7 @@ endif()
 # headers
 include_directories(include)
 include_directories(/usr/local/include)
+include_directories(/usr/local/include/rts)
 
 # source (global)
 file(GLOB SOURCES "src/*.cpp")
