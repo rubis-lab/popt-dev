@@ -13,15 +13,19 @@ Uni::Uni(nlohmann::json _js): Gen(_js){
 }
 
 void Uni::unifast_divide(int _num_task, double _tot_util){
-    double tot = frand(0.0, _tot_util);
-    double util_sum = tot;
-    for(unsigned int i = 0; i < (unsigned int) _num_task; i++){
+    divided_util.clear();
+    double util_sum = frand(0.0, _tot_util);
+    //std::cout << "util_sum:" << util_sum << std::endl;
+    for(unsigned int i = 0; i < (unsigned int) (_num_task - 1); i++){
         double temp_util = util_sum * pow(
             frand(0.0, 1.0), (1.0 / (_num_task - i)));
         divided_util.push_back(util_sum - temp_util);
+        //std::cout << "pushed back:" << util_sum - temp_util << std::endl;
         util_sum = temp_util;
+        //std::cout << "temp_util:" << temp_util << std::endl;
     }
     divided_util.push_back(util_sum);
+    //  std::cout << "\n";
 } 
 
 Task Uni::next_task(double _util_candidate){
@@ -39,6 +43,7 @@ Task Uni::next_task(double _util_candidate){
 }
 
 TaskSet Uni::next_task_set(){
+    ts.tasks.clear();
     unifast_divide(num_task, max_util);
     for(unsigned int i = 0; i < (unsigned int) num_task; i++){
         Task t = next_task(divided_util.at(i));
@@ -46,4 +51,19 @@ TaskSet Uni::next_task_set(){
     }
     return ts;
 }
+
+std::string Uni::to_str(){
+    std::string info;
+    info += Gen::to_str();
+    info += "\nUunifast between period: " + std::to_string(min_period) + 
+        + " " + std::to_string(max_period);
+    return info;
+}
+
+double Uni::frand(double _min, double _max) {
+    double f = (double)std::rand() / RAND_MAX;
+    return _min + f * (_max - _min);   
+}
+
+
 } // namespcae rts

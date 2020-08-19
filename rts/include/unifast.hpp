@@ -5,6 +5,8 @@
 #include <random>
 #include <math.h>
 #include <cstdlib>
+#include <string>
+#include <iostream>
 #include "gen.hpp"
 #include "task.hpp"
 #include "tsutil.hpp"
@@ -25,6 +27,8 @@ public:
     void unifast_divide(int _num_task, double _tot_util);
     Task next_task(double _util_candidate);
     TaskSet next_task_set();
+    double frand(double _min, double _max);
+    std::string to_str();
 };
 }  // namespace rts
 #endif // __UNIFAST_H__
