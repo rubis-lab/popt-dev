@@ -1,4 +1,4 @@
-#include "thread.hpp"
+#include "core/thread.hpp"
 
 namespace rts {
 Thread::Thread(int _tid) {

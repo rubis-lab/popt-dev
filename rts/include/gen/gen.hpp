@@ -1,8 +1,8 @@
 #ifndef __GEN_H__
 #define __GEN_H__
 
-#include "task.hpp"
-#include "task_set.hpp"
+#include "core/task.hpp"
+#include "core/task_set.hpp"
 #include <cstdlib>
 #include <unordered_map>
 #include <cmath>

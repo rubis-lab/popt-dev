@@ -1,9 +1,9 @@
 #ifndef __PTS_H__
 #define __PTS_H__
 
-#include "task_set.hpp"
-#include "thread.hpp"
-#include "pt.hpp"
+#include "core/task_set.hpp"
+#include "core/thread.hpp"
+#include "core/pt.hpp"
 #include <fstream>
 #include <vector>
 #include <nlohmann/json.hpp>

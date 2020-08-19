@@ -1,15 +1,13 @@
 #ifndef __UNIFAST_H__
 #define __UNIFAST_H__
 
-
+#include "gen/gen.hpp"
+#include "core/task.hpp"
+#include "op/tsutil.hpp"
 #include <random>
 #include <math.h>
 #include <cstdlib>
 #include <string>
-#include <iostream>
-#include "gen.hpp"
-#include "task.hpp"
-#include "tsutil.hpp"
 #include <nlohmann/json.hpp>
 #include "spdlog/spdlog.h"
 

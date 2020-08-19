@@ -1,4 +1,4 @@
-#include "gfb.hpp"
+#include "sched/gfb.hpp"
 
 namespace rts{
 GFB::GFB() {

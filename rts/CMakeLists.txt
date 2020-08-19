@@ -37,7 +37,11 @@ endif()
 # source (manual)
 # set(SOURCES src/main.cpp src/sched_deadline.cpp)
 # source (global)
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB SOURCES
+    "src/core/*.cpp"
+    "src/gen/*.cpp"
+    "src/op/*.cpp"
+    "src/sched/*.cpp")
 # osx(brew) headers
 # include_directories(/usr/local/Cellar)
 
@@ -50,8 +54,20 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
-    PUBLIC_HEADER
-        "include/task.hpp;include/task_set.hpp;include/thread.hpp;include/pt.hpp;include/tsutil.hpp;include/gfb.hpp;include/exp.hpp;include/stat.hpp;include/gen.hpp;include/egen.hpp;include/bcl.hpp;include/cho.hpp;include/pts.hpp;include/unifast.hpp")
+    PUBLIC_HEADER "include/core/task.hpp;\
+include/core/task_set.hpp;\
+include/core/thread.hpp;\
+include/core/pt.hpp;\
+include/core/pts.hpp;\
+include/gen/gen.hpp;\
+include/gen/egen.hpp;\
+include/gen/unifast.hpp;\
+include/op/tsutil.hpp;\
+include/op/exp.hpp;\
+include/op/stat.hpp;\
+include/sched/gfb.hpp;\
+include/sched/bcl.hpp;\
+include/sched/cho.hpp")
 
 # target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libspdlog.so)
 # target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libfmt.a)
@@ -74,8 +90,12 @@ if(APPLE)
 endif()
 
 # Shared library
-install(TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rts)
+# install(TARGETS ${PROJECT_NAME}
+#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rts)
+install(DIRECTORY "include/" # source directory
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rts # target directory
+    FILES_MATCHING # install only matched files
+    PATTERN "*.hpp") # select header files
 install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)

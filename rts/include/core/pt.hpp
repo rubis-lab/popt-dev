@@ -1,9 +1,9 @@
 #ifndef __PT_H__
 #define __PT_H__
 
-#include "task_set.hpp"
-#include "task.hpp"
-#include "thread.hpp"
+#include "core/task_set.hpp"
+#include "core/task.hpp"
+#include "core/thread.hpp"
 #include <map>
 #include <vector>
 

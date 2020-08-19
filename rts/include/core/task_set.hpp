@@ -1,7 +1,7 @@
 #ifndef __TASK_SET_H__
 #define __TASK_SET_H__
 
-#include "task.hpp"
+#include "core/task.hpp"
 #include <vector>
 #include <string>
 

@@ -1,8 +1,8 @@
 #ifndef __STAT_H__
 #define __STAT_H__
 
-#include "task.hpp"
-#include "task_set.hpp"
+#include "core/task.hpp"
+#include "core/task_set.hpp"
 #include <math.h>
 #include <iomanip>
 #include <nlohmann/json.hpp>

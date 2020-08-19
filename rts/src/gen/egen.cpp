@@ -1,4 +1,4 @@
-#include "egen.hpp"
+#include "gen/egen.hpp"
 
 namespace rts {
 Egen::Egen(): Gen() {

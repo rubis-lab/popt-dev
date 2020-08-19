@@ -1,8 +1,8 @@
 #ifndef __TSUTIL_H__
 #define __TSUTIL_H__
 
-#include "task.hpp"
-#include "task_set.hpp"
+#include "core/task.hpp"
+#include "core/task_set.hpp"
 #include <math.h>
 
 namespace rts {

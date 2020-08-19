@@ -1,8 +1,7 @@
 #ifndef __THR_H__
 #define __THR_H__
 
-#include <iostream>
-#include "task.hpp"
+#include "core/task.hpp"
 
 namespace rts {
 

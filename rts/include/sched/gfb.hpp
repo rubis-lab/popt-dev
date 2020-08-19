@@ -1,9 +1,9 @@
 #ifndef __GFB_H__
 #define __GFB_H__
 
-#include "task_set.hpp"
-#include "pts.hpp"
-#include "tsutil.hpp"
+#include "core/task_set.hpp"
+#include "core/pts.hpp"
+#include "op/tsutil.hpp"
 #include <string>
 #include <nlohmann/json.hpp>
 

@@ -1,8 +1,8 @@
 #ifndef __EGEN_H__
 #define __EGEN_H__
 
-#include "gen.hpp"
-#include "tsutil.hpp"
+#include "gen/gen.hpp"
+#include "op/tsutil.hpp"
 #include <nlohmann/json.hpp>
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"

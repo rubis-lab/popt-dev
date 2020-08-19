@@ -1,10 +1,10 @@
 #ifndef __CHO_H__
 #define __CHO_H__
 
-#include "task_set.hpp"
-#include "pts.hpp"
-#include "thread.hpp"
-#include "tsutil.hpp"
+#include "core/task_set.hpp"
+#include "core/pts.hpp"
+#include "core/thread.hpp"
+#include "op/tsutil.hpp"
 #include <unordered_map>
 #include <string>
 #include <iostream>
