@@ -27,14 +27,14 @@ $ sudo ./apply_binaries.sh
 
 ## Flashing NVIDIA Jetson TX2 internal eMMC
 ```shell
-# put board in recovery mode
+# put board in force recovery mode
+
 Connect Power Unit
-Press POWER
-Release POWER
+Turn of the power, if on
 Push RECOVERY_FORCE
-Push RESET (after one second)
-Release RESET
-Release RECOVERY_FORCE (after two second)
+While pushing RECOVERY_FORCE, press the POWER button
+After the board boots up, release POWER button first
+Release RECOVERY_FORCE button
 
 # run flash command (5 min)
 $ sudo ./flash.sh -t jetson-tx2 mmcblk0p1
