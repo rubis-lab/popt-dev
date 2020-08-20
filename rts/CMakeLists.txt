@@ -90,9 +90,8 @@ if(APPLE)
 endif()
 
 # Shared library
-# install(TARGETS ${PROJECT_NAME}
-#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rts)
+install(TARGETS ${PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(DIRECTORY "include/" # source directory
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rts # target directory
     FILES_MATCHING # install only matched files
