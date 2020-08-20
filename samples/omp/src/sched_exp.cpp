@@ -3,13 +3,12 @@
 #include <omp.h>
 
 SchedExp::SchedExp(std::string _exp_cfg_file, std::string _ts_cfg_file) {
-    fileName = exp_cfg_file;
-    popt_vec = popt;
-    parse_config(fileName);
+    // parse_config(fileName);
+    return;
 }
 
 void SchedExp::parse_config(std::string exp_cfg_file) {
-    ifstream inputFile(exp_cfg_file);
+    std::ifstream inputFile(exp_cfg_file);
     nlohmann::json jf;
     inputFile >> jf;
     exp_name = jf["exp_name"];
@@ -43,12 +42,12 @@ bool SchedExp::run() {
     std::cout << exp_name << std::endl;
     // 2. Create Thread
     int numTask = task_set.size(); 
-    std::vector<thread> thrs;
+    std::vector<std::thread> thrs;
     for(int i(0); i < numTask; i ++){
-        thrs.push_back(thread(work, 100, popt_vec.at(i)));
+        //thrs.push_back(std::thread(work, 100, popt_vec.at(i)));
     }
     // 3. Release
-    for(thread &t : thrs){
+    for(std::thread &t : thrs){
         t.join();
     }
     return true;

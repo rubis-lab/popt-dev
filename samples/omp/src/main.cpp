@@ -1,18 +1,22 @@
 #include "sched_core.hpp"
-#include <rts/exp.hpp>
+#include "dummy_workload.hpp"
+#include "spdlog/spdlog.h"
 #include <iostream>
-using namespace std;
+#include <string>
 
-int main(int argc, char **argv) {
-    if(argc < 2) {
-        cout << "usage: ./omp exp1.json ts1.json" << endl;
-        return -1;
-    }
-    cout << "main thread id: " << gettid() << endl;
 
-    rts::Exp e(argv[1]);
-    cout << e.to_str() << endl;
+int main(int argc, const char *argv[]) {
+    //if(argc < 2) {
+    //    std::cout << "usage: ./omp exp1.json ts1.json" << std::endl;
+    //    return -1;
+    //}
+    //std::string current_exec_name = argv[0];
+    //std::cout << "main thread id: " << gettid() << std::endl;
 
-    cout << "main dies: " << gettid() << endl;
+    //rts::Exp e(argv[1]);
+    spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
+    work(100, 4, 3, 50, 100, 200);
+
+    std::cout << "main dies: " << gettid() << std::endl;
     return 0;
 }
