@@ -1,8 +1,6 @@
 #include "sched_core.hpp"
 #include "dummy_workload.hpp"
 #include <iostream>
-
-
 #include <string>
 
 
@@ -16,7 +14,7 @@ int main(int argc, const char *argv[]) {
 
     rts::Exp e(argv[1]);
     
-    work(100000, 4);
+    work(100, 4, 3, 100, 200);
 
     std::cout << "main dies: " << gettid() << std::endl;
     return 0;
