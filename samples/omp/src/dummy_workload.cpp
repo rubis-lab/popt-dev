@@ -7,8 +7,14 @@ void work(int iter, int popt) {
     omp_set_dynamic(0);
     omp_set_num_threads(popt);
     #pragma omp parallel firstprivate(a)
-    for(int y = 0; y < iter; y++) {
-        a += 1;
+    {
+        double start_time = omp_get_wtime();
+        #pragma omp for schedule(dynamic) nowait
+        for(int y = 0; y < iter; y++) {
+            a += 1;
+        }   
+        double end_time = omp_get_wtime();
+        printf("Time taken by thread id %d is %f\n", omp_get_thread_num(), end_time - start_time);
     }
     return;
 }
