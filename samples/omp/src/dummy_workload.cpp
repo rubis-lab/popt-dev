@@ -1,5 +1,4 @@
 #include "dummy_workload.hpp"
-#include <omp.h>
 
 void work(int iter, int popt) {
     int a = 0;
