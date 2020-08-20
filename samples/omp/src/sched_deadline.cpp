@@ -1,9 +1,8 @@
 #include "sched_deadline.hpp"
 
-using namespace std;
 
 void routine_deadline(task_arg targ, int idx) {
-    cout << "task_id: " << targ.task_id << endl;
+    std::cout << "task_id: " << targ.task_id << std::endl;
 
     // Target Thread Arguments
     struct thr_arg tta = targ.thr_set.at(idx);
@@ -23,7 +22,7 @@ void routine_deadline(task_arg targ, int idx) {
     
     int ret = sched_setattr(0, &attr, attr.sched_flags);
     if(ret < 0) {
-        cerr << "[ERROR] sched_setattr failed." << endl;
+        std::cerr << "[ERROR] sched_setattr failed." << std::endl;
         perror("sched_setattr");
         exit(-1);
     }
@@ -43,7 +42,7 @@ void routine_deadline(task_arg targ, int idx) {
         end_t = clock();
 
         // analyze
-        cout << "task_id: " << targ.task_id << "\tthr_id: " << tta.thr_id << "\titer: " << iter << "\tdeadline: " << targ.deadline << "\tstart_t: " << start_t << "\tend_t: " << end_t << "\tresponse_time: " << end_t - start_t << endl;
+        std::cout << "task_id: " << targ.task_id << "\tthr_id: " << tta.thr_id << "\titer: " << iter << "\tdeadline: " << targ.deadline << "\tstart_t: " << start_t << "\tend_t: " << end_t << "\tresponse_time: " << end_t - start_t << std::endl;
 
         sched_yield();
     }
