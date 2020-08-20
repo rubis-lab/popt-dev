@@ -40,6 +40,8 @@ $ sudo ./apply_binaries.sh
 $ sudo ./flash.sh jetson-xavier mmcblk0p1
 # NEVER use -t option 082020 (JSP)
 
+7. push the reset RESET button.
+
 ```
 
 ## [HOST] Check for available SSH connection to Jetson Xavier
