@@ -22,7 +22,7 @@ void routine_deadline(task_arg targ, int idx) {
     
     int ret = sched_setattr(0, &attr, attr.sched_flags);
     if(ret < 0) {
-        cerr << "[ERROR] sched_setattr failed." << endl;
+        std::cerr << "[ERROR] sched_setattr failed." << std::endl;
         perror("sched_setattr");
         exit(-1);
     }

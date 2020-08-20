@@ -1,18 +1,15 @@
 #include "sched_core.hpp"
-#include <rts/exp.hpp>
+#include <rts/op/exp.hpp>
 #include <iostream>
-using namespace std;
+
 
 int main(int argc, char **argv) {
     if(argc < 2) {
-        cout << "usage: ./omp exp1.json ts1.json" << endl;
+        std::cout << "usage: ./omp exp1.json ts1.json" << std::endl;
         return -1;
     }
-    cout << "main thread id: " << gettid() << endl;
+    std::cout << "main thread id: " << gettid() << std::endl;
 
-    rts::Exp e(argv[1]);
-    cout << e.to_str() << endl;
-
-    cout << "main dies: " << gettid() << endl;
+    std::cout << "main dies: " << gettid() << std::endl;
     return 0;
 }
