@@ -11,11 +11,14 @@
 git clone https://github.com/gabime/spdlog.git
 cd spdlog && mkdir build && cd build
 cmake .. && make -j8
-cd ..
-mv ./spdlog /usr/local/include/
+sudo mv ../include/spdlog /usr/local/include/
 ```
 
 ## Installation
+
+```shell
+git clone --recurse-submodules https://github.com/upoque/popt-dev.git
+```
 
 ## rts shared library
 
@@ -43,7 +46,5 @@ make
 ## popt-gui
 
 ```shell
-git clone --recurse-submodules https://github.com/upoque/popt-dev.git
-cd popt-dev
 pip3 install -e .
 ```
