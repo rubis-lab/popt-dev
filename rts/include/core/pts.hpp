@@ -2,10 +2,11 @@
 #define __PTS_H__
 
 #include "core/task_set.hpp"
-#include "core/thread.hpp"
+#include "core/task.hpp"
 #include "core/pt.hpp"
-#include <fstream>
 #include <vector>
+#include <unordered_map>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
@@ -25,12 +26,12 @@ public:
     std::vector<Pt> pt_list;
     std::vector<Thread> pts_serialized;
     Pts();
-    ~Pts();
     Pts(int _max_opt, TaskSet _base_ts);
+    ~Pts();
+    Pts(nlohmann::json _js);
     void populate_pt_list();
     void serialize_pts();
     std::string to_str();
-    void from_json(std::string _fname);
 };
 
 }  // namespace rts

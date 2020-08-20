@@ -5,9 +5,9 @@ Exp::Exp() {
 
 }
 
-Exp::Exp(std::string _fname) {
+Exp::Exp(std::string _exp_config_file) {
     using json = nlohmann::json;
-    std::ifstream json_file(_fname);
+    std::ifstream json_file(_exp_config_file);
     json jf = json::parse(json_file);
     if(jf.contains("name")) {
         name = jf["name"];

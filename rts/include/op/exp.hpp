@@ -15,7 +15,7 @@ public:
     nlohmann::json stat_attr;
     nlohmann::json para_attr;
     Exp();
-    Exp(std::string _fname);
+    Exp(std::string _exp_config_file);
     std::string to_str();
 };
 }  // namespace rts

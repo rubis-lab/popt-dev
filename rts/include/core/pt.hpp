@@ -4,7 +4,7 @@
 #include "core/task_set.hpp"
 #include "core/task.hpp"
 #include "core/thread.hpp"
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace rts {
@@ -13,13 +13,15 @@ class Pt {
 public:
     int id;
     int max_opt;
-    std::map<int, std::vector<Thread>> tsdict;
+    std::unordered_map<int, std::vector<Thread>> tsdict;
     static int _pt_cnt;
     Task base_task;
     Pt();
     Pt(int _max_opt, Task _base_task);
+    Pt(int _max_opt, Task _base_task, std::unordered_map<int, std::vector<double>> _exec_times_table);
     ~Pt();
     void populate_ts_dict();
+    void populate_ts_dict_custom(std::unordered_map<int, std::vector<double>> _exec_times_table);
     std::string to_str();
 };
 
