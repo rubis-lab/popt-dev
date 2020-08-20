@@ -14,7 +14,7 @@ void work(int iter, int popt) {
             a += 1;
         }   
         double end_time = omp_get_wtime();
-        printf("Time taken by thread id %d os %f\n", omp_get_thread_num(), end_time - start_time);
+        printf("Time taken by thread id %d is %f\n", omp_get_thread_num(), end_time - start_time);
     }
     return;
 }
