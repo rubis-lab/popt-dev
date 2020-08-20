@@ -1,0 +1,10 @@
+[2020-08-20 18:55:51.000] [async_file_logger] [info] task id 3	iter 1	runtime 50.000000	start time 105206.330247	end time 105206.330251	response time 0.000004	slack 99.999996
+[2020-08-20 18:55:51.000] [async_file_logger] [info] task id 3	iter 1	runtime 50.000000	start time 105206.330247	end time 105206.330251	response time 0.000005	slack 99.999995
+[2020-08-20 18:55:51.000] [async_file_logger] [info] task id 3	iter 1	runtime 50.000000	start time 105206.330243	end time 105206.330252	response time 0.000008	slack 99.999992
+[2020-08-20 18:55:51.000] [async_file_logger] [info] task id 3	iter 1	runtime 50.000000	start time 105206.330245	end time 105206.330254	response time 0.000009	slack 99.999991
+[19:56:22 +09:00] [async_file_logger] [---I---] [thread 30740] task id	iter	exec time	period	start time	end time	response time	slack
+
+[19:56:22 +09:00] [async_file_logger] [---I---] [thread 30740] 3 1 50.000000 200.000000 108837.803277 108837.803288 0.000010 99.999990
+[19:56:22 +09:00] [async_file_logger] [---I---] [thread 30740] 3 1 50.000000 200.000000 108837.803280 108837.803285 0.000005 99.999995
+[19:56:22 +09:00] [async_file_logger] [---I---] [thread 30740] 3 1 50.000000 200.000000 108837.803281 108837.803285 0.000004 99.999996
+[19:56:22 +09:00] [async_file_logger] [---I---] [thread 30740] 3 1 50.000000 200.000000 108837.803281 108837.803285 0.000004 99.999996
