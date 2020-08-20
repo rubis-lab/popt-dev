@@ -3,8 +3,9 @@
 #include <omp.h>
 #include <iostream>
 #include <string>
-#include "spdlog/spdlog.h"
+#include "sched_log.hpp"
 
-void work(int iter, int popt, int task_id, int deadline, int period);
+void work(int _iter, int _popt, int _task_id, int _runtime, 
+    int _deadline, int _period);
 
 #endif

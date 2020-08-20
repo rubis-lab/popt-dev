@@ -44,7 +44,7 @@ bool SchedExp::run() {
     int numTask = task_set.size(); 
     std::vector<std::thread> thrs;
     for(int i(0); i < numTask; i ++){
-        thrs.push_back(std::thread(work, 100, popt_vec.at(i)));
+        //thrs.push_back(std::thread(work, 100, popt_vec.at(i)));
     }
     // 3. Release
     for(std::thread &t : thrs){
