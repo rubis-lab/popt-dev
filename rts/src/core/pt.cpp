@@ -4,19 +4,22 @@ namespace rts {
 int Pt::_pt_cnt = 1;
 
 Pt::Pt() {
+    selected_opt = 1;
     return;
 }
 
 Pt::Pt(int _max_opt, Task _base_task) {
+    selected_opt = 1;
     max_opt = _max_opt;
     base_task = _base_task;
     populate_ts_dict();
     return;
 }
 
-Pt::Pt(int _max_opt, Task _base_task, std::unordered_map<int, std::vector<double>> _exec_times_table) {
+Pt::Pt(int _max_opt, Task _base_task, std::unordered_map<int, std::vector<double>> _exec_times_table, int _selected_opt) {
     max_opt = _max_opt;
     base_task = _base_task;
+    selected_opt = _selected_opt;
     populate_ts_dict_custom(_exec_times_table);
     return;
 }
@@ -64,7 +67,13 @@ void Pt::populate_ts_dict_custom(std::unordered_map<int, std::vector<double>> _e
 
 
 std::string Pt::to_str() {
-    return std::to_string(id) + "\t" + base_task.to_str();
+    std::string ret = "selected option: " + std::to_string(selected_opt) + "\n";
+    ret += "base task:\n" + base_task.to_str() + "\n";
+    std::vector<Thread> thrs = tsdict[selected_opt];
+    for(unsigned int i = 0; i < thrs.size(); i++) {
+        ret += thrs[i].to_str() + "\n";
+    }
+    return ret;
 }
 
 }  // namespace rts
