@@ -1,9 +1,9 @@
 
 
 f = open("task.txt","r")
-for i in range(0, 6):
-    header = f.readline()
-    
+header = f.readline(7)
+thr = []
+i = 0
 
 while True:
     s = f.readline()
@@ -11,6 +11,10 @@ while True:
     b = a[6:]
     if not s:
         break       
-    print(b[6])
+    thr[i] = b[6]
+    i += 1
+
+for i in range(len(thr)):
+    print(thr[i])
 
 
