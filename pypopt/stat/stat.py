@@ -1,8 +1,10 @@
+import matplotlib
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-import tikzplotlib
 import numpy as np
 ############ Base
+
 print("stat")
 
 '''
@@ -42,5 +44,5 @@ plt.xlabel('util')
 plt.ylabel('sched')
 plt.axis([0.0 , 4.0 , 0 ,1.0])
 plt.legend(edgecolor='none')
-tikzplotlib.save("ext_base.tex")
+# tikzplotlib.save("ext_base.tex")
 plt.show()

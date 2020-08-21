@@ -67,11 +67,11 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'pyqt5',
-        'configparser',
-        'numpy',
-        'matplotlib',
-        'tikzplotlib'
+        # 'pyqt5==5.14.0',
+        'configparser'
+        # 'numpy',
+        # 'matplotlib',
+        # 'tikzplotlib'
     ],
 
     # List additional groups of dependencies here (e.g. development

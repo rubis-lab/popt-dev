@@ -46,5 +46,6 @@ make
 ## popt-gui
 
 ```shell
+sudo apt-get install python3-pyqt5 python3-numpy python3-matplotlib
 pip3 install -e .
 ```
