@@ -3,7 +3,7 @@
 SchedLog::SchedLog(sched_data _data) {
     data = _data;
     std::sort(data.thr_data.begin(), data.thr_data.end());
-    async_logger = spdlog::basic_logger_mt<spdlog::async_factory>("async_file_logger", "/log/task.txt");
+    async_logger = spdlog::basic_logger_mt<spdlog::async_factory>("async_file_logger", "./log/task.txt");
     write_header();
 }
 
