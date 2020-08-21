@@ -3,9 +3,10 @@
 #include <omp.h>
 #include <iostream>
 #include <string>
+#include <rts/core/pt.hpp>
 #include "sched_log.hpp"
+#include "sched_core.hpp"
 
-void work(int _iter, int _popt, int _task_id, int _runtime, 
-    int _deadline, int _period);
+void work(rts::Pt _task);
 
 #endif

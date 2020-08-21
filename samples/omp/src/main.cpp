@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <thread>
 
 
 int main(int argc, const char *argv[]) {
@@ -24,8 +25,15 @@ int main(int argc, const char *argv[]) {
     rts::Pts pts(jf);
     std::cout << "pts: " << pts.to_str() << std::endl;
 
+    std::vector<std::thread> thrs;
+    for(unsigned int i = 0; i < pts.pt_list.size(); i++){
+        thrs.push_back(std::thread(work, pts.pt_list.at(i)));
+    }
 
-    work(100, 4, 3, 50, 100, 200);
+    for(std::thread &t: thrs){
+        std::cout << "Task thread ID: " << gettid() << std::endl;
+        t.join(); //pauses until t finishes;
+    }
 
     std::cout << "main dies: " << gettid() << std::endl;
 
