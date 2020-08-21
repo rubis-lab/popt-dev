@@ -18,6 +18,7 @@ bool SchedLog::write_header(){
     log_str += "response time\t";
     log_str += "slack\n";
     async_logger -> info(log_str);
+    return true;
 }
 
 bool SchedLog::log_to_file() {
@@ -37,3 +38,8 @@ bool SchedLog::log_to_file() {
     }
     return true;
 }
+
+
+
+
+//@TODO: deadline print

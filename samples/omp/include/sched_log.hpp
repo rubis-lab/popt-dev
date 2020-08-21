@@ -26,6 +26,7 @@ struct sched_data {
     int iter = 0;
     double runtime;
     double period;
+    double deadline;
     std::vector<sched_data_thread> thr_data;
 };
 
