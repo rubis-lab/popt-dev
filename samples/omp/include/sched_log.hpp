@@ -39,6 +39,7 @@ public:
     bool log_to_file(sched_data _data);
     bool write_header();
     bool compare(const sched_data_thread &a, const sched_data_thread &b);
+    bool file_exist(std::string fileName);
 };
 
 #endif

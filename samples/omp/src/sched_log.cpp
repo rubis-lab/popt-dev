@@ -6,8 +6,14 @@ SchedLog::SchedLog(){
 
 SchedLog::SchedLog(std::string _logger_name, std::string _logger_out_path) {
     std::sort(data.thr_data.begin(), data.thr_data.end());
+    bool file_exists = false;
+    if(file_exist(_logger_out_path)){
+        file_exists = true;
+    }
     async_logger = spdlog::basic_logger_mt<spdlog::async_factory>(_logger_name, _logger_out_path);
-    write_header();
+    if(!file_exists){
+        write_header();
+    }
     return;
 }
 
@@ -45,7 +51,9 @@ bool SchedLog::log_to_file(sched_data _data) {
     return true;
 }
 
-
-
+bool SchedLog::file_exist(std::string fileName) {
+    std::ifstream infile(fileName);
+    return infile.good();
+}
 
 //@TODO: deadline print
