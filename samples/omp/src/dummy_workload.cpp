@@ -23,15 +23,15 @@ void DummyWorkload::work() {
     task_data.deadline = pt.base_task.deadline;
     // to allow 1 ~ popt threads, remove omp_set_dynamic
     omp_set_dynamic(0);
-    omp_set_num_threads(pt.max_opt);
+    omp_set_num_threads(pt.selected_opt);
     #pragma omp parallel firstprivate(a)
     {
         double start_time = omp_get_wtime();
         #pragma omp for schedule(dynamic) nowait
-        //assume body task of func
-        for(int y = 0; y < iter; y++) {
-            a += 1;
-        }   
+            for(int y = 0; y < iter; y++) {
+                a += 1;
+            }
+        //assume body task of func   
         double end_time = omp_get_wtime();
         sched_data_thread thread_data;
         thread_data.start_t = start_time;
@@ -39,7 +39,9 @@ void DummyWorkload::work() {
         thread_data.response_t = end_time - start_time;
         thread_data.slack = task_data.deadline - thread_data.response_t;
         #pragma omp critical
-        task_data.thr_data.push_back(thread_data);
+        {
+            task_data.thr_data.push_back(thread_data);
+        }
         std::cout << "Thread num: " << omp_get_thread_num() << " tid: " << gettid() << std::endl;
         //printf("Time taken by thread id %d is %f\n", omp_get_thread_num(), end_time - start_time);
     }

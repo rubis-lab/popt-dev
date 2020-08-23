@@ -32,7 +32,7 @@ int main(int argc, const char *argv[]) {
     }
 
     for(std::thread &t: thrs){
-        // std::cout << "Task thread ID: " << gettid() << std::endl;
+        //std::cout << "Task thread ID: " << gettid() << std::endl;
         t.join(); //pauses until t finishes;
     }
 

@@ -23,6 +23,7 @@ bool SchedLog::write_header(){
     log_str += "iter\t";
     log_str += "exec time\t";
     log_str += "period\t";
+    log_str += "deadline\t";
     log_str += "start time\t";
     log_str += "end time\t";
     log_str += "response time\t";
@@ -35,7 +36,8 @@ bool SchedLog::log_to_file(sched_data _data) {
     std::string task_str = std::to_string(_data.task_id)
         + " " + std::to_string(_data.iter)
         + " " + std::to_string(_data.runtime)
-        + " " + std::to_string(_data.period);
+        + " " + std::to_string(_data.period)
+        + " " + std::to_string(_data.deadline);
     
     std::vector<sched_data_thread> thr_data = _data.thr_data;
     for(unsigned int i = 0; i < thr_data.size(); i ++){
@@ -55,5 +57,3 @@ bool SchedLog::file_exist(std::string fileName) {
     std::ifstream infile(fileName);
     return infile.good();
 }
-
-//@TODO: deadline print
