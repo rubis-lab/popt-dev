@@ -8,7 +8,7 @@ Task::Task() {
 }
 
 Task::Task(std::unordered_map<std::string, double> _tattr) {
-    id = _count++;
+    id = _tattr["id"];
     exec_time = _tattr["exec_time"];
     deadline = _tattr["deadline"];
     period = _tattr["period"];

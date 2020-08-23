@@ -24,6 +24,7 @@ Pts::Pts(nlohmann::json _js) {
     // std::string ts_name = _js["name"];
     max_opt = _js["max_opt"];
     popt_strategy = _js["popt_strategy"];
+    id = _js["id"];
     popt_list.clear();
     for(unsigned int i = 0; i < _js["popt_list"].size(); i++) {
         popt_list.push_back((int)_js["popt_list"][i]);
@@ -33,7 +34,7 @@ Pts::Pts(nlohmann::json _js) {
     for(unsigned int i = 0; i < ts_dict.size(); i++) {
         nlohmann::json task_info = ts_dict[i];
         // task_info = { "name" : "", "options" : [], "deadline" : "", "period" : ""}
-        // int t_id = (int)i;
+        int t_id = task_info["id"];
         // std::string t_name = task_info["name"];
         double t_deadline = task_info["deadline"];
         double t_period = task_info["period"];
@@ -46,6 +47,7 @@ Pts::Pts(nlohmann::json _js) {
         tattr["deadline"] = t_deadline;
         tattr["period"] = t_period;
         tattr["exec_time"] = thr_info["exec_times"][0];
+        tattr["id"] = t_id;
         Task t = Task(tattr);
         base_ts.append(t);
 

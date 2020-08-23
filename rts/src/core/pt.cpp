@@ -20,6 +20,7 @@ Pt::Pt(int _max_opt, Task _base_task, std::unordered_map<int, std::vector<double
     max_opt = _max_opt;
     base_task = _base_task;
     selected_opt = _selected_opt;
+    id = _base_task.id;
     populate_ts_dict_custom(_exec_times_table);
     return;
 }

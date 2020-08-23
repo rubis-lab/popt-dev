@@ -27,7 +27,9 @@ int main(int argc, const char *argv[]) {
 
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++){
-        thrs.push_back(std::thread(work, pts.pt_list.at(i)));
+        DummyWorkload dw(pts.pt_list.at(i), e);
+        std::cout << pts.pt_list.at(i).id << std::endl;
+        thrs.push_back(std::thread(&DummyWorkload::work, &dw));
     }
 
     for(std::thread &t: thrs){

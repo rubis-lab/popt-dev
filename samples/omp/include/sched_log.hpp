@@ -34,8 +34,9 @@ class SchedLog {
 public:
     sched_data data;
     std::shared_ptr<spdlog::logger> async_logger;
-    SchedLog(sched_data _data);
-    bool log_to_file();
+    SchedLog();
+    SchedLog(std::string _logger_name, std::string _logger_out_path);
+    bool log_to_file(sched_data _data);
     bool write_header();
     bool compare(const sched_data_thread &a, const sched_data_thread &b);
 };
