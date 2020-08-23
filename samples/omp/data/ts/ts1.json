@@ -4,7 +4,7 @@
     "max_opt": 4,
     "popt_strategy": "custom",
     "popt_list": [
-        2, 2
+        2, 2, 3, 4
     ],
     "pts": [
         {
@@ -70,6 +70,70 @@
             ],
             "deadline": 300000,
             "period": 400000
+        },
+        {
+            "name": "task-2",
+            "id": 2,
+            "options": [
+                {
+                    "option": 1,
+                    "exec_times": [
+                        200000
+                    ]
+                },
+                {
+                    "option": 2,
+                    "exec_times": [
+                        100000, 100000
+                    ]
+                },
+                {
+                    "option": 3,
+                    "exec_times": [
+                        66666, 66666, 66666
+                    ]
+                },
+                {
+                    "option": 4,
+                    "exec_times": [
+                        50000, 50000, 50000, 50000
+                    ]
+                }
+            ],
+            "deadline": 300000,
+            "period": 400000
+        },
+        {
+            "name": "task-3",
+            "id": 3,
+            "options": [
+                {
+                    "option": 1,
+                    "exec_times": [
+                        300000
+                    ]
+                },
+                {
+                    "option": 2,
+                    "exec_times": [
+                        150000, 150000
+                    ]
+                },
+                {
+                    "option": 3,
+                    "exec_times": [
+                        100000, 100000, 100000
+                    ]
+                },
+                {
+                    "option": 4,
+                    "exec_times": [
+                        75000, 75000, 75000, 75000
+                    ]
+                }
+            ],
+            "deadline": 400000,
+            "period": 600000
         }
     ]
 }

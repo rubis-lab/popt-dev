@@ -23,17 +23,16 @@ int main(int argc, const char *argv[]) {
     std::ifstream _jf(argv[2]);
     nlohmann::json jf = nlohmann::json::parse(_jf);
     rts::Pts pts(jf);
-    std::cout << "pts: " << pts.to_str() << std::endl;
 
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++){
         DummyWorkload dw(pts.pt_list.at(i), e);
-        std::cout << pts.pt_list.at(i).id << std::endl;
+        // std::cout << pts.pt_list.at(i).id << std::endl;
         thrs.push_back(std::thread(&DummyWorkload::work, &dw));
     }
 
     for(std::thread &t: thrs){
-        std::cout << "Task thread ID: " << gettid() << std::endl;
+        // std::cout << "Task thread ID: " << gettid() << std::endl;
         t.join(); //pauses until t finishes;
     }
 
