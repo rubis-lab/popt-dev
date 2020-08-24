@@ -1,4 +1,4 @@
-### NVIDIA AGX XAVIER cpufreq HOW TO USE
+### NVIDIA AGX XAVIER nvpmodel HOW TO USE
 ``` shell
 $ sudo nvpmodel -m [0-6] --verbose
 ```
