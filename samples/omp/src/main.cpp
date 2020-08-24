@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <thread>
+#include <omp.h>
 
 
 int main(int argc, const char *argv[]) {
@@ -17,6 +18,7 @@ int main(int argc, const char *argv[]) {
     spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^-%L-%$] [thread %t] %v");
     std::string current_exec_name = argv[0];
     std::cout << "main thread id: " << gettid() << std::endl;
+    //omp_set_num_threads(20);
 
     rts::Exp e(argv[1]);
     
@@ -24,15 +26,20 @@ int main(int argc, const char *argv[]) {
     nlohmann::json jf = nlohmann::json::parse(_jf);
     rts::Pts pts(jf);
 
-    std::vector<std::thread> thrs;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++){
+    std::vector<DummyWorkload> works;
+    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
         DummyWorkload dw(pts.pt_list.at(i), e);
+        works.push_back(dw);
         // std::cout << pts.pt_list.at(i).id << std::endl;
-        thrs.push_back(std::thread(&DummyWorkload::work, &dw));
+    }
+
+    std::vector<std::thread> thrs;
+    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
+        thrs.push_back(std::thread(&DummyWorkload::work, &works[i]));
     }
 
     for(std::thread &t: thrs){
-        //std::cout << "Task thread ID: " << gettid() << std::endl;
+        // std::cout << "Task thread ID: " << gettid() << std::endl;
         t.join(); //pauses until t finishes;
     }
 
