@@ -17,9 +17,12 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.btn_eg1.clicked.connect(self.eg1_func)
         self.btn_cmake.clicked.connect(self.cmake_func)
         self.btn_make.clicked.connect(self.make_func)
-        self.build_dir = os.path.join(os.getcwd(), 'eg1/build')
-        self.data_dir = os.path.join(os.getcwd(), 'eg1/data')
-        self.target_name = 'EG1'
+        self.build_dir = os.path.join(os.getcwd(), 'samples/omp/build')
+        self.data_dir = os.path.join(os.getcwd(), 'samples/omp/data')
+        self.target_name = 'omp'
+
+        # omp tab
+        self.init_omp_tab()
 
         self.check_sys()
 
@@ -64,6 +67,42 @@ class RTPFuncs(QMainWindow, rtp_ui):
         else:
             self.log.info('running in non-rt system')
             self.is_rt = False
+        return
+
+    # inits
+    def init_omp_tab(self):
+        # treeview_omp_exp_cfg browser
+        root_dir_omp_exp_cfg = os.path.join(self.data_dir, 'exp')
+        self.log.info('root_dir_omp_exp_cfg ' + root_dir_omp_exp_cfg)
+        filter_omp_exp_cfg = ['*.json']
+        self.browser_model_omp_exp_cfg = QFileSystemModel()
+        self.browser_model_omp_exp_cfg.setRootPath(
+            root_dir_omp_exp_cfg)
+        self.browser_model_omp_exp_cfg.setNameFilters(
+            filter_omp_exp_cfg)
+        self.treeview_omp_exp_cfg.setModel(
+            self.browser_model_omp_exp_cfg)
+        self.treeview_omp_exp_cfg.setRootIndex(
+            self.browser_model_omp_exp_cfg.index(
+                root_dir_omp_exp_cfg))
+        self.treeview_omp_exp_cfg.setContextMenuPolicy(
+            QtCore.Qt.CustomContextMenu)
+
+        # treeview_omp_ts_cfg browser
+        root_dir_omp_ts_cfg = os.path.join(self.data_dir, 'ts')
+        filter_omp_ts_cfg = ['*.json']
+        self.browser_model_omp_ts_cfg = QFileSystemModel()
+        self.browser_model_omp_ts_cfg.setRootPath(
+            root_dir_omp_ts_cfg)
+        self.browser_model_omp_ts_cfg.setNameFilters(
+            filter_omp_ts_cfg)
+        self.treeview_omp_ts_cfg.setModel(
+            self.browser_model_omp_ts_cfg)
+        self.treeview_omp_ts_cfg.setRootIndex(
+            self.browser_model_omp_ts_cfg.index(
+                root_dir_omp_ts_cfg))
+        self.treeview_omp_ts_cfg.setContextMenuPolicy(
+            QtCore.Qt.CustomContextMenu)
         return
 
     def test_func(self):
