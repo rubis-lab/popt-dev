@@ -4,6 +4,7 @@
 #include "core/task_set.hpp"
 #include "core/task.hpp"
 #include "core/pt.hpp"
+#include "op/exp.hpp"
 #include <vector>
 #include <unordered_map>
 #include <iostream>
@@ -28,9 +29,9 @@ public:
     Pts();
     Pts(int _max_opt, TaskSet _base_ts);
     ~Pts();
-    Pts(nlohmann::json _js);
+    Pts(nlohmann::json _js, rts::Exp _exp);
     void populate_pt_list();
-    void serialize_pts();
+    void serialize_pts(int _num_tasks);
     std::string to_str();
 };
 

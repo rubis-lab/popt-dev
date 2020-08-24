@@ -30,6 +30,20 @@ Exp::Exp(std::string _exp_config_file) {
     if(jf.contains("para")) {
         para_attr = jf["para"];
     }
+    if(jf.contains("strategy")) {
+        strategy = jf["strategy"];
+        if(strategy == "custom") {
+            if(jf.contains("custom_option")) {
+                custom_popt.clear();
+                for(unsigned int i = 0; i < jf["para"]["max_opt"]; i++) {
+                    custom_popt.push_back(jf["custom_option"][i]); 
+                }
+            }
+        }
+    }
+    if(jf.contains("num_tasks")) {
+        num_tasks = jf["num_tasks"];
+    }
     return;
 }
 

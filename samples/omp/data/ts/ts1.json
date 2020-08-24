@@ -2,10 +2,6 @@
     "name": "ts1",
     "id": 0,
     "max_opt": 4,
-    "popt_strategy": "custom",
-    "popt_list": [
-        2, 2, 3, 4
-    ],
     "pts": [
         {
             "name": "task-0",

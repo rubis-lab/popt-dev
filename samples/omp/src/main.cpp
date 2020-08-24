@@ -24,7 +24,7 @@ int main(int argc, const char *argv[]) {
     
     std::ifstream _jf(argv[2]);
     nlohmann::json jf = nlohmann::json::parse(_jf);
-    rts::Pts pts(jf);
+    rts::Pts pts(jf, e);
 
     std::vector<DummyWorkload> works;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
