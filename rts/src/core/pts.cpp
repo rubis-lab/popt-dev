@@ -79,7 +79,7 @@ Pts::Pts(nlohmann::json _js, rts::Exp _exp) {
         // finally, create a pt
         pt_list.push_back(Pt(max_opt, t, exec_times_table, popt_list[i]));
     }
-    
+    serialize_pts();
     return;
 }
 
@@ -120,7 +120,7 @@ void Pts::populate_popt_list(int _num_tasks) {
 
 void Pts::serialize_pts() {
     pts_serialized.clear();
-    for(unsigned int i = 0; i < popt_list.size(); i++) {
+    for(unsigned int i = 0; i < pt_list.size(); i++) {
         // threads of i-th task
         // with selected option: popt_list[i]
         std::vector<Thread> thr = pt_list[i].tsdict[popt_list[i]];

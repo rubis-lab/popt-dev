@@ -2,7 +2,7 @@
     "name": "exp1",
     "scheduler": "GEDF",
     "iteration": 10000,
-    "strategy": "max",
+    "strategy": "random",
     "num_tasks": 4,
     "custom_option": [2, 2, 3, 4],
     "para": {
