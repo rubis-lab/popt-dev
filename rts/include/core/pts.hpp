@@ -31,7 +31,8 @@ public:
     ~Pts();
     Pts(nlohmann::json _js, rts::Exp _exp);
     void populate_pt_list();
-    void serialize_pts(int _num_tasks);
+    void populate_popt_list(int _num_tasks);
+    void serialize_pts();
     std::string to_str();
 };
 

@@ -24,11 +24,7 @@ Pts::Pts(nlohmann::json _js, rts::Exp _exp) {
     // std::string ts_name = _js["name"];
     max_opt = _js["max_opt"];
     popt_list = _exp.custom_popt;
-    for(unsigned int i = 0; i < popt_list.size(); i++){
-        std::cout << popt_list.at(i);
-    }
     popt_strategy = _exp.strategy;
-    std::cout << popt_strategy << std::endl;
     id = _js["id"];
     // popt_list.clear();
     // for(unsigned int i = 0; i < _js["popt_list"].size(); i++) {
@@ -36,8 +32,7 @@ Pts::Pts(nlohmann::json _js, rts::Exp _exp) {
     // }
     
     // serialize created pts
-    serialize_pts(_exp.num_tasks);
-    std::cout << "hi" << std::endl;
+    populate_popt_list(_exp.num_tasks);
     nlohmann::json ts_dict = _js["pts"];
     for(unsigned int i = 0; i < ts_dict.size(); i++) {
         nlohmann::json task_info = ts_dict[i];
@@ -84,14 +79,7 @@ Pts::Pts(nlohmann::json _js, rts::Exp _exp) {
         // finally, create a pt
         pt_list.push_back(Pt(max_opt, t, exec_times_table, popt_list[i]));
     }
-    pts_serialized.clear();
-    for(unsigned int i = 0; i < popt_list.size(); i++) {
-        // threads of i-th task
-        // with selected option: popt_list[i]
-        std::vector<Thread> thr = pt_list[i].tsdict[popt_list[i]];
-        // merge all threads into a single serialized task set
-        pts_serialized.insert(pts_serialized.end(), thr.begin(), thr.end());
-    }
+    
     return;
 }
 
@@ -104,7 +92,7 @@ void Pts::populate_pt_list() {
     return;
 }
 
-void Pts::serialize_pts(int _num_tasks) {
+void Pts::populate_popt_list(int _num_tasks) {
     if(popt_strategy == "single") {
         popt_list.clear();
         for(unsigned int i = 0; i < (unsigned int) _num_tasks; i++) {
@@ -126,6 +114,18 @@ void Pts::serialize_pts(int _num_tasks) {
         return;
     } else {
         spdlog::error("Parallelization strategy not defined");
+    }
+    return;
+}
+
+void Pts::serialize_pts() {
+    pts_serialized.clear();
+    for(unsigned int i = 0; i < popt_list.size(); i++) {
+        // threads of i-th task
+        // with selected option: popt_list[i]
+        std::vector<Thread> thr = pt_list[i].tsdict[popt_list[i]];
+        // merge all threads into a single serialized task set
+        pts_serialized.insert(pts_serialized.end(), thr.begin(), thr.end());
     }
 }
 

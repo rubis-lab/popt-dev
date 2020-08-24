@@ -39,7 +39,8 @@ bool Cho::is_schedulable(Pts _pts, Exp _exp) {
     create_tolerance_table(_pts);
     // Init
     _pts.popt_strategy = "single";
-    _pts.serialize_pts(_exp.num_tasks);
+    _pts.populate_popt_list(_exp.num_tasks);
+    _pts.serialize_pts();
     int num_task = _pts.pts_serialized.size();
     // popt starts with 1
     std::vector<int> selected_opt;
@@ -90,7 +91,8 @@ bool Cho::is_schedulable(Pts _pts, Exp _exp) {
             }
             _pts.popt_strategy = "custom";
             _pts.popt_list = selected_opt;
-            _pts.serialize_pts(_exp.num_tasks);
+            _pts.populate_popt_list(_exp.num_tasks);
+            _pts.serialize_pts();
             return true;
         }
     }
