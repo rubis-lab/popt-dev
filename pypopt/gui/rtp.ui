@@ -49,6 +49,9 @@
       <height>661</height>
      </rect>
     </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
     <property name="currentIndex">
      <number>1</number>
     </property>
@@ -113,6 +116,67 @@
       </property>
       <property name="text">
        <string>cmake</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>CPU setter</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_set_freq">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>20</y>
+        <width>221</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>set nvpmodel</string>
+      </property>
+     </widget>
+     <widget class="QTreeView" name="treeview_scripts_cfg">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>361</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_set_cpu">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>100</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>set cpu</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_edit_set_nvp">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>20</y>
+        <width>113</width>
+        <height>42</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_edit_set_cpu">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>100</y>
+        <width>113</width>
+        <height>42</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -190,6 +254,19 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QLabel" name="label_tid">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>670</y>
+      <width>129</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-1</string>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

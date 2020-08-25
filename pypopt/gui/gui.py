@@ -7,7 +7,10 @@ import configparser
 
 def start_gui():
     app = QApplication(sys.argv)
-    rtp_ui = RTPFuncs()
+    rtp_args = {
+        'terminal_pid': sys.argv[1]
+    }
+    rtp_ui = RTPFuncs(**rtp_args)
     rtp_ui.show()
     app.exec_()
 

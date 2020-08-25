@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-# if [ "$1" = "" ]
-# then
-#     echo "usage: run.sh [master/worker]"
-#     exit
-# else
-#     echo "lol_hub_dev running $1"
-#     python3 start.py $1
-#     exit
-# fi
-python3 pypopt/gui/gui.py
+if [[ $EUID -ne 0 ]]; then
+   echo “This script must be run as root”
+   exit 1
+fi
+python3 pypopt/gui/gui.py $1
