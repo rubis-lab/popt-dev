@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMessageBox, QFileSystemModel, QMainWindow, QTextEdit
+from PyQt5.QtWidgets import QMessageBox, QFileSystemModel, QMainWindow, QTextEdit, QLabel
 from PyQt5 import uic, QtCore
 import subprocess
 import os
@@ -12,24 +12,20 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.setupUi(self)
         self.log = new_logger(__name__)
         self.log.info('init')
-        self.terminal_pid = kwargs.get('terminal_pid', -1)
-        self.log.info(os.getpid())
+        self.terminal_pid = kwargs.get('terminal_pid', -1)       
         self.log.info('terminal_pid: ' + str(self.terminal_pid))
+        self.label_tid.setText("pid : " + str(self.terminal_pid))
 
         self.btn_test.clicked.connect(self.test_func)
+        self.check_sys()
+
+        # eg1 tab
         self.build_dir = os.path.join(os.getcwd(), 'samples/omp/build')
         self.data_dir = os.path.join(os.getcwd(), 'samples/omp/data')
-                
-        
-
-        # omp tab
-        self.omp_build_dir = os.path.join(os.getcwd(), 'samples/omp/build')
-        self.omp_data_dir = os.path.join(os.getcwd(), 'samples/omp/data')
-        self.target_name = 'omp'
-        self.btn_omp_run.clicked.connect(self.omp_run_func)
-        self.btn_omp_rebuild.clicked.connect(self.omp_rebuild_func)
-        self.btn_omp_build.clicked.connect(self.omp_build_func)
-        self.init_omp_tab()
+        self.btn_eg1.clicked.connect(self.eg1_func)
+        self.btn_cmake.clicked.connect(self.cmake_func)
+        self.btn_make.clicked.connect(self.eg1_make_func)
+        self.init_eg1_tab()
 
         # cpu setter tab
         self.scripts_dir = os.path.join(os.getcwd(), 'scripts') 
@@ -37,16 +33,33 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.line_edit_set_cpu.setText('4')
         self.btn_set_freq.clicked.connect(self.set_freq_func)
         self.btn_set_cpu.clicked.connect(self.set_cpu_func)
-        self.init_cpu_setter_tab()
+        self.init_cpu_setter_tab() 
+        
+        # omp tab
+        self.omp_build_dir = os.path.join(os.getcwd(), 'samples/omp/build')
+        self.omp_data_dir = os.path.join(os.getcwd(), 'samples/omp/data')
+        self.rts_build_dir = os.path.join(os.getcwd(), 'rts/build')
+        self.target_name = 'omp'
+        self.btn_rts_rebuild.clicked.connect(self.rts_rebuild_func)
+        self.btn_rts_build.clicked.connect(self.rts_build_func)
+        self.btn_omp_rebuild.clicked.connect(self.omp_rebuild_func)
+        self.btn_omp_build.clicked.connect(self.omp_build_func)
+        self.btn_omp_run.clicked.connect(self.omp_run_func)
+        self.init_omp_tab()
+        return
 
-
-        self.check_sys()
-
-        # eg1 tab
-        self.btn_eg1.clicked.connect(self.eg1_func)
-        self.btn_cmake.clicked.connect(self.cmake_func)
-        self.btn_make.clicked.connect(self.make_func)
-
+    def check_sys(self):
+        u = os.uname()
+        if '-rt' in str(u.version):
+            self.log.info('running in rt system')
+            self.is_rt = True
+        else:
+            self.log.info('running in non-rt system')
+            self.is_rt = False
+        return
+    
+    # inits
+    def init_eg1_tab(self):
         # eg1_ts_cfg_treeview browser
         eg1_ts_cfg_root_dir = os.path.join(self.data_dir, 'ts')
         eg1_ts_cfg_filter = ['*.json']
@@ -77,18 +90,9 @@ class RTPFuncs(QMainWindow, rtp_ui):
             self.eg1_exp_cfg_file_browser_model.index(
                 eg1_exp_cfg_root_dir))
         self.eg1_exp_cfg_treeview.setContextMenuPolicy(
-            QtCore.Qt.CustomContextMenu)
+            QtCore.Qt.CustomContextMenu)        
         return
 
-    def check_sys(self):
-        u = os.uname()
-        if '-rt' in str(u.version):
-            self.log.info('running in rt system')
-            self.is_rt = True
-        else:
-            self.log.info('running in non-rt system')
-            self.is_rt = False
-        return
 
     # inits
     def init_cpu_setter_tab(self):
@@ -151,7 +155,6 @@ class RTPFuncs(QMainWindow, rtp_ui):
         return
 
     #For eg1 tab
-
     def cmake_func(self):
         if not self.is_rt:
             self.log.info('cannot run in non-rt')
@@ -169,7 +172,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
         subprocess.Popen(['cmake', '..'], cwd=self.build_dir)
         return True
 
-    def make_func(self):
+    def eg1_make_func(self):
         if not self.is_rt:
             self.log.info('cannot run in non-rt')
 
@@ -202,7 +205,6 @@ class RTPFuncs(QMainWindow, rtp_ui):
             return False
 
     # For Cpu setter tab
-
     def set_cpu_func(self):        
         index = self.treeview_scripts_cfg.currentIndex()
         scripts_cfg_path = \
@@ -220,14 +222,123 @@ class RTPFuncs(QMainWindow, rtp_ui):
         subprocess.Popen(['sudo','nvpmodel','-m',self.line_edit_set_nvp.text()])
         return
 
+    # For omp tab    
+    def rts_rebuild_func(self):
+        # create build directory if not exists
+        if not os.path.exists(self.rts_build_dir):
+            try:
+                self.log.info('creating rts_build dir')
+                os.makedirs(self.rts_build_dir)
+            except Exception as e:
+                self.log.error(e)
+                return False
 
-    # For omp tab
+        # cmake                
+        self.log.info('rts_cmake')
+        subprocess.Popen(['cmake', '..'], cwd=self.rts_build_dir)
 
-    def omp_run_func(self):
-        return
+        # make & make install
+        if os.path.isfile(os.path.join(self.rts_build_dir, 'Makefile')):
+            self.log.info('rts_make & install')
+            self.make_func(self.rts_build_dir)
+            if(self.make_func(self.rts_build_dir)):
+                subprocess.Popen(["make","install"], cwd=self.rts_build_dir)
+                return True
+            else:
+                return False
+        else:
+            self.log.error('Makefile does not exist.')
+            return False
+    
+    def rts_build_func(self):
+        # make & make install
+        if os.path.isfile(os.path.join(self.rts_build_dir, 'Makefile')):
+            self.log.info('rts_make & install')
+            if(self.make_func(self.rts_build_dir)):
+                subprocess.Popen(["make","install"], cwd=self.rts_build_dir)
+                return True
+            else:
+                return False            
+        else:
+            self.log.error('Makefile does not exist.')
+            return False
 
     def omp_rebuild_func(self):
-        return
+        # create build directory if not exists
+        if not os.path.exists(self.omp_build_dir):
+            try:
+                self.log.info('creating omp_build dir')
+                os.makedirs(self.omp_build_dir)
+            except Exception as e:
+                self.log.error(e)
+                return False
 
-    def omp_build_func(self): 
-        return
+        # cmake                
+        self.log.info('cmake')
+        subprocess.Popen(['cmake', '..'], cwd=self.omp_build_dir)
+
+        # make
+        if not self.is_rt:
+            self.log.info('cannot run in non-rt')
+        if os.path.isfile(os.path.join(self.omp_build_dir, 'Makefile')):
+            self.log.info('omp_make')
+            if(self.make_func(self.omp_build_dir)):                
+                return True
+            else:
+                return False
+        else:
+            self.log.error('Makefile does not exist.')
+            return False
+
+    def omp_build_func(self):
+        # make
+        if not self.is_rt:
+            self.log.info('cannot run in non-rt')
+        if os.path.isfile(os.path.join(self.omp_build_dir, 'Makefile')):
+            self.log.info('omp_make')
+            if(self.make_func(self.omp_build_dir)):                
+                return True
+            else:
+                return False
+        else:
+            self.log.error('Makefile does not exist.')
+            return False
+
+    def omp_run_func(self):
+        #index of exp
+        index_exp = self.treeview_omp_exp_cfg.currentIndex()
+        omp_exp_cfg_path = \
+            self.browser_model_omp_exp_cfg.filePath(index_exp)
+        # index of ts        
+        index_ts = self.treeview_omp_ts_cfg.currentIndex()
+        omp_ts_cfg_path = \
+            self.browser_model_omp_ts_cfg.filePath(index_ts)
+        
+        # check select exp & ts file
+        self.log.info('selected: ' + str(omp_exp_cfg_path) + str(omp_ts_cfg_path))
+        if omp_exp_cfg_path == '':
+            QMessageBox.information(self, 'Alarm', 'Select omp_exp_cfg!')
+            return False
+        elif omp_ts_cfg_path == '':
+            QMessageBox.information(self, 'Alarm', 'Select omp_ts_cfg!')
+            return False        
+        
+        # check rt
+        if not self.is_rt:
+            self.log.info('cannot run in non-rt')
+        if os.path.isfile(os.path.join(self.omp_build_dir, self.target_name)):
+            self.log.info('opening omp.')
+            subprocess.Popen(['./omp',str(omp_exp_cfg_path), str(omp_ts_cfg_path)],
+                cwd=self.omp_build_dir)
+            return True
+        else:
+            self.log.error('omp does not exist (maybe not compiled).')
+            return False
+    # For make
+    def make_func(self,path):
+        if path == '':
+            QMessageBox.information(self, 'Alarm', 'Path is empty!')
+            return False
+        else:
+            subprocess.Popen(["make","-j8"], cwd=path)
+            return True
