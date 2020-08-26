@@ -1,9 +1,13 @@
-from PyQt5.QtWidgets import QMessageBox, QFileSystemModel, QMainWindow, QTextEdit, QLabel
+from PyQt5.QtWidgets import QMessageBox, QFileSystemModel, QMainWindow, QTextEdit, QLabel, QVBoxLayout
 from PyQt5 import uic, QtCore
 import subprocess
 import os
+import numpy as np
 from pypopt.core.log import new_logger
+from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 rtp_ui = uic.loadUiType('pypopt/gui/rtp.ui')[0]
+
 
 
 class RTPFuncs(QMainWindow, rtp_ui):
@@ -16,6 +20,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.log.info('terminal_pid: ' + str(self.terminal_pid))
         self.label_tid.setText("pid : " + str(self.terminal_pid))
 
+        #test
         self.btn_test.clicked.connect(self.test_func)
         self.check_sys()
 
@@ -46,8 +51,16 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.btn_omp_build.clicked.connect(self.omp_build_func)
         self.btn_omp_run.clicked.connect(self.omp_run_func)
         self.init_omp_tab()
-        return
 
+        # init graph
+        self.init_graph()        
+
+        return
+    '''
+    def plott(self, hour, temperature):
+        self.widget_omp_plt_task1.axes.plot(hour,temperature)
+        return
+    '''
     def check_sys(self):
         u = os.uname()
         if '-rt' in str(u.version):
@@ -149,6 +162,17 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.treeview_omp_ts_cfg.setContextMenuPolicy(
             QtCore.Qt.CustomContextMenu)
         return
+
+    # inits
+    def init_graph(self):
+        layout = QVBoxLayout(self.widget_omp_plt_task1)
+        static_canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        layout.addWidget(static_canvas)
+        self.addToolBar(NavigationToolbar(static_canvas, self))
+        self._static_ax = static_canvas.figure.subplots()
+        self.print_graph()
+             
+        return 
 
     def test_func(self):
         self.log.info('test_btn clicked.')
@@ -342,3 +366,29 @@ class RTPFuncs(QMainWindow, rtp_ui):
         else:
             subprocess.Popen(["make","-j8"], cwd=path)
             return True
+    
+    # For graph
+    def print_graph(self):
+        tmp_f = open("DummyWorkload-exp1-0.out","r")  
+
+        thr = []
+        y_data = []
+        x_data = []        
+
+        while True:
+            tmp = tmp_f.readline()
+            line_sp = tmp.split(' ')
+            dat = line_sp[7:]
+            if not tmp:
+                break    
+            thr.append(dat)    
+
+        temp = float(thr[0][4])
+        for i in range(len(thr)):    
+            print(float(thr[i][4]))
+            y_data.append(float(thr[i][6]))
+            x_data.append(float(thr[i][4])-temp)
+        print(y_data)
+        self._static_ax.bar(x_data, y_data)
+
+        return
