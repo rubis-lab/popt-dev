@@ -56,11 +56,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.init_graph()        
 
         return
-    '''
-    def plott(self, hour, temperature):
-        self.widget_omp_plt_task1.axes.plot(hour,temperature)
-        return
-    '''
+
     def check_sys(self):
         u = os.uname()
         if '-rt' in str(u.version):
@@ -71,7 +67,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
             self.is_rt = False
         return
     
-    # inits
+    # init eg1
     def init_eg1_tab(self):
         # eg1_ts_cfg_treeview browser
         eg1_ts_cfg_root_dir = os.path.join(self.data_dir, 'ts')
@@ -106,8 +102,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
             QtCore.Qt.CustomContextMenu)        
         return
 
-
-    # inits
+    # init cpu setter
     def init_cpu_setter_tab(self):
         # treeview_scripts_cfg browser
         self.log.info('root_dir_scripts_cfg ' + self.scripts_dir)
@@ -126,8 +121,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
             QtCore.Qt.CustomContextMenu)
         return
 
-
-    # inits
+    # init opm tab
     def init_omp_tab(self):
         # treeview_omp_exp_cfg browser
         root_dir_omp_exp_cfg = os.path.join(self.omp_data_dir, 'exp')
@@ -163,7 +157,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
             QtCore.Qt.CustomContextMenu)
         return
 
-    # inits
+    # init graph
     def init_graph(self):
         layout = QVBoxLayout(self.widget_omp_plt_task1)
         static_canvas = FigureCanvas(Figure(figsize=(5, 3)))
@@ -264,7 +258,6 @@ class RTPFuncs(QMainWindow, rtp_ui):
         # make & make install
         if os.path.isfile(os.path.join(self.rts_build_dir, 'Makefile')):
             self.log.info('rts_make & install')
-            self.make_func(self.rts_build_dir)
             if(self.make_func(self.rts_build_dir)):
                 subprocess.Popen(["make","install"], cwd=self.rts_build_dir)
                 return True
@@ -301,29 +294,20 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.log.info('cmake')
         subprocess.Popen(['cmake', '..'], cwd=self.omp_build_dir)
 
-        # make
-        if not self.is_rt:
-            self.log.info('cannot run in non-rt')
-        if os.path.isfile(os.path.join(self.omp_build_dir, 'Makefile')):
-            self.log.info('omp_make')
-            if(self.make_func(self.omp_build_dir)):                
-                return True
-            else:
-                return False
+        # make                
+        self.log.info('omp_make')
+        if(self.make_func(self.omp_build_dir)):                
+            return True
         else:
             self.log.error('Makefile does not exist.')
             return False
+        
 
     def omp_build_func(self):
         # make
-        if not self.is_rt:
-            self.log.info('cannot run in non-rt')
-        if os.path.isfile(os.path.join(self.omp_build_dir, 'Makefile')):
-            self.log.info('omp_make')
-            if(self.make_func(self.omp_build_dir)):                
-                return True
-            else:
-                return False
+        self.log.info('omp_make')
+        if(self.make_func(self.omp_build_dir)):                
+            return True
         else:
             self.log.error('Makefile does not exist.')
             return False
@@ -358,37 +342,68 @@ class RTPFuncs(QMainWindow, rtp_ui):
         else:
             self.log.error('omp does not exist (maybe not compiled).')
             return False
+
     # For make
     def make_func(self,path):
+        if not self.is_rt:
+            self.log.info('cannot run in non-rt')
         if path == '':
             QMessageBox.information(self, 'Alarm', 'Path is empty!')
             return False
         else:
-            subprocess.Popen(["make","-j8"], cwd=path)
-            return True
+            if os.path.isfile(os.path.join(path, 'Makefile')):                
+                subprocess.Popen(["make","-j8"], cwd=path)
+                return True
+            else:
+                return False
     
     # For graph
     def print_graph(self):
-        tmp_f = open("DummyWorkload-exp1-0.out","r")  
+        # open file
+        '''
+        index_file = 2
+        tmp_f1 = open_file(index_file)
+        '''
+        data_folder = "samples/omp/build/"
+        file_to_open = data_folder + "DummyWorkload-exp2-0.out"
+        tmp_f1 = open(file_to_open,"r")        
 
+        # file to data
+        x1_data, y1_data = self.file_to_data(tmp_f1)
+
+        # print graph
+        self._static_ax.bar(x1_data, y1_data)
+
+        return
+    '''
+    def open_file(self, idx_file):
+        data_folder = "samples/omp/build/"
+        file_to_open = data_folder + "DummyWorkload-exp" + idx_file + "-0.out"
+        tmp_f = open(file_to_open,"r")
+
+        return tmp_f
+    '''
+    #file to data
+    def file_to_data(self,tmp_file):
         thr = []
+        x_data = []
         y_data = []
-        x_data = []        
 
+        # read thr & split
         while True:
-            tmp = tmp_f.readline()
+            tmp = tmp_file.readline()
             line_sp = tmp.split(' ')
             dat = line_sp[7:]
             if not tmp:
                 break    
-            thr.append(dat)    
+            thr.append(dat)
 
+        # thr to data
         temp = float(thr[0][4])
-        for i in range(len(thr)):    
-            print(float(thr[i][4]))
+        for i in range(len(thr)):                
             y_data.append(float(thr[i][6]))
             x_data.append(float(thr[i][4])-temp)
-        print(y_data)
-        self._static_ax.bar(x_data, y_data)
 
-        return
+        return x_data, y_data
+
+    
