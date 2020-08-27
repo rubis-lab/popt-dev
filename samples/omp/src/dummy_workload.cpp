@@ -30,7 +30,7 @@ void DummyWorkload::milli_sec_work(int _msec){
 
 void DummyWorkload::work() {
     // task loop
-    int iter = 100;
+    int iter = 10;
     std::cout << "hi" << pt.selected_opt << std::endl;
     for(int task_iter = 0; task_iter < iter; task_iter++) {
         // create task data for logging
@@ -52,22 +52,16 @@ void DummyWorkload::work() {
                 // thr_log->info("(work): rt-constraints already applied");
             } else {
                 thr_log->info("(work): setting rt-constraints for " + std::to_string(tid));
-                //set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
+                set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
                 omp_thr_ids.push_back(tid);
             }
 
             double start_time = omp_get_wtime();
             int a = 0;
-            //int workload = 80 * _texec_time;
-            #pragma omp for schedule(dynamic) nowait
+            #pragma omp for schedule(dynamic,4) nowait
             for(int y = 0; y < 100; y++) {
-                milli_sec_work(10);
+                milli_sec_work((100 - y)/10);
             }
-            // #pragma omp for schedule(dynamic) nowait
-            //     for(int y = 0; y < 100; y++) {
-            //         a += 1;
-            //     }
-            //assume body task of func   
             double end_time = omp_get_wtime();
             sched_data_thread thr_data;
             thr_data.start_t = start_time;
@@ -82,10 +76,10 @@ void DummyWorkload::work() {
             }
             thr_log->info("num iter " + std::to_string(thr_data.iter));
         }
-        #pragma omp barrier
+        // #pragma omp barrier
         thr_log->info("(work): iter " + std::to_string(task_iter) + " completed.");
         sl.log_to_file(task_data);
-        // sched_yield();
+        sched_yield();
     }  // task loop
     thr_log->info("(work) task exiting..");
     

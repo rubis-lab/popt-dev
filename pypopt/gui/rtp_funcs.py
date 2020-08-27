@@ -164,7 +164,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
         layout.addWidget(static_canvas)
         self.addToolBar(NavigationToolbar(static_canvas, self))
         self._static_ax = static_canvas.figure.subplots()
-        self.print_graph()
+        # self.print_graph()
              
         return 
 
@@ -232,7 +232,6 @@ class RTPFuncs(QMainWindow, rtp_ui):
         self.log.info('opening setcpu.')
         subprocess.Popen(['./cpuset.sh',self.line_edit_set_cpu.text(),str(self.terminal_pid)],
             cwd=self.scripts_dir)
-        subprocess.Popen(['stress','-c','12','-t','10'])
         return
     
     def set_freq_func(self):                
@@ -399,6 +398,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
             thr.append(dat)
 
         # thr to data
+        self.log.info(thr[0][4])
         temp = float(thr[0][4])
         for i in range(len(thr)):                
             y_data.append(float(thr[i][6]))
