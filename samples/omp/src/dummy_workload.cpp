@@ -58,7 +58,7 @@ void DummyWorkload::work() {
 
             double start_time = omp_get_wtime();
             int a = 0;
-            #pragma omp for schedule(dynamic,4) nowait
+            #pragma omp for schedule(dynamic) nowait
             for(int y = 0; y < 100; y++) {
                 milli_sec_work((100 - y)/10);
             }
