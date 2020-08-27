@@ -5,6 +5,7 @@ if [[ $EUID -ne 0 ]] ; then
     exit 1
 fi
 
+
 current_date=$(date "+%m.%d.%y")
 current_time=$(date "+%m.%d.%y-%H:%M:%S")
 
@@ -17,8 +18,6 @@ if [ ! -d $HOME/experiment/$current_date ] ; then
 fi
 
 cd $HOME/experiment/$current_date
-trace-cmd record -e sched -F $1 $2
-mv trace.dat $current_time.dat
-kernelshark $current_time.dat
+trace-cmd record -e sched -r 99 -o $1.dat
 
 exit 0
