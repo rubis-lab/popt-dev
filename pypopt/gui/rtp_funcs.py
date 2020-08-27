@@ -43,13 +43,12 @@ class RTPFuncs(QMainWindow, rtp_ui):
         # omp tab
         self.omp_build_dir = os.path.join(os.getcwd(), 'samples/omp/build')
         self.omp_data_dir = os.path.join(os.getcwd(), 'samples/omp/data')
+        self.omp_log_dir = os.path.join(os.getcwd(), 'samples/omp/build')
         self.rts_build_dir = os.path.join(os.getcwd(), 'rts/build')
         self.target_name = 'omp'
         self.btn_rts_rebuild.clicked.connect(self.rts_rebuild_func)
         self.btn_rts_build.clicked.connect(self.rts_build_func)
-        self.btn_omp_rebuild.clicked.connect(self.omp_rebuild_func)
-        self.btn_omp_build.clicked.connect(self.omp_build_func)
-        self.btn_omp_run.clicked.connect(self.omp_run_func)
+        
         self.init_omp_tab()
 
         # init graph
@@ -155,6 +154,29 @@ class RTPFuncs(QMainWindow, rtp_ui):
                 root_dir_omp_ts_cfg))
         self.treeview_omp_ts_cfg.setContextMenuPolicy(
             QtCore.Qt.CustomContextMenu)
+
+        # treeview_omp_log_file
+        root_dir_omp_log_file = self.omp_log_dir
+        filter_omp_log_file = ['*.out']
+        self.browser_model_omp_log_file = QFileSystemModel()
+        self.browser_model_omp_log_file.setRootPath(
+            root_dir_omp_log_file)
+        self.browser_model_omp_log_file.setNameFilters(
+            filter_omp_log_file)
+        self.treeview_omp_log_file.setModel(
+            self.browser_model_omp_log_file)
+        self.treeview_omp_log_file.setRootIndex(
+            self.browser_model_omp_log_file.index(
+                root_dir_omp_log_file))
+        self.treeview_omp_log_file.setContextMenuPolicy(
+            QtCore.Qt.CustomContextMenu)
+
+        # omp tab buttons
+        self.btn_omp_rebuild.clicked.connect(self.omp_rebuild_func)
+        self.btn_omp_build.clicked.connect(self.omp_build_func)
+        self.btn_omp_run.clicked.connect(self.omp_run_func)
+        self.btn_omp_analyze.clicked.connect(self.omp_analyze_func)
+
         return
 
     # init graph
@@ -336,8 +358,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
         if os.path.isfile(os.path.join(self.omp_build_dir, self.target_name)):
             self.log.info('opening omp.')
             subprocess.Popen(['./omp',str(omp_exp_cfg_path), str(omp_ts_cfg_path)],
-                cwd=self.omp_build_dir)
-            self.calc_response()
+                cwd=self.omp_build_dir)            
             return True
         else:
             self.log.error('omp does not exist (maybe not compiled).')
@@ -356,21 +377,46 @@ class RTPFuncs(QMainWindow, rtp_ui):
                 return True
             else:
                 return False
-    # For calculation respose time
-    def calc_response(self):
-        data_folder = "samples/omp/build/"
-        file_to_open = data_folder + "DummyWorkload-exp1-0.out"
-        tmp_f = open(file_to_open,"r")
-        thr = []
+    # For omp analyze
+    def omp_analyze_func(self):
 
-        while True:
-            tmp = tmp_f.readline()
-            line_sp = tmp.split(' ')
-            #dat = line_sp[]
-            self.log.info(line_sp[4])
-            if not tmp:
-                break    
-            thr.append(line_sp)
+        index_log_file = self.treeview_omp_log_file.currentIndex()
+        omp_log_file_path = \
+            self.browser_model_omp_log_file.filePath(index_log_file)
+
+        thr_data = []
+        with open(omp_log_file_path, 'r') as f:
+            lines = f.readlines()
+            for line in lines:                
+                if '$' not in line:
+                    continue
+                thr_data_raw = line.split('$')[1].split(' ')                
+                thr_data.append({
+                    'task_id': int(thr_data_raw[0]),
+                    'iter': int(thr_data_raw[1]),
+                    'exec_time': float(thr_data_raw[2]) / 10**6,
+                    'period': float(thr_data_raw[3]) / 10**6,
+                    'deadline': float(thr_data_raw[4]) / 10**6,
+                    'start_time': float(thr_data_raw[5]) / 10**6,
+                    'end_time': float(thr_data_raw[6]) / 10**6,
+                    'response_time': float(thr_data_raw[7]) / 10**6,
+                    'slack': float(thr_data_raw[8]) / 10**6
+                })
+        
+        # calc mean response time
+        averages = {}
+        for key in thr_data[0].keys():
+            tmp_sum = 0
+            for td in thr_data:
+                tmp_sum += td[key]
+            averages[key] = tmp_sum / len(thr_data)
+            ret = key + ': ' + str(averages[key])
+            if 'task_id' not in key or 'iter' not in key:
+                ret += ' ms'
+            print(ret)
+
+            
+            
 
 
         return 

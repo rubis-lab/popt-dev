@@ -36,7 +36,7 @@ bool SchedLog::write_header() {
 }
 
 bool SchedLog::log_to_file(sched_data _data) {
-    std::string task_str = std::to_string(_data.task_id)
+    std::string task_str = "$" + std::to_string(_data.task_id)
         + " " + std::to_string(_data.iter)
         + " " + std::to_string(_data.runtime)
         + " " + std::to_string(_data.period)

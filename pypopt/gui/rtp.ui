@@ -279,6 +279,29 @@
        <string>rts build</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="btn_omp_analyze">
+      <property name="geometry">
+       <rect>
+        <x>780</x>
+        <y>300</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>analyze</string>
+      </property>
+     </widget>
+     <widget class="QTreeView" name="treeview_omp_log_file">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>290</y>
+        <width>381</width>
+        <height>191</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="label_tid">
