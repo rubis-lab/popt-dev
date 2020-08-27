@@ -20,6 +20,7 @@ public:
     std::vector<int> omp_thr_ids;
     void work();
     DummyWorkload(rts::Pt _pt, rts::Exp _exp);
+    void milli_sec_work(int msec);
     rts::Pt pt;
     SchedLog sl;
 };

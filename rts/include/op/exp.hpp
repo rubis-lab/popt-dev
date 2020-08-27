@@ -2,6 +2,7 @@
 #define __EXP_H__
 #include <fstream>
 #include <string>
+#include <iostream>
 #include <nlohmann/json.hpp>
 namespace rts {
 

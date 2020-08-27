@@ -16,6 +16,7 @@ struct sched_data_thread {
     double end_t;
     double response_t;
     double slack;
+    int iter = 0;
     bool operator<(const sched_data_thread &a) const {
         return response_t > a.response_t;
     }

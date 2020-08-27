@@ -93,6 +93,10 @@ bool Cho::is_schedulable(Pts _pts, Exp _exp) {
             _pts.popt_list = selected_opt;
             _pts.populate_popt_list(_exp.num_tasks);
             _pts.serialize_pts();
+            for(unsigned int i = 0; i < _pts.popt_list.size(); i++) {
+                std::cout << _pts.popt_list.at(i) + " ";
+            }
+            std::cout << "cho" << std::endl;
             return true;
         }
     }

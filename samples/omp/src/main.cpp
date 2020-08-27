@@ -1,6 +1,7 @@
 #include "sched_core.hpp"
 #include "dummy_workload.hpp"
 #include <rts/core/pts.hpp>
+#include <rts/sched/cho.hpp>
 #include <rts/op/exp.hpp>
 #include "spdlog/spdlog.h"
 #include <iostream>
@@ -26,7 +27,13 @@ int main(int argc, const char *argv[]) {
     nlohmann::json jf = nlohmann::json::parse(_jf);
     rts::Pts pts(jf, e);
 
+    // rts::Cho cho;
+    // cho.max_opt = 4;
+    // cho.num_core = 4;
+    // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
+
     std::vector<DummyWorkload> works;
+    std::cout << pts.pt_list.size() << std::endl;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
         DummyWorkload dw(pts.pt_list.at(i), e);
         works.push_back(dw);

@@ -19,22 +19,29 @@ DummyWorkload::DummyWorkload(rts::Pt _pt, rts::Exp _exp) {
     return;
 }
 
+void DummyWorkload::milli_sec_work(int _msec){
+    unsigned int iter = 600000 * _msec;
+    int sum = 0;
+    for(unsigned int i = 0; i < iter; i++){
+        sum++;
+    }
+    return;
+}
+
 void DummyWorkload::work() {
     // task loop
-    int iter = 10;
+    int iter = 100;
+    std::cout << "hi" << pt.selected_opt << std::endl;
     for(int task_iter = 0; task_iter < iter; task_iter++) {
         // create task data for logging
         sched_data task_data;
         task_data.task_id = pt.id;
         task_data.iter = task_iter;
-        //TODO - exec times!
         task_data.runtime = pt.base_task.exec_time;
         task_data.period = pt.base_task.period;
         task_data.deadline = pt.base_task.deadline;
-
-        int a = 0;
         omp_set_dynamic(0);
-        #pragma omp parallel firstprivate(a) num_threads(pt.selected_opt)
+        #pragma omp parallel num_threads(pt.selected_opt)
         {
             // check rt constraints applied to openmp thread
             int tid = gettid();
@@ -45,27 +52,35 @@ void DummyWorkload::work() {
                 // thr_log->info("(work): rt-constraints already applied");
             } else {
                 thr_log->info("(work): setting rt-constraints for " + std::to_string(tid));
-                set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
+                //set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
                 omp_thr_ids.push_back(tid);
             }
 
             double start_time = omp_get_wtime();
+            int a = 0;
+            //int workload = 80 * _texec_time;
             #pragma omp for schedule(dynamic) nowait
-                for(int y = 0; y < 100; y++) {
-                    a += 1;
-                }
+            for(int y = 0; y < 100; y++) {
+                milli_sec_work(10);
+            }
+            // #pragma omp for schedule(dynamic) nowait
+            //     for(int y = 0; y < 100; y++) {
+            //         a += 1;
+            //     }
             //assume body task of func   
             double end_time = omp_get_wtime();
             sched_data_thread thr_data;
             thr_data.start_t = start_time;
             thr_data.end_t = end_time;
-            thr_data.response_t = end_time - start_time;
+            thr_data.response_t = (end_time - start_time)*1e9;
             thr_data.slack = task_data.deadline - thr_data.response_t;
+            thr_data.iter = a;
             #pragma omp critical
             {
                 task_data.thr_data.push_back(thr_data);
                 thr_log->info("(work): openmp_thread_idx: " + std::to_string(omp_get_thread_num()));
             }
+            thr_log->info("num iter " + std::to_string(thr_data.iter));
         }
         #pragma omp barrier
         thr_log->info("(work): iter " + std::to_string(task_iter) + " completed.");
