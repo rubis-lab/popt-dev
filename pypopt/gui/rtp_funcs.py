@@ -337,6 +337,7 @@ class RTPFuncs(QMainWindow, rtp_ui):
             self.log.info('opening omp.')
             subprocess.Popen(['./omp',str(omp_exp_cfg_path), str(omp_ts_cfg_path)],
                 cwd=self.omp_build_dir)
+            self.calc_response()
             return True
         else:
             self.log.error('omp does not exist (maybe not compiled).')
@@ -355,7 +356,24 @@ class RTPFuncs(QMainWindow, rtp_ui):
                 return True
             else:
                 return False
-    
+    # For calculation respose time
+    def calc_response(self):
+        data_folder = "samples/omp/build/"
+        file_to_open = data_folder + "DummyWorkload-exp1-0.out"
+        tmp_f = open(file_to_open,"r")
+        thr = []
+
+        while True:
+            tmp = tmp_f.readline()
+            line_sp = tmp.split(' ')
+            #dat = line_sp[]
+            self.log.info(line_sp[4])
+            if not tmp:
+                break    
+            thr.append(line_sp)
+
+
+        return 
     # For graph
     def print_graph(self):
         # open file
