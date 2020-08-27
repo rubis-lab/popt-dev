@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1039</width>
-    <height>734</height>
+    <width>1068</width>
+    <height>778</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,8 +49,11 @@
       <height>661</height>
      </rect>
     </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -116,6 +119,67 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>CPU setter</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_set_freq">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>20</y>
+        <width>221</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>set nvpmodel</string>
+      </property>
+     </widget>
+     <widget class="QTreeView" name="treeview_scripts_cfg">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>361</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_set_cpu">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>100</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>set cpu</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_edit_set_nvp">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>20</y>
+        <width>113</width>
+        <height>42</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_edit_set_cpu">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>100</y>
+        <width>113</width>
+        <height>42</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>omp</string>
@@ -133,10 +197,10 @@
      <widget class="QPushButton" name="btn_omp_run">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>440</y>
+        <x>120</x>
+        <y>550</y>
         <width>111</width>
-        <height>31</height>
+        <height>41</height>
        </rect>
       </property>
       <property name="text">
@@ -156,40 +220,79 @@
      <widget class="QPushButton" name="btn_omp_rebuild">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>470</y>
-        <width>111</width>
-        <height>31</height>
+        <x>180</x>
+        <y>440</y>
+        <width>171</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string>rebuild</string>
+       <string>omp rebuild</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btn_omp_build">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>500</y>
-        <width>111</width>
-        <height>31</height>
+        <x>180</x>
+        <y>490</y>
+        <width>171</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string>build</string>
+       <string>omp build</string>
       </property>
      </widget>
      <widget class="QWidget" name="widget_omp_plt_task1" native="true">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>30</y>
+        <x>380</x>
+        <y>0</y>
         <width>371</width>
         <height>281</height>
        </rect>
       </property>
      </widget>
+     <widget class="QPushButton" name="btn_rts_rebuild">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>440</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>rts rebuild</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_rts_build">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>490</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>rts build</string>
+      </property>
+     </widget>
     </widget>
+   </widget>
+   <widget class="QLabel" name="label_tid">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>670</y>
+      <width>129</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-1</string>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
