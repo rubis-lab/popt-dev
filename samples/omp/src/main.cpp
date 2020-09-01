@@ -1,5 +1,5 @@
 #include "sched_core.hpp"
-#include "dummy_workload.hpp"
+#include "dlworker.hpp"
 #include <rts/core/pts.hpp>
 #include <rts/sched/cho.hpp>
 #include <rts/op/exp.hpp>
