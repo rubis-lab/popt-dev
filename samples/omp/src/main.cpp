@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <thread>
+#include <vector>
 #include <omp.h>
 
 
@@ -32,22 +33,20 @@ int main(int argc, const char *argv[]) {
     // cho.num_core = 4;
     // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
-    std::vector<DummyWorkload> works;
+    std::vector<DLWorker> workers;
     std::cout << pts.pt_list.size() << std::endl;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        DummyWorkload dw(pts.pt_list.at(i), e);
-        works.push_back(dw);
-        // std::cout << pts.pt_list.at(i).id << std::endl;
+        DLWorker dw(pts.pt_list[i]], e);
+        workers.push_back(dw);
     }
 
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        thrs.push_back(std::thread(&DummyWorkload::work, &works[i]));
+        thrs.push_back(std::thread(&DLWorker::work, &workers[i]));
     }
 
     for(std::thread &t: thrs){
-        // std::cout << "Task thread ID: " << gettid() << std::endl;
-        t.join(); //pauses until t finishes;
+        t.join();
     }
 
     std::cout << "main dies: " << gettid() << std::endl;
