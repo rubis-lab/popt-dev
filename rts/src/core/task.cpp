@@ -12,6 +12,7 @@ Task::Task(std::unordered_map<std::string, double> _tattr) {
     exec_time = _tattr["exec_time"];
     deadline = _tattr["deadline"];
     period = _tattr["period"];
+    slack = 0;
     return;
 }
 

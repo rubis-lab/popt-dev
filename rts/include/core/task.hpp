@@ -14,6 +14,7 @@ public:
     double exec_time;
     double deadline;
     double period;
+    double slack;
     Task();
     Task(std::unordered_map<std::string, double> _tattr);
     std::string to_str();

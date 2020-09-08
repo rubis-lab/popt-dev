@@ -15,6 +15,10 @@ public:
     double calc_interference(Task _base_task, Task _inter_task);
     double sum_interference(TaskSet _ts, Task _base_task);
     bool is_schedulable(TaskSet _ts);
+    //slack
+    double calc_interference_slack(Task _base_task, Task _inter_task);
+    double sum_interference_slack(TaskSet _ts, Task _base_task);
+    bool is_schedulable_slack(TaskSet _ts);
 };
 
 }  // namespace rts

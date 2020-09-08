@@ -16,6 +16,7 @@ public:
     double max_utilization(TaskSet _ts);
     double max_density(TaskSet _ts);
     double workload_in_interval_edf(Task _t, double _interval);
+    double workload_in_interval_edf_slack(Task _t, double _interval);
 };
 
 } // namespace rts

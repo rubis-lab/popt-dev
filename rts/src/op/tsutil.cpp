@@ -60,4 +60,18 @@ double TSUtil::workload_in_interval_edf(Task _t, double _interval){
     return workload_carry_in + workload_body_job;
 }
 
+double TSUtil::workload_in_interval_edf_slack(Task _t, double _interval) {
+    int num_body_job = floor(_interval / _t.period);
+    double workload_body_job = _t.exec_time * num_body_job;
+    
+    // slack added
+    double workload_carry_in = fmod(_interval, _t.period) - _t.slack;
+    if(workload_carry_in < 0.0){
+        workload_carry_in = 0.0;
+    }
+    
+    workload_carry_in = std::min(_t.exec_time, workload_carry_in);
+    return workload_carry_in + workload_body_job;  
+}
+
 }  // namespace rts

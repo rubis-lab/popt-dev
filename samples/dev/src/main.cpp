@@ -56,7 +56,10 @@ int main(int argc, char **argv) {
         // apply schedulability test
         bool sched_gfb = gfb.is_schedulable(ts);
         gfb_st.add(sum_util, sched_gfb);
-        bool sched_cho = cho.is_schedulable(pts);
+        
+        //exp?
+        bool sched_cho = cho.is_schedulable(pts, e);
+
         cho_st.add(sum_util, sched_cho);
         bool sched_bcl = bcl.is_schedulable(ts);
         bcl_st.add(sum_util, sched_bcl);
