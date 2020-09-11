@@ -3,6 +3,7 @@
 
 #include "core/task.hpp"
 #include "core/task_set.hpp"
+#include <iostream>
 #include <math.h>
 
 namespace rts {
