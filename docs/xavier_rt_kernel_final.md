@@ -85,16 +85,17 @@ $ cd $TEGRA_XAVIER_KERNEL_OUT/modules/lib/modules
 $ sudo cp -r 4.9.140-rt93-tegra/ $HOME/nvidia/Linux_for_Tegra/rootfs/lib/modules/
 ```
 
-## Flashing NVIDIA AGX XAVIER internal eMMC
+# Flashing NVIDIA AGX XAVIER internal eMMC
 
-# put board in recovery mode
+## put board in recovery mode
 1. Power down the device. If connected, remove the AC adapter from the device. The device must be powered OFF, and not in a suspend or sleep state.
 2. Connect the Type-C plug on the USB cable to the Recovery (USB Type-C) Port on the device and the other end to an available USB port on the host PC.
 3. Connect the power adapter to the device.
 4. Press and release the POWER button to power on device.
 5. Press and hold the FORCE RECOVERY button: while pressing the FORCE RECOVERY button, press and release the RESET button; wait two seconds and release the FORCE RECOVERY button.
 6. When the device is in recovery mode, **lsusb** command on host will list a line of **"NVidia Corp"**
-# the board should boot up but the monitor won't turn on
+
+**the board should boot up but the monitor won't turn on**
 
 ```shell
 # run flash command (5 min)
