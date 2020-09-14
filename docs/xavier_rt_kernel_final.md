@@ -81,7 +81,7 @@ $ make -j12 O=$TEGRA_XAVIER_KERNEL_OUT ARCH=$ARCH modules
 $ make O=$TEGRA_XAVIER_KERNEL_OUT ARCH=$ARCH modules_install INSTALL_MOD_PATH=$TEGRA_XAVIER_KERNEL_OUT/modules
 
 # copy the kernel modules and paste to the sample file system modules
-$ cd $TEGRA_XAVIER_KERNEL_OUT/lib/modules
+$ cd $TEGRA_XAVIER_KERNEL_OUT/modules/lib/modules
 $ sudo cp -r 4.9.140-rt93-tegra/ $HOME/nvidia/Linux_for_Tegra/rootfs/lib/modules/
 ```
 
