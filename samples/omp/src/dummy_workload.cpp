@@ -62,6 +62,10 @@ void DummyWorkload::work() {
             for(int y = 0; y < 100; y++) {
                 milli_sec_work((100 - y)/10);
             }
+            // for(int y = 1; y < 15; y++) {
+            //     milli_sec_work((_texec_time * y) / 1e8);
+            // }
+            
             double end_time = omp_get_wtime();
             sched_data_thread thr_data;
             thr_data.start_t = start_time;
