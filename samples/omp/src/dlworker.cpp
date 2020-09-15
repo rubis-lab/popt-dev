@@ -1,9 +1,9 @@
-#include "dummy_workload.hpp"
+#include "dlworker.hpp"
 
 
-DummyWorkload::DummyWorkload(rts::Pt _pt, rts::Exp _exp) {
+DLWorker::DLWorker(rts::Pt _pt, rts::Exp _exp) {
     pt = _pt;
-    name = "DummyWorkload-" + _exp.name + "-" + std::to_string(pt.id);
+    name = "DLWorker-" + _exp.name + "-" + std::to_string(pt.id);
 
     // logger for thread debug messages
     std::string thread_logger_name = "thread-" + name + "_logger";
@@ -19,16 +19,33 @@ DummyWorkload::DummyWorkload(rts::Pt _pt, rts::Exp _exp) {
     return;
 }
 
-void DummyWorkload::milli_sec_work(int _msec){
+void DLWorker::apply_rt() {
+    // check rt constraints applied to openmp thread
+    int tid = gettid();
+    if(std::find(omp_thr_ids.begin(), omp_thr_ids.end(), tid)!=omp_thr_ids.end()) {
+        // thr_log->info("(work): rt-constraints already applied");
+    } else {
+        int _tperiod = (int)std::round(pt.base_task.period);
+        int _tdeadline = (int)std::round(pt.base_task.deadline);
+        int _texec_time = (int)std::round(pt.tsdict[pt.selected_opt][0].exec_time);
+        thr_log->info("(work): setting rt-constraints for " + std::to_string(tid));
+        set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
+        omp_thr_ids.push_back(tid);
+    }
+    return;
+}
+
+void DLWorker::msec_work(int _msec) {
+    // 600000 addition takes about 1msec on an 1.2GHz CPU
     unsigned int iter = 600000 * _msec;
     int sum = 0;
-    for(unsigned int i = 0; i < iter; i++){
+    for(unsigned int i = 0; i < iter; i++) {
         sum++;
     }
     return;
 }
 
-void DummyWorkload::work() {
+void DLWorker::work() {
     // task loop
     int iter = 10;
     std::cout << "hi" << pt.selected_opt << std::endl;
@@ -43,36 +60,28 @@ void DummyWorkload::work() {
         omp_set_dynamic(0);
         #pragma omp parallel num_threads(pt.selected_opt)
         {
-            // check rt constraints applied to openmp thread
-            int tid = gettid();
-            int _tperiod = (int)std::round(pt.base_task.period);
-            int _tdeadline = (int)std::round(pt.base_task.deadline);
-            int _texec_time = (int)std::round(pt.tsdict[pt.selected_opt][0].exec_time);
-            if(std::find(omp_thr_ids.begin(), omp_thr_ids.end(), tid)!=omp_thr_ids.end()) {
-                // thr_log->info("(work): rt-constraints already applied");
-            } else {
-                thr_log->info("(work): setting rt-constraints for " + std::to_string(tid));
-                set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
-                omp_thr_ids.push_back(tid);
-            }
+            apply_rt()
+            #pragma omp barrier
 
+            // actual work
             double start_time = omp_get_wtime();
-            int a = 0;
             #pragma omp for schedule(dynamic) nowait
             for(int y = 0; y < 100; y++) {
-                milli_sec_work((100 - y)/10);
+                msec_work((100 - y)/10);
             }
             // for(int y = 1; y < 15; y++) {
             //     milli_sec_work((_texec_time * y) / 1e8);
             // }
             
             double end_time = omp_get_wtime();
+
+            // log work
             sched_data_thread thr_data;
             thr_data.start_t = start_time;
             thr_data.end_t = end_time;
-            thr_data.response_t = (end_time - start_time)*1e9;
+            thr_data.response_t = (end_time - start_time) * 1e9;
             thr_data.slack = task_data.deadline - thr_data.response_t;
-            thr_data.iter = a;
+            thr_data.iter = task_iter;
             #pragma omp critical
             {
                 task_data.thr_data.push_back(thr_data);
@@ -80,12 +89,12 @@ void DummyWorkload::work() {
             }
             thr_log->info("num iter " + std::to_string(thr_data.iter));
         }
-        // #pragma omp barrier
+
         thr_log->info("(work): iter " + std::to_string(task_iter) + " completed.");
         sl.log_to_file(task_data);
         sched_yield();
     }  // task loop
     thr_log->info("(work) task exiting..");
-    
+
     return;
 }
