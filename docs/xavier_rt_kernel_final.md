@@ -95,7 +95,11 @@ $ sudo cp -r 4.9.140-rt93-tegra/ $HOME/nvidia/Linux_for_Tegra/rootfs/lib/modules
 5. Press and hold the FORCE RECOVERY button: while pressing the FORCE RECOVERY button, press and release the RESET button; wait two seconds and release the FORCE RECOVERY button.
 6. When the device is in recovery mode, **lsusb** command on host will list a line of **"NVidia Corp"**
 
+<<<<<<< HEAD
     **the board should boot up but the monitor won't turn on**
+=======
+  **the board should boot up but the monitor won't turn on**
+>>>>>>> a37dea88f6f2dbecbc63dcb41eec9025adf0df29
 
 ```shell
 # run flash command (5 min)

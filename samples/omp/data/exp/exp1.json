@@ -3,7 +3,7 @@
     "scheduler": "GEDF",
     "iteration": 10000,
     "strategy": "max",
-    "num_tasks": 1,
+    "num_tasks": 4,
     "custom_option": [2, 2, 3, 4],
     "para": {
         "max_opt": 4

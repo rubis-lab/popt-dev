@@ -69,6 +69,10 @@ void DLWorker::work() {
             for(int y = 0; y < 100; y++) {
                 msec_work((100 - y)/10);
             }
+            // for(int y = 1; y < 15; y++) {
+            //     milli_sec_work((_texec_time * y) / 1e8);
+            // }
+            
             double end_time = omp_get_wtime();
 
             // log work

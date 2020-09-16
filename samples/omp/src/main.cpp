@@ -28,10 +28,10 @@ int main(int argc, const char *argv[]) {
     nlohmann::json jf = nlohmann::json::parse(_jf);
     rts::Pts pts(jf, e);
 
-    // rts::Cho cho;
-    // cho.max_opt = 4;
-    // cho.num_core = 4;
-    // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
+    rts::Cho cho;
+    cho.max_opt = 4;
+    cho.num_core = 4;
+    std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
     std::vector<DLWorker> workers;
     std::cout << pts.pt_list.size() << std::endl;
