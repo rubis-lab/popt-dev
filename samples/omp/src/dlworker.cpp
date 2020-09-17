@@ -60,7 +60,7 @@ void DLWorker::work() {
         omp_set_dynamic(0);
         #pragma omp parallel num_threads(pt.selected_opt)
         {
-            apply_rt()
+            apply_rt();
             #pragma omp barrier
 
             // actual work

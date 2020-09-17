@@ -1,5 +1,6 @@
 #include "sched_core.hpp"
 #include "dlworker.hpp"
+#include "dagworker.hpp"
 #include <rts/core/pts.hpp>
 #include <rts/sched/cho.hpp>
 #include <rts/op/exp.hpp>
@@ -23,31 +24,44 @@ int main(int argc, const char *argv[]) {
     //omp_set_num_threads(20);
 
     rts::Exp e(argv[1]);
-    
     std::ifstream _jf(argv[2]);
     nlohmann::json jf = nlohmann::json::parse(_jf);
     rts::Pts pts(jf, e);
+    // rts::Cho cho;
+    // cho.max_opt = 4;
+    // cho.num_core = 4;
+    // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
-    rts::Cho cho;
-    cho.max_opt = 4;
-    cho.num_core = 4;
-    std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
-    std::vector<DLWorker> workers;
-    std::cout << pts.pt_list.size() << std::endl;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        DLWorker dw(pts.pt_list[i]], e);
-        workers.push_back(dw);
+    std::vector<DAGWorker> workers;
+
+    //for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
+    for(unsigned int i = 0; i < 4; i++) { 
+        DAGWorker dag(pts.pt_list[0], e);
+        workers.push_back(dag);
     }
-
+    //dag.apply_rt();
+    //    workers.push_back(dag);
+    //}
     std::vector<std::thread> thrs;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        thrs.push_back(std::thread(&DLWorker::work, &workers[i]));
+    for(unsigned int i = 0; i < 4; i++) {
+        thrs.push_back(std::thread(&DAGWorker::work, &workers[i], i));
     }
-
-    for(std::thread &t: thrs){
+    for(std::thread &t: thrs) {
         t.join();
     }
+
+    // std::vector<DLWorker> workers;
+    // std::cout << pts.pt_list.size() << std::endl;
+    // for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
+    //     DLWorker dw(pts.pt_list[i], e);
+    //     workers.push_back(dw);
+    // }
+
+    // std::vector<std::thread> thrs;
+    // for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
+    //     thrs.push_back(std::thread(&DLWorker::work, &workers[i]));
+    // }
 
     std::cout << "main dies: " << gettid() << std::endl;
 
