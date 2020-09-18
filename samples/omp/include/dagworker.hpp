@@ -18,7 +18,6 @@ public:
     std::vector<int> thr_ids;
     std::vector<int> dependence_order;
     rts::Pt pt;
-    void apply_rt();
     void msec_work(int _msec);
     void work(int _index);
 };

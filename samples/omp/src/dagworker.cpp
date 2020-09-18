@@ -10,22 +10,6 @@ DAGWorker::DAGWorker(rts::Pt _pt, rts::Exp _exp) {
     return;
 }
 
-void DAGWorker::apply_rt() {
-    // check rt constraints applied to openmp thread
-    std::cout << "entering apply_rt" << std::endl;
-    int tid = gettid();
-    if(std::find(thr_ids.begin(), thr_ids.end(), tid)!=thr_ids.end()) {
-        // thr_log->info("(work): rt-constraints already applied");
-    } else {
-        int _tperiod = (int)std::round(pt.base_task.period);
-        int _tdeadline = (int)std::round(pt.base_task.deadline);
-        int _texec_time = (int)std::round(pt.tsdict[pt.selected_opt][0].exec_time);
-        set_sched_deadline(tid, _texec_time, _tdeadline, _tperiod);
-        thr_ids.push_back(tid);
-        dependence_order.push_back(++count);
-    }
-    return;
-}
 
 void DAGWorker::msec_work(int _msec) {
     // 600000 addition takes about 1msec on an 1.2GHz CPU
@@ -52,7 +36,7 @@ void DAGWorker::work(int _index) {
         for(int y = 0; y < 100; y++) {
             msec_work((100 - y)/10);
         }
-        sched_yield();
+        //sched_yield();
     }  // task loop
     std::cout << "index " << _index << " completed" << std::endl;
     mutex++;

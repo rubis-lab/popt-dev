@@ -4,6 +4,7 @@
 #include <rts/core/pts.hpp>
 #include <rts/sched/cho.hpp>
 #include <rts/op/exp.hpp>
+#include <rts/core/dag.hpp>
 #include "spdlog/spdlog.h"
 #include <iostream>
 #include <fstream>
@@ -32,24 +33,36 @@ int main(int argc, const char *argv[]) {
     // cho.num_core = 4;
     // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
+    rts::DAG dag(pts);
+    // 0 -> 1, 3 -> 2
+    dag.task_list.at(3).predecessors.push_back((dag.task_list.at(0)));
+    dag.task_list.at(2).predecessors.push_back((dag.task_list.at(3)));
+    dag.task_list.at(2).predecessors.push_back((dag.task_list.at(1))); 
+    dag.task_list.at(1).predecessors.push_back((dag.task_list.at(0)));
 
-    std::vector<DAGWorker> workers;
-
-    //for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-    for(unsigned int i = 0; i < 4; i++) { 
-        DAGWorker dag(pts.pt_list[0], e);
-        workers.push_back(dag);
-    }
-    //dag.apply_rt();
-    //    workers.push_back(dag);
-    //}
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < 4; i++) {
-        thrs.push_back(std::thread(&DAGWorker::work, &workers[i], i));
+        thrs.push_back(std::thread(&rts::DAG::work, &dag, i));
     }
     for(std::thread &t: thrs) {
         t.join();
     }
+
+
+    // std::vector<DAGWorker> workers;
+
+    // for(unsigned int i = 0; i < 4; i++) { 
+    //     DAGWorker dag(pts.pt_list[0], e);
+    //     workers.push_back(dag);
+    // }
+   
+    // std::vector<std::thread> thrs;
+    // for(unsigned int i = 0; i < 4; i++) {
+    //     thrs.push_back(std::thread(&DAGWorker::work, &workers[i], i));
+    // }
+    // for(std::thread &t: thrs) {
+    //     t.join();
+    // }
 
     // std::vector<DLWorker> workers;
     // std::cout << pts.pt_list.size() << std::endl;
