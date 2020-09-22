@@ -4,9 +4,9 @@ namespace rts {
 DAG::DAG(rts::Pts _pts) {
     pts = _pts;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        task_node temp;
+        task_node* temp;
         temp.task = pts.pt_list.at(i);
-        task_list.push_back(temp);
+        task_list.push_back(*temp);
     }
 }
 
@@ -29,14 +29,6 @@ void DAG::work(int _index) {
     std::cout << "index " << _index << " end time: "
               << t1 << '\n';
     task_list.at(_index).isFinished = true;
-    for(unsigned int i = 0; i < task_list.size(); i++) {
-        for(unsigned int j = 0; j < task_list.at(i).predecessors.size(); j++) {
-            if(!(task_list.at(i).predecessors.at(j).isFinished)) {
-                task_list.at(i).predecessors.at(j).isFinished = true;
-                break;
-            }
-        }
-    }
     return;
 }
 
