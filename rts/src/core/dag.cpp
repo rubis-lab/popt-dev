@@ -5,7 +5,7 @@ DAG::DAG(rts::Pts _pts) {
     pts = _pts;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
         task_node* temp;
-        temp.task = pts.pt_list.at(i);
+        temp->task = pts.pt_list.at(i);
         task_list.push_back(*temp);
     }
 }
