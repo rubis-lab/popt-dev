@@ -40,9 +40,20 @@ int main(int argc, const char *argv[]) {
     dag.task_list.at(2).predecessors.push_back((dag.task_list.at(1))); 
     dag.task_list.at(1).predecessors.push_back((dag.task_list.at(0)));
 
+
+    rts::DAG dag1(pts);
+    // 0 -> 1, 3 -> 2
+    dag1.task_list.at(3).predecessors.push_back((dag1.task_list.at(0)));
+    dag1.task_list.at(2).predecessors.push_back((dag1.task_list.at(3)));
+    dag1.task_list.at(2).predecessors.push_back((dag1.task_list.at(1))); 
+    dag1.task_list.at(1).predecessors.push_back((dag1.task_list.at(0)));
+
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < 4; i++) {
         thrs.push_back(std::thread(&rts::DAG::work, &dag, i));
+    }
+    for(unsigned int i = 0; i < 4; i++) {
+        thrs.push_back(std::thread(&rts::DAG::work, &dag1, i));
     }
     for(std::thread &t: thrs) {
         t.join();

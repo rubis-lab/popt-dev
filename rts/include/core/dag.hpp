@@ -4,6 +4,8 @@
 #include "core/pts.hpp"
 #include "core/pt.hpp"
 #include <vector>
+#include <string>
+#include <nlohmann/json.hpp>
 #include <memory>
 #include <chrono>
 #include <mutex>
@@ -12,8 +14,10 @@
 namespace rts {
 
 struct task_node {
-    rts::Pt task;
+    int index;
     volatile bool isFinished = false;
+    std::string name;
+    rts::Pt task;
     std::vector<task_node> predecessors;
     std::vector<task_node> successors;
 };

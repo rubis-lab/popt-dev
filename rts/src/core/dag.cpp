@@ -1,7 +1,7 @@
 #include "core/dag.hpp"
 
 namespace rts {
-DAG::DAG(rts::Pts _pts) {
+DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
     pts = _pts;
     for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
         task_node* temp;
