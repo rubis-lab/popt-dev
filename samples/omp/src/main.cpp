@@ -16,7 +16,7 @@
 
 int main(int argc, const char *argv[]) {
     if(argc < 3) {
-       std::cout << "usage: ./omp ../data/exp/exp1.json ../data/ts/ts1.json" << std::endl;
+       std::cout << "usage: ./omp ../data/exp/exp1.json ../data/ts/ts1.json  ../data/dag/dag.json" << std::endl;
        return -1;
     }
     spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^-%L-%$] [thread %t] %v");
@@ -26,35 +26,22 @@ int main(int argc, const char *argv[]) {
 
     rts::Exp e(argv[1]);
     std::ifstream _jf(argv[2]);
+    std::ifstream _jf_dag(argv[3]);
     nlohmann::json jf = nlohmann::json::parse(_jf);
+    nlohmann::json jf_dag = nlohmann::json::parse(_jf_dag);
     rts::Pts pts(jf, e);
     // rts::Cho cho;
     // cho.max_opt = 4;
     // cho.num_core = 4;
     // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
-    rts::DAG dag(pts);
-    // 0 -> 1, 3 -> 2
-    dag.task_list.at(3).predecessors.push_back((dag.task_list.at(0)));
-    dag.task_list.at(2).predecessors.push_back((dag.task_list.at(3)));
-    dag.task_list.at(2).predecessors.push_back((dag.task_list.at(1))); 
-    dag.task_list.at(1).predecessors.push_back((dag.task_list.at(0)));
-
-
-    rts::DAG dag1(pts);
-    // 0 -> 1, 3 -> 2
-    dag1.task_list.at(3).predecessors.push_back((dag1.task_list.at(0)));
-    dag1.task_list.at(2).predecessors.push_back((dag1.task_list.at(3)));
-    dag1.task_list.at(2).predecessors.push_back((dag1.task_list.at(1))); 
-    dag1.task_list.at(1).predecessors.push_back((dag1.task_list.at(0)));
-
+    rts::DAG dag(pts, jf_dag);
+    
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < 4; i++) {
         thrs.push_back(std::thread(&rts::DAG::work, &dag, i));
     }
-    for(unsigned int i = 0; i < 4; i++) {
-        thrs.push_back(std::thread(&rts::DAG::work, &dag1, i));
-    }
+    
     for(std::thread &t: thrs) {
         t.join();
     }
