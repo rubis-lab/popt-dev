@@ -12,14 +12,16 @@
 #include <memory>
 #include <chrono>
 #include <mutex>
+#include <queue>
 #include <iostream>
 
 namespace rts {
 
 struct task_node {
-    volatile bool isFinished = false;
-    bool isHead;
-    bool isLeaf;
+    volatile bool is_finished = false;
+    bool is_head;
+    bool is_leaf;
+    bool is_visited = false;
     double deadline;
     int index;
     std::string name;
@@ -42,6 +44,11 @@ public:
     struct task_node* get_by_index(int _index);
     std::string to_str();
 
+    void reset_is_visited();
+    bool is_not_visited(struct task_node* _task);
+    std::vector<int> get_topological_order();
+    std::vector<std::vector<int>> get_all_topological_order(); 
+    std::vector<int> get_not_visited_list();
     void msec_work(int _msec);
     void work(int _index);
 };

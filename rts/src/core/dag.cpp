@@ -7,7 +7,7 @@ DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
     nlohmann::json js_task_list = _js["task_list"];
     for(unsigned int i = 0; i < js_task_list.size(); i++) {
         task_node* temp = new task_node;
-        temp->task = pts.pt_list.at(i);
+        //temp->task = pts.pt_list.at(i);
         temp->name = js_task_list[i]["name"];
         temp->deadline = js_task_list[i]["deadline"];
         temp->index = js_task_list[i]["index"];
@@ -24,7 +24,7 @@ DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
                 }
             }
         } else {
-            task_list.at(i).isHead = true;
+            task_list.at(i).is_head = true;
         }
         if(js_task_list[i]["successors"].size() != 0) {
             for(unsigned int j = 0; j < js_task_list[i]["successors"].size(); j++) {
@@ -34,7 +34,7 @@ DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
                 }
             }
         } else {
-            task_list.at(i).isLeaf = true;
+            task_list.at(i).is_leaf = true;
         }
     }
 }
@@ -44,7 +44,20 @@ bool DAG::is_ready(struct task_node* _task) {
         return true;
     } else {
         for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
-            if(!((_task->predecessors.at(i))->isFinished)) {
+            if(!((_task->predecessors.at(i))->is_finished)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+bool DAG::is_not_visited(struct task_node* _task) {
+    if(_task->predecessors.empty()) {
+        return true;
+    } else {
+        for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
+            if(!((_task->predecessors.at(i))->is_visited)) {
                 return false;
             }
         }
@@ -101,6 +114,50 @@ std::string DAG::to_str() {
     return NULL;
 }
 
+std::vector<int> DAG::get_topological_order() {
+    // find the first head
+    // can be modified
+    std::vector<int> ret;
+    std::queue<task_node*> q;
+    for(unsigned int i = 0; i < get_head_nodes().size(); i++) {
+        q.push(get_head_nodes().at(i));
+    }
+    while(ret.size() != task_list.size()) {
+        task_node* q_pop = q.front();
+        q.pop();
+        q_pop->is_visited = true;
+        ret.push_back(q_pop->index);
+        for(unsigned int i = 0; i < q_pop->successors.size(); i++) {
+            if(is_valid(q_pop->successors.at(i))) {
+                q.push(q_pop->successors.at(i));
+            }
+        }
+    }
+    return ret;
+}
+
+std::vector<std::vector<int>> DAG::get_all_topological_order(std::vector<int> free_list, std::vector<int> results) {
+    // if free list is empty push back results to return value;
+}
+
+//TODO refactor using get_by_index
+std::vector<int> DAG::get_not_visited_list() {
+    std::vector<int> res;
+    for(unsigned int i = 0; i < task_list.size(); i++){
+        if(is_ready(&task_list.at(i)) && !is_not_visited(&task_list.at(i))) {
+            res.push_back(task_list.at(i).index);
+        }
+    }
+    return res;
+}
+
+void DAG::reset_is_visited() {  
+    for(unsigned int i = 0; i < task_list.size(); i++) {
+        task_list.at(i).is_visited = false;
+    }
+    return;
+}
+
 
 //need to be removed later
 void DAG::work(int _index) {
@@ -120,7 +177,7 @@ void DAG::work(int _index) {
     int64_t t1 = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     std::cout << "index " << _index << " end time: "
               << t1 << '\n';
-    task_list.at(_index).isFinished = true;
+    task_list.at(_index).is_finished = true;
     return;
 }
 

@@ -37,6 +37,12 @@ int main(int argc, const char *argv[]) {
 
     rts::DAG dag(pts, jf_dag);
     
+    std::vector<int> temp = dag.get_topological_order();
+
+    for(unsigned int i = 0; i < temp.size(); i++) {
+        std::cout << temp.at(i) << "->";
+    }
+    std::cout << "\n";
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < 4; i++) {
         thrs.push_back(std::thread(&rts::DAG::work, &dag, i));
@@ -45,7 +51,7 @@ int main(int argc, const char *argv[]) {
     for(std::thread &t: thrs) {
         t.join();
     }
-
+    
 
     // std::vector<DAGWorker> workers;
 
