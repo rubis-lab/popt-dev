@@ -19,28 +19,13 @@ def generate_launch_description():
 	Node(
             package='ros2-dagsim',
             node_namespace='simple_chain',
-            node_executable='middle_node',
+            node_executable='leaf_node',
             node_name='node1',
 		output='screen',
 	    parameters=[
 		{
 			"parent_num" : 1,
 			"parent_idx" : [0],
-			"child_num" : 1,
-			"child_idx" : [2],
-			"waste_time" : 1000 # ms
-		}
-	    ],
-        ),
-	Node(
-            package='ros2-dagsim',
-            node_namespace='simple_chain',
-            node_executable='leaf_node',
-            node_name='node2',
-	    parameters=[
-		{
-			"parent_num" : 1,
-			"parent_idx" : [1],
 			"waste_time" : 1000 # ms
 		}
 	    ],

@@ -19,6 +19,7 @@ class MiddleNode : public rclcpp::Node
 		: Node("middle_node")
 		{
 			parameter_init();
+			publisher_init();
 			subscriber_init();
 		}
 		
@@ -67,7 +68,7 @@ class MiddleNode : public rclcpp::Node
 		{
 			for(int i=0; i<child_num_; i++){
 				std::string topic_name = rclcpp::Node::get_name();
-				topic_name = "topic_node_" + topic_name + "_" + std::to_string(child_idx_.at(i));
+				topic_name = "topic_" + topic_name + "_node" + std::to_string(child_idx_.at(i));
 				publisher_list.push_back(this->create_publisher<std_msgs::msg::String>(topic_name.c_str(), 10));
 			}
 		}
@@ -90,7 +91,7 @@ class MiddleNode : public rclcpp::Node
 
 			if(find(sub_flag.begin(), sub_flag.end(), false) == sub_flag.end()){
 				for(int i=0; i<parent_num_; i++){
-					sub_flag.push_back(false);
+					sub_flag.at(i) = false;
 				}
 				waste_time();
 			}

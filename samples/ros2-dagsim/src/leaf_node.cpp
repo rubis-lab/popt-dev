@@ -26,7 +26,7 @@ class LeafNode : public rclcpp::Node
 		void parameter_init()
 		{
 			// parameter setting ; default value is second parameter
-			this->declare_parameter<int>("parent_num", 0);
+			this->declare_parameter<int>("parent_num", 1);
 			rclcpp::Parameter parent_num_param = this->get_parameter("parent_num");
 			parent_num_ = parent_num_param.as_int();
 
@@ -48,7 +48,7 @@ class LeafNode : public rclcpp::Node
 			for(int i=0; i<parent_num_; i++){
 				std::string topic_name = rclcpp::Node::get_name();
 				topic_name = "topic_node" + std::to_string(parent_idx_.at(i)) + "_" + topic_name;
-				
+
 				std::function<void(const std_msgs::msg::String::SharedPtr msg)> fnc = std::bind(&LeafNode::topic_callback, this, _1, i);
 				subscriber_list.push_back(this->create_subscription<std_msgs::msg::String>(topic_name.c_str(), 10, fnc));
 
@@ -63,7 +63,7 @@ class LeafNode : public rclcpp::Node
 
 			if(find(sub_flag.begin(), sub_flag.end(), false) == sub_flag.end()){
 				for(int i=0; i<parent_num_; i++){
-					sub_flag.push_back(false);
+					sub_flag.at(i) = false;
 				}
 				waste_time();
 			}
