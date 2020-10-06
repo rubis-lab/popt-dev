@@ -45,9 +45,9 @@ public:
     std::string to_str();
 
     void reset_is_visited();
-    bool is_not_visited(struct task_node* _task);
+    bool is_in_free_list(struct task_node* _task);
     std::vector<int> get_topological_order();
-    std::vector<std::vector<int>> get_all_topological_order(); 
+    void get_all_topological_order(std::vector<std::vector<int>> &result, std::vector<int> prev); 
     std::vector<int> get_not_visited_list();
     void msec_work(int _msec);
     void work(int _index);

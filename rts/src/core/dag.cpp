@@ -39,32 +39,6 @@ DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
     }
 }
 
-bool DAG::is_ready(struct task_node* _task) {
-    if(_task->predecessors.empty()) {
-        return true;
-    } else {
-        for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
-            if(!((_task->predecessors.at(i))->is_finished)) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
-bool DAG::is_not_visited(struct task_node* _task) {
-    if(_task->predecessors.empty()) {
-        return true;
-    } else {
-        for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
-            if(!((_task->predecessors.at(i))->is_visited)) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
 std::vector<task_node*> DAG::get_head_nodes() {
     std::vector<task_node*> temp;
     for(unsigned int i = 0; i < task_list.size(); i++) {
@@ -114,6 +88,32 @@ std::string DAG::to_str() {
     return NULL;
 }
 
+bool DAG::is_ready(struct task_node* _task) {
+    if(_task->predecessors.empty()) {
+        return true;
+    } else {
+        for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
+            if(!((_task->predecessors.at(i))->is_finished)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+bool DAG::is_in_free_list(struct task_node* _task) {
+    if(_task->predecessors.empty()) {
+        return true;
+    } else {
+        for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
+            if(!((_task->predecessors.at(i))->is_visited)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
 std::vector<int> DAG::get_topological_order() {
     // find the first head
     // can be modified
@@ -128,7 +128,7 @@ std::vector<int> DAG::get_topological_order() {
         q_pop->is_visited = true;
         ret.push_back(q_pop->index);
         for(unsigned int i = 0; i < q_pop->successors.size(); i++) {
-            if(is_valid(q_pop->successors.at(i))) {
+            if(is_in_free_list(q_pop->successors.at(i))) {
                 q.push(q_pop->successors.at(i));
             }
         }
@@ -136,15 +136,30 @@ std::vector<int> DAG::get_topological_order() {
     return ret;
 }
 
-std::vector<std::vector<int>> DAG::get_all_topological_order(std::vector<int> free_list, std::vector<int> results) {
-    // if free list is empty push back results to return value;
+//usage: empty 2d vector, 1d vector, 0
+void DAG::get_all_topological_order(std::vector<std::vector<int>> &_result, std::vector<int> prev) {
+    std::vector<int> free_list = get_not_visited_list();
+    for(unsigned int i = 0; i < free_list.size(); i++) {
+        std::cout << free_list.at(i) << " ";
+    }
+    std::cout << "\n";
+    for(unsigned int i = 0; i < free_list.size(); i++) {
+        get_by_index(free_list.at(i))->is_visited = true;
+        std::vector<int> copy = prev;
+        copy.push_back(i);
+        get_all_topological_order(_result, prev);
+        get_by_index(free_list.at(i))->is_visited = false;
+    }
+    if(free_list.size() == 0){
+        _result.push_back(prev);
+    }
 }
 
 //TODO refactor using get_by_index
 std::vector<int> DAG::get_not_visited_list() {
     std::vector<int> res;
     for(unsigned int i = 0; i < task_list.size(); i++){
-        if(is_ready(&task_list.at(i)) && !is_not_visited(&task_list.at(i))) {
+        if(is_in_free_list(&task_list.at(i))) {
             res.push_back(task_list.at(i).index);
         }
     }
