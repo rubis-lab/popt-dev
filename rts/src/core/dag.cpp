@@ -12,10 +12,8 @@ DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
         temp->deadline = js_task_list[i]["deadline"];
         temp->index = js_task_list[i]["index"];
         task_list.push_back(*temp);
-        std::cout << "pushed back task_node" << std::endl;
     }
     for(unsigned int i = 0; i < js_task_list.size(); i++) {
-        std::cout << "task " << i+1 << std::endl;
         if(js_task_list[i]["predecessors"].size() != 0) {
             for(unsigned int j = 0; j < js_task_list[i]["predecessors"].size(); j++){
                 struct task_node* temp = get_by_index(js_task_list[i]["predecessors"][j]);
@@ -102,9 +100,12 @@ bool DAG::is_ready(struct task_node* _task) {
 }
 
 bool DAG::is_in_free_list(struct task_node* _task) {
-    if(_task->predecessors.empty()) {
+    if(_task->is_visited) {
+        return false;
+    } else if(_task->predecessors.empty()){
         return true;
-    } else {
+    }
+    else {
         for(unsigned int i = 0; i < _task->predecessors.size(); i++) {
             if(!((_task->predecessors.at(i))->is_visited)) {
                 return false;
@@ -138,25 +139,25 @@ std::vector<int> DAG::get_topological_order() {
 
 //usage: empty 2d vector, 1d vector, 0
 void DAG::get_all_topological_order(std::vector<std::vector<int>> &_result, std::vector<int> prev) {
-    std::vector<int> free_list = get_not_visited_list();
-    for(unsigned int i = 0; i < free_list.size(); i++) {
-        std::cout << free_list.at(i) << " ";
-    }
-    std::cout << "\n";
+    std::vector<int> free_list = get_free_list();
     for(unsigned int i = 0; i < free_list.size(); i++) {
         get_by_index(free_list.at(i))->is_visited = true;
         std::vector<int> copy = prev;
-        copy.push_back(i);
-        get_all_topological_order(_result, prev);
+        copy.push_back(free_list.at(i));
+        get_all_topological_order(_result, copy);
         get_by_index(free_list.at(i))->is_visited = false;
     }
     if(free_list.size() == 0){
+        // for(unsigned int i = 0; i < prev.size(); i++) {
+        //     std::cout << prev.at(i);
+        // }
+        // std::cout << "\n";
         _result.push_back(prev);
     }
 }
 
 //TODO refactor using get_by_index
-std::vector<int> DAG::get_not_visited_list() {
+std::vector<int> DAG::get_free_list() {
     std::vector<int> res;
     for(unsigned int i = 0; i < task_list.size(); i++){
         if(is_in_free_list(&task_list.at(i))) {
@@ -176,7 +177,7 @@ void DAG::reset_is_visited() {
 
 //need to be removed later
 void DAG::work(int _index) {
-    int64_t t0 = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    //int64_t t0 = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     while(!is_ready(&task_list.at(_index))){
         ;
     }

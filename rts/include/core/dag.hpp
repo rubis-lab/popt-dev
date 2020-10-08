@@ -48,7 +48,7 @@ public:
     bool is_in_free_list(struct task_node* _task);
     std::vector<int> get_topological_order();
     void get_all_topological_order(std::vector<std::vector<int>> &result, std::vector<int> prev); 
-    std::vector<int> get_not_visited_list();
+    std::vector<int> get_free_list();
     void msec_work(int _msec);
     void work(int _index);
 };

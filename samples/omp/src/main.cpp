@@ -35,19 +35,24 @@ int main(int argc, const char *argv[]) {
     // cho.num_core = 4;
     // std::cout << (cho.is_schedulable(pts, e)) << std::endl;
 
+    
+    // std::vector<int> result2 = dag.get_topological_order();
+    // for(unsigned int i = 0; i < result2.size(); i++) {
+    //     std::cout << result2.at(i);
+    // }
+
     rts::DAG dag(pts, jf_dag);
     std::vector<std::vector<int>> result;
     std::vector<int> prev;
+    dag.get_all_topological_order(result, prev);
     
-    // dag.get_all_topological_order(result, prev);
-
-    // for(unsigned int i = 0; i < result.size(); i++) {
-    //     for(unsigned int j = 0; j < result.at(i).size(); i++) {
-    //         std::cout << result.at(i).at(j) << " -> ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    // std::cout << "\n";
+    for(unsigned int i = 0; i < result.size(); i++) {
+        for(unsigned int j = 0; j < result.at(i).size(); j++) {
+            std::cout << result.at(i).at(j) << " -> ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
 
     std::vector<std::thread> thrs;
     for(unsigned int i = 0; i < 4; i++) {
