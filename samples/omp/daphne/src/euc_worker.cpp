@@ -1,5 +1,6 @@
 #include "euc_worker.hpp"
 
+extern kernel& EUCKernel;
 
 EUCWorker::EUCWorker(rts::Pt _pt, rts::Exp _exp) {
     pt = _pt;
@@ -37,8 +38,13 @@ void EUCWorker::apply_rt() {
 
 void EUCWorker::work() {
     // task loop
-    int iter = 10;
+    int iter = 1;
     std::cout << "hi" << pt.selected_opt << std::endl;
+    std::chrono::high_resolution_clock::time_point start,end;
+    std::chrono::duration<double> elapsed;
+    std::chrono::high_resolution_clock timer;
+    euclidean_clustering euc = euclidean_clustering();
+    kernel& EUCKernel = euc;
     for(int task_iter = 0; task_iter < iter; task_iter++) {
         // create task data for logging
         sched_data task_data;
@@ -48,24 +54,23 @@ void EUCWorker::work() {
         task_data.period = pt.base_task.period;
         task_data.deadline = pt.base_task.deadline;
         omp_set_dynamic(0);
-        #pragma omp parallel num_threads(pt.selected_opt)
+        #pragma omp parallel num_threads(1)
         {
-            apply_rt();
+            //apply_rt();
             #pragma omp barrier
 
             // actual work
             double start_time = omp_get_wtime();
             // #pragma omp for schedule(dynamic, 1) nowait
-            
-            EUCKernel.set_timer_functions(pause_timer, unpause_timer);
+            std::cout << "start time " << start_time << std::endl;
             EUCKernel.init();
-            
+            std::cout << "init done" << std::endl;
             // measure the runtime of the kernel
             start = timer.now();
 
             // execute the kernel
             EUCKernel.run(1);
-            
+            std::cout << "run done" << std::endl;
             // measure the runtime of the kernel
             if (!pause) 
             {

@@ -1212,17 +1212,17 @@
 
 // #pragma omp begin declare variant match(device={arch(nvptx, nvptx64)}, implementation={extension(match_any)})
 
-// #define __CUDA__
+// // #define __CUDA__
 // // #include <__clang_cuda_device_functions.h>
-// #undef __CUDA__
+// // #undef __CUDA__
 
-// void atom_add(double* address, double val){
-// 	__dAtomicAdd(address, val);
-// }
+// // void atom_add(double* address, double val){
+// // 	__dAtomicAdd(address, val);
+// // }
 
-// void atom_addI(int* address, int val){
-// 	__iAtomicAdd(address, val);
-// }
+// // void atom_addI(int* address, int val){
+// // 	__iAtomicAdd(address, val);
+// // }
 
 // #pragma omp end declare variant
 
@@ -1433,8 +1433,7 @@
 // 		for (int h = 0; h < 4; h++) {
 // 			// test for nan
 // 			for (int w = 0; w < 4; w++) {
-// 				if (std::isnan(results[i].final_transformation.data[h][w]) !=
-// 					std::isnan(reference.final_transformation.data[h][w])) {
+// 				if (std::isnan(results[i].final_transformation.data[h][w]) != std::isnan(reference.final_transformation.data[h][w])) {
 // 					error_so_far = true;
 // 				}
 // 			}

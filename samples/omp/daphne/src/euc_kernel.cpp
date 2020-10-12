@@ -857,14 +857,16 @@ int euclidean_clustering::read_next_testcases(int count)
 {
 	int i;
 	// free previously allocated memory
-	if (in_cloud_ptr)
-	for (i = 0; i < count; i++)
-		omp_target_free(in_cloud_ptr[i], 0);
-	delete [] in_cloud_ptr;
-	delete [] cloud_size;
-	delete [] out_cloud_ptr;
-	delete [] out_boundingbox_array;
-	delete [] out_centroids;
+	if (in_cloud_ptr) {
+		for (i = 0; i < count; i++)
+				omp_target_free(in_cloud_ptr[i], 0);
+			delete [] in_cloud_ptr;
+			delete [] cloud_size;
+			delete [] out_cloud_ptr;
+			delete [] out_boundingbox_array;
+			delete [] out_centroids;
+	}
+	
 	// allocate memory for the testcases read here
 	in_cloud_ptr = new PointCloud[count];
 	cloud_size = new int[count];
@@ -874,6 +876,7 @@ int euclidean_clustering::read_next_testcases(int count)
 	// read the testcase data
 	for (i = 0; (i < count) && (read_testcases < testcases); i++,read_testcases++)
 	{
+		std::cout << "inside for loop; count : " << count << std::endl;
 		try {
 			parsePointCloud(input_file, &in_cloud_ptr[i], &cloud_size[i]);
 		} catch (std::ios_base::failure e) {
@@ -923,17 +926,21 @@ void euclidean_clustering::init() {
 
 void euclidean_clustering::run(int p) {
 	// prepare reading the first testcases
-	pause_func();
+	std::cout << "inside run" << std::endl;
+	//pause_func();
 	
 	while (read_testcases < testcases)
 	{
+		std::cout << read_testcases << " " << testcases << std::endl;
 		// read the next input data
 		int count = read_next_testcases(p);
+		std::cout << "count: " << count << std::endl;
 		// execute the algorithm
-		unpause_func();
+		//unpause_func();
 		for (int i = 0; i < count; i++)
 		{
 			// actual kernel invocation
+			std::cout << "inside actual kernel invocation" << std::endl;
 			segmentByDistance(in_cloud_ptr[i],
 					cloud_size[i],
 					&out_cloud_ptr[i],
@@ -941,7 +948,7 @@ void euclidean_clustering::run(int p) {
 					&out_centroids[i]);
 		}
 		// pause the timer, then read and compare with the reference data
-		pause_func();
+		//pause_func();
 		check_next_outputs(count);
 	}
 }
@@ -1082,6 +1089,3 @@ bool euclidean_clustering::check_output()
 }
 
 // set kernel used by main()
-euclidean_clustering euc = euclidean_clustering();
-kernel& EUCKernel = euc;
-

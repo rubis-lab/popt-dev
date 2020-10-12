@@ -1,3 +1,5 @@
+#ifndef __EUCKERNEL__
+#define __EUCKERNEL__
 /**
  * Author:  Florian Stock, Technische Universität Darmstadt,
  * Embedded Systems & Applications Group 2018
@@ -80,3 +82,5 @@ protected:
 	 */
 	virtual void check_next_outputs(int count);
 };
+
+#endif

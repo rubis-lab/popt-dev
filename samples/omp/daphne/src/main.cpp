@@ -37,14 +37,18 @@ int main(int argc, const char *argv[]) {
 
     std::vector<EUCWorker> workers;
     std::cout << pts.pt_list.size() << std::endl;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
+    for(unsigned int i = 0; i < 1; i++) {
         EUCWorker dw(pts.pt_list[i], e);
         workers.push_back(dw);
     }
 
     std::vector<std::thread> thrs;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
+    for(unsigned int i = 0; i < 1; i++) {
         thrs.push_back(std::thread(&EUCWorker::work, &workers[i]));
+    }
+
+    for(std::thread &t: thrs) {
+        t.join();
     }
 
     std::cout << "main dies: " << gettid() << std::endl;
