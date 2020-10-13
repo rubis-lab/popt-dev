@@ -40,75 +40,68 @@ void EUCWorker::work() {
     // task loop
     int iter = 1;
     std::cout << "hi" << pt.selected_opt << std::endl;
-    std::chrono::high_resolution_clock::time_point start,end;
-    std::chrono::duration<double> elapsed;
-    std::chrono::high_resolution_clock timer;
-    euclidean_clustering euc = euclidean_clustering();
-    kernel& EUCKernel = euc;
+    // euclidean_clustering euc = euclidean_clustering();
+    // kernel& EUCKernel = euc;
     for(int task_iter = 0; task_iter < iter; task_iter++) {
         // create task data for logging
-        sched_data task_data;
-        task_data.task_id = pt.id;
-        task_data.iter = task_iter;
-        task_data.runtime = pt.base_task.exec_time;
-        task_data.period = pt.base_task.period;
-        task_data.deadline = pt.base_task.deadline;
-        omp_set_dynamic(0);
-        #pragma omp parallel num_threads(1)
-        {
-            //apply_rt();
-            #pragma omp barrier
+        // sched_data task_data;
+        // task_data.task_id = pt.id;
+        // task_data.iter = task_iter;
+        // task_data.runtime = pt.base_task.exec_time;
+        // task_data.period = pt.base_task.period;
+        // task_data.deadline = pt.base_task.deadline;
+        
+        //apply_rt();
 
-            // actual work
-            double start_time = omp_get_wtime();
-            // #pragma omp for schedule(dynamic, 1) nowait
-            std::cout << "start time " << start_time << std::endl;
-            EUCKernel.init();
-            std::cout << "init done" << std::endl;
-            // measure the runtime of the kernel
-            start = timer.now();
+        // actual work
+        // double start_time = omp_get_wtime();
+        // // #pragma omp for schedule(dynamic, 1) nowait
+        // std::cout << "start time " << start_time << std::endl;
+        // EUCKernel.init();
+        // std::cout << "init done" << std::endl;
+        // // measure the runtime of the kernel
+        // start = timer.now();
 
-            // execute the kernel
-            EUCKernel.run(1);
-            std::cout << "run done" << std::endl;
-            // measure the runtime of the kernel
-            if (!pause) 
-            {
-            end = timer.now();
-                elapsed += end-start;
-            }
-            std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
-                << EUCKernel.testcases << "): " << elapsed.count() / (double) EUCKernel.testcases
-                << " seconds" << std::endl;
+        // // execute the kernel
+        // EUCKernel.run(1);
+        // std::cout << "run done" << std::endl;
+        // // measure the runtime of the kernel
+        // if (!pause) 
+        // {
+        // end = timer.now();
+        //     elapsed += end-start;
+        // }
+        // std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
+        //     << EUCKernel.testcases << "): " << elapsed.count() / (double) EUCKernel.testcases
+        //     << " seconds" << std::endl;
 
-            // read the desired output  and compare
-            if (EUCKernel.check_output())
-            {
-                std::cout << "result ok\n";
-            } else
-            {
-                std::cout << "error: wrong result\n";
-            }
-            double end_time = omp_get_wtime();
+        // // read the desired output  and compare
+        // if (EUCKernel.check_output())
+        // {
+        //     std::cout << "result ok\n";
+        // } else
+        // {
+        //     std::cout << "error: wrong result\n";
+        // }
+        // double end_time = omp_get_wtime();
 
-            // log work
-            sched_data_thread thr_data;
-            thr_data.start_t = start_time;
-            thr_data.end_t = end_time;
-            thr_data.response_t = (end_time - start_time) * 1e9;
-            thr_data.slack = task_data.deadline - thr_data.response_t;
-            thr_data.iter = task_iter;
-            #pragma omp critical
-            {
-                task_data.thr_data.push_back(thr_data);
-                thr_log->info("(work): openmp_thread_idx: " + std::to_string(omp_get_thread_num()));
-            }
-            thr_log->info("num iter " + std::to_string(thr_data.iter));
-        }
-
-        thr_log->info("(work): iter " + std::to_string(task_iter) + " completed.");
-        sl.log_to_file(task_data);
-        sched_yield();
+        // log work
+        // sched_data_thread thr_data;
+        // thr_data.start_t = start_time;
+        // thr_data.end_t = end_time;
+        // thr_data.response_t = (end_time - start_time) * 1e9;
+        // thr_data.slack = task_data.deadline - thr_data.response_t;
+        // thr_data.iter = task_iter;
+        // #pragma omp critical
+        // {
+        //     task_data.thr_data.push_back(thr_data);
+        //     thr_log->info("(work): openmp_thread_idx: " + std::to_string(omp_get_thread_num()));
+        // }
+        // thr_log->info("num iter " + std::to_string(thr_data.iter));
+    
+        // thr_log->info("(work): iter " + std::to_string(task_iter) + " completed.");
+        // sl.log_to_file(task_data);
+        // sched_yield();
     }  // task loop
     thr_log->info("(work) task exiting..");
 

@@ -4,6 +4,7 @@
 #include <rts/op/exp.hpp>
 #include <rts/core/dag.hpp>
 #include "spdlog/spdlog.h"
+#include "benchmark.h"
 #include "p2i_kernel.hpp"
 #include "p2i_worker.hpp"
 #include "euc_kernel.hpp"
@@ -35,21 +36,41 @@ int main(int argc, const char *argv[]) {
     nlohmann::json jf_dag = nlohmann::json::parse(_jf_dag);
     rts::Pts pts(jf, e);
 
-    std::vector<EUCWorker> workers;
-    std::cout << pts.pt_list.size() << std::endl;
-    for(unsigned int i = 0; i < 1; i++) {
-        EUCWorker dw(pts.pt_list[i], e);
-        workers.push_back(dw);
-    }
 
-    std::vector<std::thread> thrs;
-    for(unsigned int i = 0; i < 1; i++) {
-        thrs.push_back(std::thread(&EUCWorker::work, &workers[i]));
+    euclidean_clustering euc = euclidean_clustering();
+    kernel& EUCKernel = euc;
+    double start_time = omp_get_wtime();
+    // #pragma omp for schedule(dynamic, 1) nowait
+    std::cout << "start time " << start_time << std::endl;
+    EUCKernel.init();
+    std::cout << "init done" << std::endl;
+    // execute the kernel
+    EUCKernel.run(1);
+    std::cout << "run done" << std::endl;
+    // read the desired output  and compare
+    if (EUCKernel.check_output())
+    {
+        std::cout << "result ok\n";
+    } else
+    {
+        std::cout << "error: wrong result\n";
     }
+    double end_time = omp_get_wtime();
+    // std::vector<EUCWorker> workers;
+    // std::cout << pts.pt_list.size() << std::endl;
+    // for(unsigned int i = 0; i < 1; i++) {
+    //     EUCWorker dw(pts.pt_list[i], e);
+    //     workers.push_back(dw);
+    // }
 
-    for(std::thread &t: thrs) {
-        t.join();
-    }
+    // std::vector<std::thread> thrs;
+    // for(unsigned int i = 0; i < 1; i++) {
+    //     thrs.push_back(std::thread(&EUCWorker::work, &workers[i]));
+    // }
+
+    // for(std::thread &t: thrs) {
+    //     t.join();
+    // }
 
     std::cout << "main dies: " << gettid() << std::endl;
 
