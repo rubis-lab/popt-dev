@@ -7,12 +7,13 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
+#include <rts/core/pts.hpp>
 #include "benchmark.h"
 
 std::chrono::high_resolution_clock::time_point start,end;
 std::chrono::duration<double> elapsed;
 std::chrono::high_resolution_clock timer;
-bool pause = false;
+bool isPaused = false;
 
 // how many testcases should be executed in sequence (before checking for correctness)
 int pipelined = 1;
@@ -22,18 +23,18 @@ extern kernel& ndtKernel;
 extern kernel& p2iKernel;
 
 
-void pause_timer()
-{
-  end = timer.now();
-  elapsed += (end-start);
-  pause = true;
-}  
+// void pause_timer()
+// {
+//   end = timer.now();
+//   elapsed += (end-start);
+//   isPaused = true;
+// }  
 
-void unpause_timer() 
-{
-  pause = false;
-  start = timer.now();
-}
+// void unpause_timer() 
+// {
+//   isPaused = false;
+//   start = timer.now();
+// }
 
 void usage(char *exec)
 {
@@ -41,6 +42,7 @@ void usage(char *exec)
   std::cout << "before taking time and check the result.\n";
   std::cout << "         Default: N=1\n";
 }
+
 int main(int argc, char **argv) {
 
   if ((argc != 1) && (argc !=  3))
@@ -69,17 +71,8 @@ int main(int argc, char **argv) {
 
     //euc
     std::cout << "invoking euc" << std::endl;
-    eucKernel.set_timer_functions(pause_timer, unpause_timer);
     eucKernel.init();
-    start = timer.now();
     eucKernel.run(pipelined);
-    if (!pause) {
-	end = timer.now();
-    	elapsed += end-start;
-    }
-    std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
-	      << eucKernel.testcases << "): " << elapsed.count() / (double) eucKernel.testcases
-	      << " seconds" << std::endl;
     if (eucKernel.check_output()) {
 	    std::cout << "result ok\n";
     } else {
@@ -88,17 +81,8 @@ int main(int argc, char **argv) {
 
     //ndt  
     std::cout << "invoking ndt" << std::endl;
-    ndtKernel.set_timer_functions(pause_timer, unpause_timer);
     ndtKernel.init();
-    start = timer.now();
     ndtKernel.run(pipelined);
-    if (!pause) {
-	end = timer.now();
-    	elapsed += end-start;
-    }
-    std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
-	      << ndtKernel.testcases << "): " << elapsed.count() / (double) ndtKernel.testcases
-	      << " seconds" << std::endl;
     if (ndtKernel.check_output()) {
 	    std::cout << "result ok\n";
     } else {
@@ -107,20 +91,29 @@ int main(int argc, char **argv) {
 
     //p2i
     std::cout << "invoking p2i" << std::endl;
-    p2iKernel.set_timer_functions(pause_timer, unpause_timer);
     p2iKernel.init();
-    start = timer.now();
     p2iKernel.run(pipelined);
-    if (!pause) {
-	end = timer.now();
-    	elapsed += end-start;
-    }
-    std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
-	      << p2iKernel.testcases << "): " << elapsed.count() / (double) p2iKernel.testcases
-	      << " seconds" << std::endl;
     if (p2iKernel.check_output()) {
 	    std::cout << "result ok\n";
     } else {
         std::cout << "error: wrong result\n";
     }
 }
+
+// std::cout << "invoking ndt" << std::endl;
+//     ndtKernel.set_timer_functions(pause_timer, unpause_timer);
+//     ndtKernel.init();
+//     start = timer.now();
+//     ndtKernel.run(pipelined);
+//     if (!isPaused) {
+// 	    end = timer.now();
+//     	elapsed += end-start;
+//     }
+//     std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
+// 	      << ndtKernel.testcases << "): " << elapsed.count() / (double) ndtKernel.testcases
+// 	      << " seconds" << std::endl;
+//     if (ndtKernel.check_output()) {
+// 	    std::cout << "result ok\n";
+//     } else {
+//         std::cout << "error: wrong result\n";
+//     }

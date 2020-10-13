@@ -394,11 +394,11 @@ PointsImage pointcloud2_to_image(
 void points2image::run(int p) {
 	// pause while reading and comparing data
 	// only run the timer when the algorithm is active
-	pause_func();
+	// pause_func();
 	while (read_testcases < testcases)
 	{
 		int count = read_next_testcases(p);
-		unpause_func();
+		// unpause_func();
 		// run the algorithm for each input data set
 		for (int i = 0; i < count; i++)
 		{
@@ -407,7 +407,7 @@ void points2image::run(int p) {
 								cameraMat[i], distCoeff[i],
 								imageSize[i]);
 		}
-		pause_func();
+		// pause_func();
 		// compare with the reference data
 		check_next_outputs(count);
 	}

@@ -1433,20 +1433,20 @@ CallbackResult ndt_mapping::partial_points_callback(PointCloud &input_cloud, Mat
 
 void ndt_mapping::run(int p) {
 	// prepare to read the first data set
-	pause_func();
+	// pause_func();
 	while (read_testcases < testcases)
 	{
 		// read the next data set while paused
 		int count = read_next_testcases(p);
 		// resume kernel runtime measurement
-		unpause_func();
+		// unpause_func();
 		for (int i = 0; i < count; i++)
 		{
 			// actual kernel invocation
 			results[i] = partial_points_callback(filtered_scan_ptr[i], init_guess[i], maps[i]);
 		}
 		// pause and compare results to reference
-		pause_func();
+		// pause_func();
 		check_next_outputs(count);
 	}
 }

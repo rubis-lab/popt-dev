@@ -1,0 +1,5 @@
+main.o: main.cpp ../include/benchmark.h
+euckernel.o: euckernel.cpp ../include/benchmark.h eucdatatypes.h
+main.o: main.cpp ../include/benchmark.h
+ndtkernel.o: ndtkernel.cpp ../include/benchmark.h ndtdatatypes.h
+p2ikernel.o: p2ikernel.cpp ../include/benchmark.h p2idatatypes.h

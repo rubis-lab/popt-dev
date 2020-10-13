@@ -976,12 +976,9 @@ void euclidean_clustering::init() {
 }
 
 void euclidean_clustering::run(int p) {
-  pause_func();
-  
   while (read_testcases < testcases)
     {
       int count = read_next_testcases(p);
-      unpause_func();
       for (int i = 0; i < count; i++)
 	  {
 	      // actual kernel invocation
@@ -990,7 +987,6 @@ void euclidean_clustering::run(int p) {
 				&out_boundingbox_array[i],
 				&out_centroids[i]);
 	  }
-      pause_func();
       check_next_outputs(count);
     }
 }

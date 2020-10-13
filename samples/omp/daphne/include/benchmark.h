@@ -26,15 +26,15 @@ public:
   uint32_t testcases = 1;
   
   // sets the functions which should be called to pause and unpause the timer
-  void set_timer_functions(void (*pause_function)(),
-		            void (*unpause_function)()) {
-     unpause_func = unpause_function;
-     pause_func = pause_function;
-   }
+  // void set_timer_functions(void (*pause_function)(),
+	// 	            void (*unpause_function)()) {
+  //    unpause_func = unpause_function;
+  //    pause_func = pause_function;
+  //  }
   
 protected:
-  void (*unpause_func)();
-  void (*pause_func)();
+  // void (*unpause_func)();
+  // void (*pause_func)();
   virtual int read_next_testcases(int count) = 0;
 };
 
