@@ -516,7 +516,7 @@ void initRadiusSearch(const std::vector<Point> &points, bool**  sqr_distances, c
 	int n = points.size();
 	*sqr_distances = (bool*) malloc(n * n * sizeof(bool));
 	float sqr_radius = radius * radius;
-	#pragma omp parallel for default(none) shared(points, sqr_distances, n, sqr_radius) schedule(dynamic)
+	#pragma omp parallel for default(none) shared(points, sqr_distances, n, sqr_radius) schedule(dynamic, 1)
 	for (int j = 0; j < n; j++){
 		for (int i = 0; i < n; i++){
 			float dx = points[i].x - points[j].x;
@@ -579,7 +579,7 @@ void extractEuclideanClusters (
 	// Create a bool vector of processed point indices, and initialize it to false
 	bool* processed = (bool*) malloc(sizeof(bool) * cloud.size());
 	int cloud_size = cloud.size();
-	#pragma omp parallel for default(none) shared(cloud_size, processed)
+	#pragma omp parallel for schedule(dynamic, 1) default(none) shared(cloud_size, processed)
 	for(int i = 0; i < cloud_size; ++i){
 		processed[i] = false;
 	}
@@ -983,7 +983,7 @@ void euclidean_clustering::run(int p) {
 	  {
 	      // actual kernel invocation
 	      segmentByDistance(&in_cloud_ptr[i],
-				&out_cloud_ptr[i],
+				&out_cloud_ptr[i], 
 				&out_boundingbox_array[i],
 				&out_centroids[i]);
 	  }

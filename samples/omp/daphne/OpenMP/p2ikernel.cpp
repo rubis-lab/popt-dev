@@ -314,7 +314,8 @@ PointsImage pointcloud2_to_image(
 	}
 	// apply the algorithm for each point in the cloud
 	for (uint32_t y = 0; y < pointcloud2.height; ++y) {
-	#pragma omp parallel for reduction(max : max_y) reduction(min : min_y) schedule(static)
+		//numthreads
+	#pragma omp parallel for reduction(max : max_y) reduction(min : min_y) schedule(dynamic, 1)
 		for (uint32_t x = 0; x < pointcloud2.width; ++x) {
 			float* fp = (float *)(cp + (x + y*pointcloud2.width) * pointcloud2.point_step);
 			double intensity = fp[4];

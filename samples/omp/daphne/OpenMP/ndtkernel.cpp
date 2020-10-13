@@ -387,7 +387,7 @@ void transformPointCloud(const PointCloud& input, PointCloud &output, Matrix4f t
 		output.clear();
 		output.resize(input.size());
 	}
-	# pragma omp parallel for default(none) shared(input, output, transform)
+	# pragma omp parallel for schedule(dynamic, 1) default(none) shared(input, output, transform)
 	for (auto it = 0 ; it < input.size(); ++it)
 	{
 		PointXYZI transformed;
@@ -563,7 +563,7 @@ void ndt_mapping::computeHessian (Mat66 &hessian, PointCloud &trans_cloud, Vec6 
 {
 	memset(&(hessian.data[0][0]), 0, sizeof(double) * 6 * 6);
 	// Update hessian for each point, line 17 in Algorithm 2 [Magnusson 2009]
-	#pragma omp parallel for
+	#pragma omp parallel for schedule(dynamic, 1)
 	for (size_t idx = 0; idx < input_->size (); idx++)
 	{
 		PointXYZI x_trans_pt = trans_cloud[idx];
@@ -1308,7 +1308,7 @@ void ndt_mapping::initCompute()
 	float max1 = (*target_)[0].data[0];
 	float max2 = (*target_)[0].data[1];
 	float max3 = (*target_)[0].data[2];
-	# pragma omp parallel for\
+	# pragma omp parallel for schedule(dynamic, 1)\
 		reduction(min : min1) reduction(min : min2) reduction(min : min3) \
 		reduction(max : max1) reduction(max : max2) reduction(max : max3)
 	for (int i = 1; i < target_->size(); i++)
@@ -1338,7 +1338,7 @@ void ndt_mapping::initCompute()
 	// spans over the point cloud
 	target_cells_.clear();
 	target_cells_.resize(voxelDimension[0] * voxelDimension[1] * voxelDimension[2]);
-	# pragma omp parallel for
+	# pragma omp parallel for schedule(dynamic, 1)
 	for (int i = 0; i < target_cells_.size(); i++)
 	{
 		target_cells_[i].numberPoints = 0;
@@ -1367,7 +1367,7 @@ void ndt_mapping::initCompute()
 			target_cells_[voxelIndex].invCovariance.data[row][col] += (*target_)[i].data[row] * (*target_)[i].data[col];
 	}
 	// normalize cells
-	# pragma omp parallel for
+	# pragma omp parallel for schedule(dynamic, 1)
 	for (int i = 0; i < target_cells_.size(); i++)
 	{
 		// average the point sum
