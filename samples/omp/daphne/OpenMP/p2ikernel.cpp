@@ -7,12 +7,18 @@
  */
 #include "benchmark.h"
 #include "p2idatatypes.h"
+#include "omp_log.hpp"
+#include "seq_log.hpp"
 #include <cmath>
 #include <iostream>
+#include <chrono>
 #include <fstream>
 #include <cstring>
 #include <omp.h>
-
+#include <unistd.h>
+#include <sys/syscall.h>
+#define gettid() syscall(SYS_gettid)
+#define THREADS 1
 // maximum allowed deviation from the reference results
 #define MAX_EPS 0.001
 
@@ -52,7 +58,7 @@ public:
 	 * Finally checks whether all input data has been processed successfully.
 	 */
 	virtual bool check_output();
-	
+	OmpLog ol;
 protected:
 	/**
 	* Reads the next test cases.
@@ -69,7 +75,6 @@ protected:
 	 * Reads the number of testcases in the data set.
 	 */
 	int read_number_testcases(std::ifstream& input_file);
-	
 };
 
 /**
@@ -275,9 +280,17 @@ PointsImage pointcloud2_to_image(
 	const PointCloud2& pointcloud2,
 	const Mat44& cameraExtrinsicMat,
 	const Mat33& cameraMat, const Vec5& distCoeff,
-	const ImageSize& imageSize)
+	const ImageSize& imageSize, int read_testcases)
 {
-        // initialize the resulting image data structure
+	// logging
+	std::string seq_logger_name = "p2i_seq_" + std::to_string(read_testcases) + "_logger";
+	std::string seq_logger_out_path = "p2i_seq_" + std::to_string(read_testcases) + ".out";
+	SeqLog sl = SeqLog(seq_logger_name, seq_logger_out_path);
+	
+	std::vector<seq_data> seq_data_vec;
+	double seq_start_time = omp_get_wtime();
+	double omp_tot = 0.0;
+	// initialize the resulting image data structure
 	int w = imageSize.width;
 	int h = imageSize.height;
 	PointsImage msg;
@@ -313,9 +326,17 @@ PointsImage pointcloud2_to_image(
 			invT.data[row] -= invR.data[row][col] * cameraExtrinsicMat.data[col][3];
 	}
 	// apply the algorithm for each point in the cloud
+
+	std::string omp_logger_name = "p2i_omp_" + std::to_string(THREADS) + "_" + std::to_string(read_testcases) + "_logger";
+	std::string omp_logger_out_path = "p2i_omp_" + std::to_string(THREADS) + "_" + std::to_string(read_testcases) + ".out";
+	OmpLog ol = OmpLog(omp_logger_name, omp_logger_out_path);
+	std::vector<omp_data> omp_data_vec;
+
 	for (uint32_t y = 0; y < pointcloud2.height; ++y) {
-		//numthreads
-	#pragma omp parallel for reduction(max : max_y) reduction(min : min_y) schedule(dynamic, 1)
+		//numthreads	
+		omp_set_dynamic(0);
+		double omp_start_time = omp_get_wtime();
+		#pragma omp parallel for reduction(max : max_y) reduction(min : min_y) schedule(dynamic) num_threads(THREADS) 
 		for (uint32_t x = 0; x < pointcloud2.width; ++x) {
 			float* fp = (float *)(cp + (x + y*pointcloud2.width) * pointcloud2.point_step);
 			double intensity = fp[4];
@@ -385,10 +406,35 @@ PointsImage pointcloud2_to_image(
 					}
 				}
 			}
-		}
+			struct omp_data omp_data;
+			int tid = gettid();
+			double omp_end_time = omp_get_wtime();
+			omp_data.start_t = omp_start_time;
+			omp_data.end_t = omp_end_time;
+			omp_data.exec_t = (omp_end_time - omp_start_time) * 1000000;
+			omp_tot += omp_data.exec_t;
+			omp_data.tid = tid;
+			omp_data.iter = x;
+			omp_data.test_case = read_testcases;
+			#pragma omp critical 
+			{
+				omp_data_vec.push_back(omp_data);
+			}
+		}	
 	}
+	ol.log_to_file(omp_data_vec);
 	msg.max_y = max_y;
 	msg.min_y = min_y;
+	double seq_end_time = omp_get_wtime();
+	struct seq_data seq_data;
+	seq_data.start_t = seq_start_time;
+	seq_data.end_t = seq_end_time;
+	seq_data.exec_t = (seq_end_time - seq_start_time) * 1000000;
+	seq_data.tid = gettid();
+	seq_data.test_case = read_testcases;
+	seq_data_vec.push_back(seq_data);
+	sl.log_to_file(seq_data_vec);
+	std::cout << "omp_tot: " << omp_tot << std::endl;
 	return msg;
 }
 
@@ -399,17 +445,15 @@ void points2image::run(int p) {
 	while (read_testcases < testcases)
 	{
 		int count = read_next_testcases(p);
-		// unpause_func();
-		// run the algorithm for each input data set
+		
 		for (int i = 0; i < count; i++)
 		{
+			//omp logging -> for each iteration of pointcloud2_to_image
 			results[i] = pointcloud2_to_image(pointcloud2[i],
 								cameraExtrinsicMat[i],
 								cameraMat[i], distCoeff[i],
-								imageSize[i]);
+								imageSize[i], read_testcases);
 		}
-		// pause_func();
-		// compare with the reference data
 		check_next_outputs(count);
 	}
 }

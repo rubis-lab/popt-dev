@@ -82,11 +82,7 @@ void DLWorker::work() {
             thr_data.response_t = (end_time - start_time) * 1e9;
             thr_data.slack = task_data.deadline - thr_data.response_t;
             thr_data.iter = task_iter;
-            #pragma omp critical
-            {
-                task_data.thr_data.push_back(thr_data);
-                thr_log->info("(work): openmp_thread_idx: " + std::to_string(omp_get_thread_num()));
-            }
+             
             thr_log->info("num iter " + std::to_string(thr_data.iter));
         }
 
