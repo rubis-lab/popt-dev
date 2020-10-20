@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
+#include <cstdlib>
 #include <rts/core/pts.hpp>
 #include "benchmark.h"
 #include "seq_log.hpp"
@@ -32,24 +33,6 @@ void usage(char *exec)
 }
 
 int main(int argc, char **argv) {
-  if ((argc != 1) && (argc !=  3)) {
-    usage(argv[0]);
-    exit(2);
-  }
-  if (argc == 3) {
-    if (strcmp(argv[1], "-p") != 0) { 
-	    usage(argv[0]);
-	    exit(3);
-	  }
-    errno = 0;
-    pipelined = strtol(argv[2], NULL, 10);
-    if (errno || (pipelined < 1) )
-	  {
-	    usage(argv[0]);
-	    exit(4);
-	  }
-    std::cout << "Invoking kernel " << pipelined << " time(s) per measure/checking step\n";
-  }
   // read input data
 
   //euc
@@ -75,7 +58,8 @@ int main(int argc, char **argv) {
   //p2i
   std::cout << "invoking p2i" << std::endl;
   p2iKernel.init();
-  p2iKernel.run(pipelined);
+
+  p2iKernel.run(pipelined, std::atoi(argv[1]));
   if (p2iKernel.check_output()) {
     std::cout << "result ok\n\n";
   } else {

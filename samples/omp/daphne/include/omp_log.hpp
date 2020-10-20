@@ -26,7 +26,7 @@ public:
     std::shared_ptr<spdlog::logger> async_logger;
     OmpLog();
     OmpLog(std::string _logger_name, std::string _logger_out_path);
-    bool log_to_file(std::vector<omp_data> _data);
+    bool log_to_file(std::vector<std::vector<omp_data>> _data);
     bool write_header();
     bool file_exist(std::string fileName);
 };

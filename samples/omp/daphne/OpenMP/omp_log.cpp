@@ -28,15 +28,16 @@ bool OmpLog::write_header() {
     return true;
 }
 
-bool OmpLog::log_to_file(std::vector<omp_data> _data) {
+bool OmpLog::log_to_file(std::vector<std::vector<omp_data>> _data) {
     for(unsigned int i = 0; i < _data.size(); i++) {
-        std::string log_str = std::to_string(_data.at(i).start_t)
-        + "\t" + std::to_string(_data.at(i).end_t)
-        + "\t" + std::to_string(_data.at(i).exec_t)
-        + "\t" + std::to_string(_data.at(i).iter)
-        + "\t" + std::to_string(_data.at(i).test_case)
-        + "\t" + std::to_string(_data.at(i).tid);
-        async_logger->info(log_str);
+        for(unsigned int j = 0; j < _data.at(i).size(); j++){
+            std::string log_str = std::to_string(_data.at(i).at(j).start_t)
+            + "\t" + std::to_string(_data.at(i).at(j).end_t)
+            + "\t" + std::to_string(_data.at(i).at(j).exec_t)
+            + "\t" + std::to_string(_data.at(i).at(j).test_case)
+            + "\t" + std::to_string(_data.at(i).at(j).tid);
+            async_logger->info(log_str);
+        }
     }
     return true;
 }

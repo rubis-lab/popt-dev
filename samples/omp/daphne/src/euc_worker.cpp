@@ -1,7 +1,8 @@
-#include "dlworker.hpp"
+#include "euc_worker.hpp"
 
+extern kernel& EUCKernel;
 
-DLWorker::DLWorker(rts::Pt _pt, rts::Exp _exp) {
+EUCWorker::EUCWorker(rts::Pt _pt, rts::Exp _exp) {
     pt = _pt;
     name = "DLWorker-" + _exp.name + "-" + std::to_string(pt.id);
 
@@ -19,7 +20,7 @@ DLWorker::DLWorker(rts::Pt _pt, rts::Exp _exp) {
     return;
 }
 
-void DLWorker::apply_rt() {
+void EUCWorker::apply_rt() {
     // check rt constraints applied to openmp thread
     int tid = gettid();
     if(std::find(omp_thr_ids.begin(), omp_thr_ids.end(), tid)!=omp_thr_ids.end()) {
@@ -35,20 +36,15 @@ void DLWorker::apply_rt() {
     return;
 }
 
-void DLWorker::msec_work(int _msec) {
-    // 600000 addition takes about 1msec on an 1.2GHz CPU
-    unsigned int iter = 600000 * _msec;
-    int sum = 0;
-    for(unsigned int i = 0; i < iter; i++) {
-        sum++;
-    }
-    return;
-}
-
-void DLWorker::work() {
+void EUCWorker::work() {
     // task loop
-    int iter = 10;
+    int iter = 1;
     std::cout << "hi" << pt.selected_opt << std::endl;
+    std::chrono::high_resolution_clock::time_point start,end;
+    std::chrono::duration<double> elapsed;
+    std::chrono::high_resolution_clock timer;
+    euclidean_clustering euc = euclidean_clustering();
+    kernel& EUCKernel = euc;
     for(int task_iter = 0; task_iter < iter; task_iter++) {
         // create task data for logging
         sched_data task_data;
@@ -58,21 +54,41 @@ void DLWorker::work() {
         task_data.period = pt.base_task.period;
         task_data.deadline = pt.base_task.deadline;
         omp_set_dynamic(0);
-        #pragma omp parallel num_threads(pt.selected_opt)
+        #pragma omp parallel num_threads(1)
         {
-            apply_rt();
+            //apply_rt();
             #pragma omp barrier
 
             // actual work
             double start_time = omp_get_wtime();
-            #pragma omp for schedule(dynamic) nowait
-            for(int y = 0; y < 100; y++) {
-                msec_work((100 - y)/10);
+            // #pragma omp for schedule(dynamic, 1) nowait
+            std::cout << "start time " << start_time << std::endl;
+            EUCKernel.init();
+            std::cout << "init done" << std::endl;
+            // measure the runtime of the kernel
+            start = timer.now();
+
+            // execute the kernel
+            EUCKernel.run(1);
+            std::cout << "run done" << std::endl;
+            // measure the runtime of the kernel
+            if (!pause) 
+            {
+            end = timer.now();
+                elapsed += end-start;
             }
-            // for(int y = 1; y < 15; y++) {
-            //     milli_sec_work((_texec_time * y) / 1e8);
-            // }
-            
+            std::cout <<  "elapsed time: "<< elapsed.count() << " seconds, average time per testcase (#"
+                << EUCKernel.testcases << "): " << elapsed.count() / (double) EUCKernel.testcases
+                << " seconds" << std::endl;
+
+            // read the desired output  and compare
+            if (EUCKernel.check_output())
+            {
+                std::cout << "result ok\n";
+            } else
+            {
+                std::cout << "error: wrong result\n";
+            }
             double end_time = omp_get_wtime();
 
             // log work

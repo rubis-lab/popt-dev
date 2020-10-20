@@ -65,7 +65,7 @@ private:
 	int voxelDimension[3];
 public:
 	virtual void init();
-	virtual void run(int p = 1);
+	virtual void run(int p = 1, int popt = 1);
 	virtual bool check_output();
 protected:
 	/**
@@ -1431,7 +1431,7 @@ CallbackResult ndt_mapping::partial_points_callback(PointCloud &input_cloud, Mat
 	return result;
 }
 
-void ndt_mapping::run(int p) {
+void ndt_mapping::run(int p, int popt) {
 	// prepare to read the first data set
 	// pause_func();
 	while (read_testcases < testcases)
