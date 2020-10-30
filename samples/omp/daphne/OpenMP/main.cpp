@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
   //p2i
   std::cout << "invoking p2i" << std::endl;
   p2iKernel.init();
-
+  
   p2iKernel.run(pipelined, std::atoi(argv[1]));
   if (p2iKernel.check_output()) {
     std::cout << "result ok\n\n";

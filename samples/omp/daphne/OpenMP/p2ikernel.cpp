@@ -336,9 +336,12 @@ PointsImage pointcloud2_to_image(
 	}
 	// apply the algorithm for each point in the cloud
 	//numpopt	
+	double id1 = 0.0, id2 = 0.0, id3 = 0.0, id4 = 0.0;
 	omp_set_dynamic(0);
 	#pragma omp parallel num_threads(popt) 
 	{
+		// #pragma omp parallel for collapse(2) num_threads(popt) schedule(dynamic) nowait
+		//#pragma omp for collapse(2) schedule(dynamic) nowait
 		for (uint32_t y = 0; y < pointcloud2.height; ++y) {
 		// reduction(max : max_y) reduction(min : min_y)
 			double omp_start_time = omp_get_wtime();
@@ -384,8 +387,8 @@ PointsImage pointcloud2_to_image(
 				if(0 <= px && px < w && 0 <= py && py < h)
 				{
 					int pid = py * w + px;
-					//#pragma omp critical
-					//{
+					// #pragma omp critical
+					// {
 						if(msg.distance[pid] == 0 ||
 							msg.distance[pid] > (point.data[2] * 100.0))
 						{
@@ -410,7 +413,7 @@ PointsImage pointcloud2_to_image(
 							msg.min_height[pid] = -1.25;
 							msg.max_height[pid] = 0;
 						}
-					//}
+					// }
 				}
 				struct omp_data omp_data;
 				int tid = gettid();
@@ -427,9 +430,10 @@ PointsImage pointcloud2_to_image(
 			}
 		}
 	}
+	
+
 	msg.max_y = max_y;
 	msg.min_y = min_y;
-	ol.log_to_file(omp_data_vec);
 	double seq_end_time = omp_get_wtime();
 	struct seq_data seq_data;
 	seq_data.start_t = seq_start_time;
@@ -439,6 +443,7 @@ PointsImage pointcloud2_to_image(
 	seq_data.test_case = read_testcases;
 	seq_data_vec.push_back(seq_data);
 	sl.log_to_file(seq_data_vec);
+	ol.log_to_file(omp_data_vec);
 	std::cout << "omp_tot: " << omp_tot << std::endl;
 	return msg;
 }
