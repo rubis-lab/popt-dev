@@ -141,3 +141,8 @@ Linux nvidia 4.9.140-rt93-rt #1 SMP PREEMPT RT Thu Aug 19 17:17:52 KST 2020 aarc
 #check L4T version
 $ cat /etc/nv_tegra_release
 ```
+
+## You may install Cuda
+```shell
+sudo apt install cuda-toolkit-10-2
+```
