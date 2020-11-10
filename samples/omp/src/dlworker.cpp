@@ -54,7 +54,7 @@ void DLWorker::work() {
         sched_data task_data;
         task_data.task_id = pt.id;
         task_data.iter = task_iter;
-        task_data.runtime = pt.base_task.exec_time;
+        task_data.runtime = pt.tsdict[pt.selected_opt][0].exec_time;
         task_data.period = pt.base_task.period;
         task_data.deadline = pt.base_task.deadline;
         omp_set_dynamic(0);
@@ -65,13 +65,11 @@ void DLWorker::work() {
 
             // actual work
             double start_time = omp_get_wtime();
+
             #pragma omp for schedule(dynamic) nowait
-            for(int y = 0; y < 100; y++) {
-                msec_work((100 - y)/10);
+            for(int y = 0; y < (int) (task_data.runtime/1e6); y++) {
+                msec_work(1);
             }
-            // for(int y = 1; y < 15; y++) {
-            //     milli_sec_work((_texec_time * y) / 1e8);
-            // }
             
             double end_time = omp_get_wtime();
 

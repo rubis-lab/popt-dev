@@ -516,7 +516,8 @@ void initRadiusSearch(const std::vector<Point> &points, bool**  sqr_distances, c
 	int n = points.size();
 	*sqr_distances = (bool*) malloc(n * n * sizeof(bool));
 	float sqr_radius = radius * radius;
-	#pragma omp parallel for default(none) shared(points, sqr_distances, n, sqr_radius) schedule(dynamic, 1)
+	double start_time = omp_get_wtime();
+	//#pragma omp parallel for default(none) shared(points, sqr_distances, n, sqr_radius) schedule(dynamic, 1)
 	for (int j = 0; j < n; j++){
 		for (int i = 0; i < n; i++){
 			float dx = points[i].x - points[j].x;
@@ -526,6 +527,8 @@ void initRadiusSearch(const std::vector<Point> &points, bool**  sqr_distances, c
 			(*sqr_distances)[j*n+i] = sqr_dist <= sqr_radius;
 		}
 	}
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "initRadiusSearch " << start_time << std::endl;
 }
 
 
@@ -579,10 +582,14 @@ void extractEuclideanClusters (
 	// Create a bool vector of processed point indices, and initialize it to false
 	bool* processed = (bool*) malloc(sizeof(bool) * cloud.size());
 	int cloud_size = cloud.size();
-	#pragma omp parallel for schedule(dynamic, 1) default(none) shared(cloud_size, processed)
+	double start_time = omp_get_wtime();
+	
+	//#pragma omp parallel for schedule(dynamic, 1) default(none) shared(cloud_size, processed)
 	for(int i = 0; i < cloud_size; ++i){
 		processed[i] = false;
 	}
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "extractEucClusters " << start_time << std::endl;
 	std::vector<int> nn_indices;
 	// compute the pairwise distance matrix
 	bool *sqr_distances;

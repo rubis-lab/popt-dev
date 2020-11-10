@@ -12,6 +12,7 @@
 #include <fstream>
 #include <limits>
 #include <cstring>
+#include <omp.h>
 #include <chrono>
 
 // maximum allowed deviation from reference
@@ -387,7 +388,8 @@ void transformPointCloud(const PointCloud& input, PointCloud &output, Matrix4f t
 		output.clear();
 		output.resize(input.size());
 	}
-	# pragma omp parallel for schedule(dynamic, 1) default(none) shared(input, output, transform)
+	//# pragma omp parallel for schedule(dynamic, 1) default(none) shared(input, output, transform)
+	double start_time = omp_get_wtime();
 	for (auto it = 0 ; it < input.size(); ++it)
 	{
 		PointXYZI transformed;
@@ -400,6 +402,8 @@ void transformPointCloud(const PointCloud& input, PointCloud &output, Matrix4f t
 		}
 		output[it] = transformed;
 	}
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "omp: transformPointCloud " << start_time << std::endl;
 }
 
 /**
@@ -563,7 +567,9 @@ void ndt_mapping::computeHessian (Mat66 &hessian, PointCloud &trans_cloud, Vec6 
 {
 	memset(&(hessian.data[0][0]), 0, sizeof(double) * 6 * 6);
 	// Update hessian for each point, line 17 in Algorithm 2 [Magnusson 2009]
-	#pragma omp parallel for schedule(dynamic, 1)
+	double start_time = omp_get_wtime();
+
+	//#pragma omp parallel for schedule(dynamic, 1)
 	for (size_t idx = 0; idx < input_->size (); idx++)
 	{
 		PointXYZI x_trans_pt = trans_cloud[idx];
@@ -598,6 +604,8 @@ void ndt_mapping::computeHessian (Mat66 &hessian, PointCloud &trans_cloud, Vec6 
 			updateHessian (hessian, x_trans, c_inv);
 		}
 	}
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "omp: Hessian " << start_time << std::endl; 
 }
 
 void ndt_mapping::updateHessian (Mat66 &hessian, Vec3 &x_trans, Mat33 &c_inv)
@@ -1308,9 +1316,10 @@ void ndt_mapping::initCompute()
 	float max1 = (*target_)[0].data[0];
 	float max2 = (*target_)[0].data[1];
 	float max3 = (*target_)[0].data[2];
-	# pragma omp parallel for schedule(dynamic, 1)\
+	//# pragma omp parallel for schedule(dynamic, 1)\
 		reduction(min : min1) reduction(min : min2) reduction(min : min3) \
 		reduction(max : max1) reduction(max : max2) reduction(max : max3)
+	double start_time = omp_get_wtime();
 	for (int i = 1; i < target_->size(); i++)
 	{
 		float elem1 = (*target_)[i].data[0];
@@ -1323,6 +1332,9 @@ void ndt_mapping::initCompute()
 		max2 = (elem2 > max2) ? elem2 : max2;
 		max3 = (elem3 > max3) ? elem3 : max3;
 	}
+
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "omp initcompute " << start_time << std::endl;
 	minVoxel.data[0] = min1 - 0.01f;
 	minVoxel.data[1] = min2 - 0.01f;
 	minVoxel.data[2] = min3 - 0.01f;
@@ -1338,7 +1350,9 @@ void ndt_mapping::initCompute()
 	// spans over the point cloud
 	target_cells_.clear();
 	target_cells_.resize(voxelDimension[0] * voxelDimension[1] * voxelDimension[2]);
-	# pragma omp parallel for schedule(dynamic, 1)
+	
+	start_time = omp_get_wtime();
+	//# pragma omp parallel for schedule(dynamic, 1)
 	for (int i = 0; i < target_cells_.size(); i++)
 	{
 		target_cells_[i].numberPoints = 0;
@@ -1350,7 +1364,9 @@ void ndt_mapping::initCompute()
 		target_cells_[i].invCovariance.data[1][1] = 1.0;
 		target_cells_[i].invCovariance.data[0][2] = 1.0;
 	}
-
+	
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "omp initcompute2 " << start_time << std::endl;
 	// assign the points to their respective voxel
 	for (int i = 0; i < target_->size(); i++)
 	{
@@ -1367,7 +1383,9 @@ void ndt_mapping::initCompute()
 			target_cells_[voxelIndex].invCovariance.data[row][col] += (*target_)[i].data[row] * (*target_)[i].data[col];
 	}
 	// normalize cells
-	# pragma omp parallel for schedule(dynamic, 1)
+	//# pragma omp parallel for schedule(dynamic, 1)
+	
+	start_time = omp_get_wtime();
 	for (int i = 0; i < target_cells_.size(); i++)
 	{
 		// average the point sum
@@ -1387,6 +1405,9 @@ void ndt_mapping::initCompute()
 		invertMatrix(target_cells_[i].invCovariance);
 
 	}
+	
+	start_time = omp_get_wtime() - start_time;
+	std::cout << "omp initcompute3 " << start_time << std::endl;
 }
 
 void ndt_mapping::ndt_align (const Matrix4f& guess)

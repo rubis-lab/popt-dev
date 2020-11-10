@@ -36,24 +36,24 @@ int main(int argc, char **argv) {
   // read input data
 
   //euc
-  // std::cout << "invoking euc" << std::endl;
-  // eucKernel.init();
-  // eucKernel.run(pipelined);
-  // if (eucKernel.check_output()) {
-  //   std::cout << "result ok\n";
-  // } else {
-  //     std::cout << "error: wrong result\n";
-  // }
+   std::cout << "invoking euc" << std::endl;
+   eucKernel.init();
+   eucKernel.run(pipelined, std::atoi(argv[1]));
+   if (eucKernel.check_output()) {
+     std::cout << "result ok\n";
+   } else {
+       std::cout << "error: wrong result\n";
+   }
 
   //ndt  
-  // std::cout << "invoking ndt" << std::endl;
-  // ndtKernel.init();
-  // ndtKernel.run(pipelined);
-  // if (ndtKernel.check_output()) {
-  //   std::cout << "result ok\n";
-  // } else {
-  //     std::cout << "error: wrong result\n";
-  // }
+   std::cout << "invoking ndt" << std::endl;
+   ndtKernel.init();
+   ndtKernel.run(pipelined, std::atoi(argv[1]));
+   if (ndtKernel.check_output()) {
+     std::cout << "result ok\n";
+   } else {
+       std::cout << "error: wrong result\n";
+   }
 
   //p2i
   std::cout << "invoking p2i" << std::endl;

@@ -1,10 +1,10 @@
 {
     "name": "exp1",
     "scheduler": "GEDF",
-    "iteration": 10000,
+    "iteration": 10,
     "strategy": "max",
-    "num_tasks": 4,
-    "custom_option": [2, 2, 3, 4],
+    "num_tasks": 3,
+    "custom_option": [4, 4, 1],
     "para": {
         "max_opt": 4
     }

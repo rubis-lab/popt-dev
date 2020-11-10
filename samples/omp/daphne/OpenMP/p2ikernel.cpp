@@ -291,7 +291,7 @@ PointsImage pointcloud2_to_image(
 	std::string omp_logger_out_path = "p2i_omp_" + std::to_string(popt) + "_" + std::to_string(read_testcases) + ".out";
 	OmpLog ol = OmpLog(omp_logger_name, omp_logger_out_path);
 	std::vector<std::vector<omp_data>> omp_data_vec;
-	for(unsigned int i = 0; i < 4; i++) {
+	for(unsigned int i = 0; i < popt; i++) {
 		std::vector<omp_data> t1;
 		omp_data_vec.push_back(t1);
 	}
@@ -337,103 +337,7 @@ PointsImage pointcloud2_to_image(
 	// apply the algorithm for each point in the cloud
 	//numpopt	
 	double id1 = 0.0, id2 = 0.0, id3 = 0.0, id4 = 0.0;
-	omp_set_dynamic(0);
-	#pragma omp parallel num_threads(popt) 
-	{
-		// #pragma omp parallel for collapse(2) num_threads(popt) schedule(dynamic) nowait
-		//#pragma omp for collapse(2) schedule(dynamic) nowait
-		for (uint32_t y = 0; y < pointcloud2.height; ++y) {
-		// reduction(max : max_y) reduction(min : min_y)
-			double omp_start_time = omp_get_wtime();
-			#pragma omp for schedule(dynamic) nowait
-			for (uint32_t x = 0; x < pointcloud2.width; ++x) {
-				float* fp = (float *)(cp + (x + y*pointcloud2.width) * pointcloud2.point_step);
-				double intensity = fp[4];
-				// apply the transformations
-				Mat13 point, point2;
-				point2.data[0] = double(fp[0]);
-				point2.data[1] = double(fp[1]);
-				point2.data[2] = double(fp[2]);
-				//point = point * invR.t() + invT.t();
-				for (int row = 0; row < 3; row++) {
-					point.data[row] = invT.data[row];
-					for (int col = 0; col < 3; col++) 
-					point.data[row] += point2.data[col] * invR.data[row][col];
-				}
-				
-				if (point.data[2] <= 2.5) {
-						continue;
-				}
 
-				double tmpx = point.data[0] / point.data[2];
-				double tmpy = point.data[1]/ point.data[2];
-				double r2 = tmpx * tmpx + tmpy * tmpy;
-				double tmpdist = 1 + distCoeff.data[0] * r2
-						+ distCoeff.data[1] * r2 * r2
-						+ distCoeff.data[4] * r2 * r2 * r2;
-
-				Point2d imagepoint;
-				imagepoint.x = tmpx * tmpdist
-						+ 2 * distCoeff.data[2] * tmpx * tmpy
-						+ distCoeff.data[3] * (r2 + 2 * tmpx * tmpx);
-				imagepoint.y = tmpy * tmpdist
-						+ distCoeff.data[2] * (r2 + 2 * tmpy * tmpy)
-						+ 2 * distCoeff.data[3] * tmpx * tmpy;
-				imagepoint.x = cameraMat.data[0][0] * imagepoint.x + cameraMat.data[0][2];
-				imagepoint.y = cameraMat.data[1][1] * imagepoint.y + cameraMat.data[1][2];
-				int px = int(imagepoint.x + 0.5);
-				int py = int(imagepoint.y + 0.5);
-				// continue with points inside image bounds
-				if(0 <= px && px < w && 0 <= py && py < h)
-				{
-					int pid = py * w + px;
-					// #pragma omp critical
-					// {
-						if(msg.distance[pid] == 0 ||
-							msg.distance[pid] > (point.data[2] * 100.0))
-						{
-							msg.distance[pid] = float(point.data[2] * 100);
-							msg.intensity[pid] = float(intensity);
-
-							max_y = py > max_y ? py : max_y;
-							min_y = py < min_y ? py : min_y;
-
-						}
-					// }
-					// #pragma omp critical
-					// {
-						if (0 == y && pointcloud2.height == 2)//process simultaneously min and max during the first layer
-						{
-							float* fp2 = (float *)(cp + (x + (y+1)*pointcloud2.width) * pointcloud2.point_step);
-							msg.min_height[pid] = fp[2];
-							msg.max_height[pid] = fp2[2];
-						}
-						else
-						{
-							msg.min_height[pid] = -1.25;
-							msg.max_height[pid] = 0;
-						}
-					// }
-				}
-				struct omp_data omp_data;
-				int tid = gettid();
-				double omp_end_time = omp_get_wtime();
-				omp_data.start_t = omp_start_time;
-				omp_data.end_t = omp_end_time;
-				omp_data.exec_t = (omp_end_time - omp_start_time);
-				omp_tot += omp_end_time - omp_start_time;
-				omp_data.tid = tid;
-				omp_data.iter = read_testcases;
-				omp_data.test_case = read_testcases;
-				int omp_id = omp_get_thread_num();
-				omp_data_vec.at(omp_id).push_back(omp_data);
-			}
-		}
-	}
-	
-
-	msg.max_y = max_y;
-	msg.min_y = min_y;
 	double seq_end_time = omp_get_wtime();
 	struct seq_data seq_data;
 	seq_data.start_t = seq_start_time;
@@ -442,8 +346,113 @@ PointsImage pointcloud2_to_image(
 	seq_data.tid = gettid();
 	seq_data.test_case = read_testcases;
 	seq_data_vec.push_back(seq_data);
+	double omp_start_time = 0.0;
+	omp_set_dynamic(0);
+	//for(unsigned int i = 0; i < 21; i ++) {
+	//	#pragma omp parallel num_threads(popt) 
+	//	{
+			// #pragma omp parallel for collapse(2) num_threads(popt) schedule(dynamic) nowait
+			//#pragma omp for collapse(2) schedule(dynamic) nowait
+			//if(i == 20) omp_start_time = omp_get_wtime();
+			omp_start_time = omp_get_wtime();
+			for (uint32_t y = 0; y < pointcloud2.height; ++y) {
+			// reduction(max : max_y) reduction(min : min_y)
+				//#pragma omp for schedule(dynamic, 1) nowait
+				for (uint32_t x = 0; x < pointcloud2.width; ++x) {
+					float* fp = (float *)(cp + (x + y*pointcloud2.width) * pointcloud2.point_step);
+					double intensity = fp[4];
+					// apply the transformations
+					Mat13 point, point2;
+					point2.data[0] = double(fp[0]);
+					point2.data[1] = double(fp[1]);
+					point2.data[2] = double(fp[2]);
+					//point = point * invR.t() + invT.t();
+					for (int row = 0; row < 3; row++) {
+						point.data[row] = invT.data[row];
+						for (int col = 0; col < 3; col++) 
+						point.data[row] += point2.data[col] * invR.data[row][col];
+					}
+					
+					if (point.data[2] <= 2.5) {
+							continue;
+					}
+
+					double tmpx = point.data[0] / point.data[2];
+					double tmpy = point.data[1]/ point.data[2];
+					double r2 = tmpx * tmpx + tmpy * tmpy;
+					double tmpdist = 1 + distCoeff.data[0] * r2
+							+ distCoeff.data[1] * r2 * r2
+							+ distCoeff.data[4] * r2 * r2 * r2;
+
+					Point2d imagepoint;
+					imagepoint.x = tmpx * tmpdist
+							+ 2 * distCoeff.data[2] * tmpx * tmpy
+							+ distCoeff.data[3] * (r2 + 2 * tmpx * tmpx);
+					imagepoint.y = tmpy * tmpdist
+							+ distCoeff.data[2] * (r2 + 2 * tmpy * tmpy)
+							+ 2 * distCoeff.data[3] * tmpx * tmpy;
+					imagepoint.x = cameraMat.data[0][0] * imagepoint.x + cameraMat.data[0][2];
+					imagepoint.y = cameraMat.data[1][1] * imagepoint.y + cameraMat.data[1][2];
+					int px = int(imagepoint.x + 0.5);
+					int py = int(imagepoint.y + 0.5);
+					// continue with points inside image bounds
+					if(0 <= px && px < w && 0 <= py && py < h)
+					{
+						int pid = py * w + px;
+						// #pragma omp critical
+						// {
+							if(msg.distance[pid] == 0 ||
+								msg.distance[pid] > (point.data[2] * 100.0))
+							{
+								msg.distance[pid] = float(point.data[2] * 100);
+								msg.intensity[pid] = float(intensity);
+
+								max_y = py > max_y ? py : max_y;
+								min_y = py < min_y ? py : min_y;
+
+							}
+						// }
+						// #pragma omp critical
+						// {
+							if (0 == y && pointcloud2.height == 2)//process simultaneously min and max during the first layer
+							{
+								float* fp2 = (float *)(cp + (x + (y+1)*pointcloud2.width) * pointcloud2.point_step);
+								msg.min_height[pid] = fp[2];
+								msg.max_height[pid] = fp2[2];
+							}
+							else
+							{
+								msg.min_height[pid] = -1.25;
+								msg.max_height[pid] = 0;
+							}
+						// }
+					}
+					
+				}
+			}
+			omp_start_time = omp_get_wtime() - omp_start_time;
+			std::cout << omp_start_time << std::endl;
+			//if ( i == 20 ) {
+			//	struct omp_data omp_data;
+			//	int tid = gettid();
+			//	double omp_end_time = omp_get_wtime();
+			//	omp_data.start_t = omp_start_time;
+			//	omp_data.end_t = omp_end_time;
+			//	omp_data.exec_t = (omp_end_time - omp_start_time);
+			//	omp_tot += omp_data.exec_t;
+			//	omp_data.tid = tid;
+			//	omp_data.iter = read_testcases;
+			//	omp_data.test_case = read_testcases;
+			//	int omp_id = omp_get_thread_num();
+			//	omp_data_vec.at(omp_id).push_back(omp_data);
+			//}
+		//}	
+	//}
+	
+	msg.max_y = max_y;
+	msg.min_y = min_y;
 	sl.log_to_file(seq_data_vec);
-	ol.log_to_file(omp_data_vec);
+	//ol.log_to_file(omp_data_vec);
 	std::cout << "omp_tot: " << omp_tot << std::endl;
 	return msg;
 }

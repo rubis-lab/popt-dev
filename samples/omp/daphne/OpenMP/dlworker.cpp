@@ -79,7 +79,7 @@ void DLWorker::work() {
             sched_data_thread thr_data;
             thr_data.start_t = start_time;
             thr_data.end_t = end_time;
-            thr_data.response_t = (end_time - start_time) * 1e9;
+            thr_data.response_t = (end_time - start_time) *1e4;
             thr_data.slack = task_data.deadline - thr_data.response_t;
             thr_data.iter = task_iter;
             #pragma omp critical
