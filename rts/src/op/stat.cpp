@@ -41,7 +41,7 @@ void Stat::add(double _x, bool _sched) {
     }
     return;
 }
-
+ 
 void Stat::normalize() {
     normalized_data.clear();
     for(unsigned int i = 0; i < x_size; i ++) {

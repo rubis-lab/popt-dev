@@ -25,6 +25,8 @@ std::string Task::to_str() {
     ret += std::to_string(deadline);
     ret += "\t";
     ret += std::to_string(period);
+    ret += "\t";
+    ret += std::to_string(slack);
     return ret;
 }
 

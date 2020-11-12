@@ -32,7 +32,7 @@ Pts::Pts(nlohmann::json _js, rts::Exp _exp) {
     // }
     
     // serialize created pts
-    std::cout << " hi " << _exp.num_tasks << std::endl;
+    // std::cout << " hi " << _exp.num_tasks << std::endl;
     populate_popt_list(_exp.num_tasks);
     nlohmann::json ts_dict = _js["pts"];
     for(unsigned int i = 0; i < ts_dict.size(); i++) {

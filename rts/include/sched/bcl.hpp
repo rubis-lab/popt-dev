@@ -4,6 +4,7 @@
 #include "op/tsutil.hpp"
 #include <string>
 #include <nlohmann/json.hpp>
+#include <iostream>
 
 namespace rts {
 class BCL {
@@ -12,6 +13,7 @@ public:
     BCL();
     BCL(nlohmann::json _js);
     std::string to_str();
+    std::string to_str_slack();
     double calc_interference(Task _base_task, Task _inter_task);
     double sum_interference(TaskSet _ts, Task _base_task);
     bool is_schedulable(TaskSet _ts);

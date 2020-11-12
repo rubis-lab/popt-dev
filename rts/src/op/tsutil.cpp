@@ -69,6 +69,8 @@ double TSUtil::workload_in_interval_edf_slack(Task _t, double _interval) {
     if(workload_carry_in < 0.0){
         workload_carry_in = 0.0;
     }
+
+    // std::cout << std::to_string(_t.slack) << std::endl;
     
     workload_carry_in = std::min(_t.exec_time, workload_carry_in);
     return workload_carry_in + workload_body_job;  

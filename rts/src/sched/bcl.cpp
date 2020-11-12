@@ -16,6 +16,12 @@ std::string BCL::to_str() {
     return ret;
 }
 
+std::string BCL::to_str_slack() {
+    std::string ret;
+    ret += "BCL_SLACK: num_core = " + std::to_string(num_core) + "\n";
+    return ret;
+}
+
 double BCL::calc_interference(Task _base_task, Task _inter_task) {
     TSUtil tsutil;
     double i_sum = tsutil.workload_in_interval_edf(_inter_task, _base_task.deadline);
@@ -67,23 +73,35 @@ double BCL::sum_interference_slack(TaskSet _ts, Task _base_task) {
 
 bool BCL::is_schedulable_slack(TaskSet _ts) {
     bool slack_updated = true;
-    bool potentially_not_schedulable = true;
     double slack;
+    int iter = 0;
     while(slack_updated) {
         slack_updated = false;
-        for(Task base_task: _ts.tasks) {
+        // std::cout << "while loop iteration: " << std::to_string(iter) << std::endl << _ts.to_str() << std::endl;
+        bool potentially_not_schedulable = false;
+        for(Task& base_task: _ts.tasks) {
             double interference = sum_interference_slack(_ts, base_task);
-            slack = (base_task.deadline - base_task.exec_time) + 0.1 - interference;
-            if(slack > base_task.slack) {
+            // std::cout << base_task.to_str() << std::endl;
+            slack = (base_task.deadline - base_task.exec_time) - interference;
+            // std::cout << std::to_string(base_task.slack) << " <--- base_task.slack  new slack --->" << std::to_string(slack) << std::endl;
+            if(slack > base_task.slack + 0.1 ) {
+                // std::cout << "slack updated : " << base_task.slack << " -> " << slack <<std::endl;
                 base_task.slack = slack;
                 slack_updated = true;
             } else if(slack < 0) {
                 potentially_not_schedulable = true;
+            } else {
+                // std::cout << "elsecase" << std::endl;
             }
         }
-        if(!potentially_not_schedulable)
+        if(!potentially_not_schedulable) {
+            // std::cout << "bcl_slack returns true" << std::endl;
             return true;
+        }
+        // std::cout << "while loop iteration: " << std::to_string(iter) << std::endl << _ts.to_str() << std::endl;
+        iter++;
     }
+    // std::cout << "bcl_slack returns false" << std::endl;
     return false;
 }
 
