@@ -41,18 +41,18 @@ int main(int argc, const char *argv[]) {
     //     std::cout << result2.at(i);
     // }
 
-    //rts::DAG dag(pts, jf_dag);
-    //std::vector<std::vector<int>> result;
-    //std::vector<int> prev;
-    //dag.get_all_topological_order(result, prev);
+    rts::DAG dag(pts, jf_dag);
+    std::vector<std::vector<int>> result;
+    std::vector<int> prev;
+    dag.get_all_topological_order(result, prev);
     
-    //for(unsigned int i = 0; i < result.size(); i++) {
-        //for(unsigned int j = 0; j < result.at(i).size(); j++) {
-            //std::cout << result.at(i).at(j) << " -> ";
-        //}
-        //std::cout << "\n";
-    //}
-    //std::cout << "\n";
+    for(unsigned int i = 0; i < result.size(); i++) {
+        for(unsigned int j = 0; j < result.at(i).size(); j++) {
+            std::cout << result.at(i).at(j) << " -> ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
 
     //std::vector<std::thread> thrs;
     //for(unsigned int i = 0; i < 4; i++) {
@@ -62,7 +62,6 @@ int main(int argc, const char *argv[]) {
     //for(std::thread &t: thrs) {
     //    t.join();
     //}
-    
 
     // std::vector<DAGWorker> workers;
 
@@ -75,22 +74,6 @@ int main(int argc, const char *argv[]) {
     // for(unsigned int i = 0; i < 4; i++) {
     //     thrs.push_back(std::thread(&DAGWorker::work, &workers[i], i));
     // }
-    
-
-    std::vector<DLWorker> workers;
-    std::cout << pts.pt_list.size() << std::endl;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        DLWorker dw(pts.pt_list[i], e);
-        workers.push_back(dw);
-    }
-
-    std::vector<std::thread> thrs;
-    for(unsigned int i = 0; i < pts.pt_list.size(); i++) {
-        thrs.push_back(std::thread(&DLWorker::work, &workers[i]));
-    }
-    for(std::thread &t: thrs) {
-        t.join();
-    }
 
     std::cout << "main dies: " << gettid() << std::endl;
 

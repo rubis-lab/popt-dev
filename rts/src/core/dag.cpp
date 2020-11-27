@@ -3,20 +3,20 @@
 namespace rts {
 DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
     pts = _pts;
-    name = _js["name"];
+    name = "dag";
     nlohmann::json js_task_list = _js["task_list"];
     for(unsigned int i = 0; i < js_task_list.size(); i++) {
         task_node* temp = new task_node;
         //temp->task = pts.pt_list.at(i);
-        temp->name = js_task_list[i]["name"];
+        temp->name = js_task_list[i]["node_name"];
         temp->deadline = js_task_list[i]["deadline"];
         temp->index = js_task_list[i]["index"];
         task_list.push_back(*temp);
     }
     for(unsigned int i = 0; i < js_task_list.size(); i++) {
-        if(js_task_list[i]["predecessors"].size() != 0) {
-            for(unsigned int j = 0; j < js_task_list[i]["predecessors"].size(); j++){
-                struct task_node* temp = get_by_index(js_task_list[i]["predecessors"][j]);
+        if(js_task_list[i]["parents"].size() != 0) {
+            for(unsigned int j = 0; j < js_task_list[i]["parents"].size(); j++){
+                struct task_node* temp = get_by_index(js_task_list[i]["parents"][j]["parent_index"]);
                 if(temp != NULL) {
                     task_list.at(i).predecessors.push_back(temp);
                 }
@@ -24,9 +24,9 @@ DAG::DAG(rts::Pts _pts, nlohmann::json _js) {
         } else {
             task_list.at(i).is_head = true;
         }
-        if(js_task_list[i]["successors"].size() != 0) {
-            for(unsigned int j = 0; j < js_task_list[i]["successors"].size(); j++) {
-                struct task_node* temp = get_by_index(js_task_list[i]["successors"][j]);
+        if(js_task_list[i]["childs"].size() != 0) {
+            for(unsigned int j = 0; j < js_task_list[i]["childs"].size(); j++) {
+                struct task_node* temp = get_by_index(js_task_list[i]["childs"][j]["child_index"]);
                 if(temp != NULL) {
                     task_list.at(i).successors.push_back(temp);
                 }
