@@ -20,7 +20,7 @@ def f2s(fullname):
 def s2f(shortname):
     return 'rubis-'+shortname+'.log'
 
-def parselog():
+def parse_currentlog():
     logs = []
 
     for f in os.listdir(log_dir):
@@ -59,15 +59,6 @@ def parselog():
         
             return logdatas
 
-# True or False
-def schedulable(logdatas):
-    return True
-
-parselog()
-
-
-
-
 # {
 #     'thr0-1': {
 #         'header': ['idx', 'perf', ...],
@@ -90,3 +81,14 @@ parselog()
 #         ]
 #     }
 # }
+
+# True or False
+def schedulable(logdatas):
+    return True
+
+parse_currentlog()
+
+
+
+
+
