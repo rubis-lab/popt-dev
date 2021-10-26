@@ -17,5 +17,19 @@ for f in os.listdir(log_dir):
     
     logs.append(f)
 
-# print(logs)
+logdatas = []
+
+for log in logs:
+    with open(log_dir+'/'+log, 'r') as lines:
+        datas = {}
+
+        # exception not handled. assume log is fine
+        for line in lines:
+            splited = ' '.join(line.split()).split(' ')
+            print(splited)
+            
+
+        
+
+
     
