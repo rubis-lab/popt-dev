@@ -33,28 +33,52 @@ logdatas = {}
 
 for log in logs:
     with open(log_dir+'/'+s2f(log), 'r') as lines:
-        newdict = {}        
+        newdict = {}
         header = []
-        data = {}
+        data = []     
         # exception not handled. assume log is fine
         for line in lines:
+            linedata = []
+
             arr = ' '.join(line.split()).split(' ')
-            newdict['data'] = {}
             # print(logstr)
 
             if arr[0] == '#idx':
                 arr[0] = arr[0].split('#')[-1]
                 for _ in arr:
                     header.append(_)
-                
-                newdict['header'] = header
                 # print(newdict)
-            
-            
-            print(newdict)
-        exit()
-
-        newdict['header']
-        newdict['data']
+            else:
+                for _ in arr:
+                    linedata.append(_)
+                data.append(linedata)
         
+        newdict['header'] = header
+        newdict['data'] = data
+
         logdatas[log] = newdict
+        
+        print(logdatas)
+
+{
+    'thr0-1': {
+        'header': ['idx', 'perf', ...],
+        'data': [
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+        ]
+    },
+    'thr1-0': {
+        'header': ['idx', 'perf', ...],
+        'data': [
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+            ['1', '6000', ...],
+        ]
+    }
+}
