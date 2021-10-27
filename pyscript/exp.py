@@ -14,7 +14,9 @@ def create_logdir(jsonfile):
         j = json.loads(f.read())
 
     logdir = j["global"]["logdir"]
-    os.mkdir(logdir)
+    if not os.path.exists(logdir):
+        os.makedirs(logdir)
+    
     return
 
 if __name__=="__main__":
