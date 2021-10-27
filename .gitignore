@@ -4,6 +4,9 @@
 .swp
 *Makefile
 
+.log
+/pyscript/test
+
 # data files
 /data/
 *.json

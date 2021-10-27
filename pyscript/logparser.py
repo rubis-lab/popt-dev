@@ -3,7 +3,8 @@ from datetime import datetime
 from time import time
 import math
 
-log_dir = '/home/rtss/rt-app/rubis/log'
+# log_dir = '/home/rtss/rt-app/rubis/log'
+log_dir = '/home/rtss/popt-dev/pyscript/test'
 
 def f2s(fullname):
     if len(fullname.split('.')) > 2:
@@ -13,12 +14,14 @@ def f2s(fullname):
     filename = fullname.split('.log')[0]
     if filename.split('.')[-1] == 'swp':
         return False
-    if filename.split('-')[0] != 'rubis':
-        return False
-    return filename.split('rubis-')[-1]
+    # if filename.split('-')[0] != 'rubis':
+    #     return False
+    # return filename.split('rubis-')[-1]
+    return filename
 
 def s2f(shortname):
-    return 'rubis-'+shortname+'.log'
+    # return 'rubis-'+shortname+'.log'
+    return shortname+'.log'
 
 def parse_currentlogs():
     logs = []

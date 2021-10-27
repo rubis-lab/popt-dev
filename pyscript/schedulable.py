@@ -8,23 +8,28 @@ import logparser
 startfrom = 5
 
 # True or False
-def schedulable(logdatas):
+def missoccur(logdatas):
     ret = {}
     for lkey in logdatas:
-        sched = True
+        deadlinemiss = 0
         lvalue = logdatas[lkey]
         deadline = int(lvalue['data'][startfrom][3])
         
         for idx in range(startfrom, len(lvalue['data'])):
             line = lvalue['data'][idx]
             if int(line[2]) > deadline:
-                sched = False
-                break
+                deadlinemiss += 1
 
-        ret[lkey] = sched
+        ret[lkey] = deadlinemiss
     
     return ret
 
+def schedulable(missdata):
+    for misskey in missdata:
+        thr = missdata[misskey]
+        if thr > 0:
+            return False
+    return True
 
 # sch = schedulable(logparser.parse_currentlogs())
 # print(sch)

@@ -1,4 +1,3 @@
 #!/bin/sh
-echo $1
-echo $2
+rt-app rubis_test.json
 exit 0
