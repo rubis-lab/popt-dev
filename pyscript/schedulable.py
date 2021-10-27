@@ -6,30 +6,37 @@ import logparser
 
 
 startfrom = 5
+def get_min(lvalue):
+    lvaluemin = 9999999999
+    for arr in lvalue['data']:
+        if lvaluemin > int(arr[3]):
+            lvaluemin = int(arr[3])
 
+    return lvaluemin
 # True or False
-def missoccur(logdatas):
-    ret = {}
+def misscount(logdatas):
+    linenum = 0
+    deadlinemiss = 0
     for lkey in logdatas:
-        deadlinemiss = 0
+
         lvalue = logdatas[lkey]
-        deadline = int(lvalue['data'][startfrom][3])
+        linenum += lvalue['lines']-startfrom
+        
+        deadline = get_min(lvalue)
         
         for idx in range(startfrom, len(lvalue['data'])):
             line = lvalue['data'][idx]
             if int(line[2]) > deadline:
                 deadlinemiss += 1
+   
+    return linenum, deadlinemiss
 
-        ret[lkey] = deadlinemiss
-    
-    return ret
-
-def schedulable(missdata):
-    for misskey in missdata:
-        thr = missdata[misskey]
-        if thr > 0:
-            return False
-    return True
+# def schedulable(missdata):
+#     for misskey in missdata:
+#         thr = missdata[misskey]
+#         if thr > 0:
+#             return False
+#     return True
 
 # sch = schedulable(logparser.parse_currentlogs())
 # print(sch)
@@ -40,6 +47,7 @@ def schedulable(missdata):
 
 # {
 #     'thr0-1': {
+#         'lines': 100,
 #         'header': ['idx', 'perf', ...],
 #         'data': [
 #             ['1', '6000', ...],

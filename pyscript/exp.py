@@ -8,6 +8,8 @@ import json
 
 jsondir = '/home/rtss/json'
 
+final_logfile = "/home/rtss/final.log"
+
 
 def create_logdir(jsonfile):
     with open(jsonfile, "r") as f:
@@ -17,7 +19,7 @@ def create_logdir(jsonfile):
     if not os.path.exists(logdir):
         os.makedirs(logdir)
     
-    return
+    return logdir
 
 if __name__=="__main__":
     
@@ -28,10 +30,22 @@ if __name__=="__main__":
         if jsonfile.split(".")[-1] != "json":
             continue
         jsonfile_path = os.path.join(jsondir, jsonfile)
-        print(f"running {jsonfile_path}...")
-        create_logdir(jsonfile_path)
+        # print(f"running {jsonfile_path}...")
+        logdir = create_logdir(jsonfile_path)
         os.system(f"rt-app {jsonfile_path}")
         
+        logdatas = logparser.parse_currentlogs(logdir)
+        # print(f"logdatas: {logdatas}")
+
+        exp_name = jsonfile.split(".")[0]
+        linenum, deadlinemiss = schedulable.misscount(logdatas)
+        
+        res_str = f"{exp_name}\t{linenum}\t{deadlinemiss}\n"
+        print(res_str)
+        with open(final_logfile, "a") as logfile:
+            logfile.write(res_str)
+
+
         exit()
 
     sch = schedulable.missoccur(logparser.parse_currentlogs())

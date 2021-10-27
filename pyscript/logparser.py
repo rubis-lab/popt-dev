@@ -4,7 +4,7 @@ from time import time
 import math
 
 # log_dir = '/home/rtss/rt-app/rubis/log'
-log_dir = '/home/rtss/popt-dev/pyscript/test'
+# log_dir = '/home/rtss/popt-dev/pyscript/test'
 
 def f2s(fullname):
     if len(fullname.split('.')) > 2:
@@ -23,7 +23,8 @@ def s2f(shortname):
     # return 'rubis-'+shortname+'.log'
     return shortname+'.log'
 
-def parse_currentlogs():
+def parse_currentlogs(log_dir):
+    
     logs = []
 
     for f in os.listdir(log_dir):
@@ -37,7 +38,7 @@ def parse_currentlogs():
         with open(log_dir+'/'+s2f(log), 'r') as lines:
             newdict = {}
             header = []
-            data = []     
+            data = []
             # exception not handled. assume log is fine
             for line in lines:
                 linedata = []
@@ -57,6 +58,7 @@ def parse_currentlogs():
             
             newdict['header'] = header
             newdict['data'] = data
+            newdict['lines'] = len(data)
 
             logdatas[log] = newdict
         
