@@ -5,6 +5,7 @@ import math
 import logparser
 import schedulable
 import json
+import shutil
 
 jsondir = '/home/rtss/json'
 
@@ -21,11 +22,15 @@ def create_logdir(jsonfile):
     
     return logdir
 
+def delete_logdir(logdir):
+    shutil.rmtree(logdir)
+    return
+
 if __name__=="__main__":
     
     jsonfiles = os.listdir(jsondir)
 
-
+    num = 0
     for jsonfile in jsonfiles:
         if jsonfile.split(".")[-1] != "json":
             continue
@@ -41,17 +46,21 @@ if __name__=="__main__":
         linenum, deadlinemiss = schedulable.misscount(logdatas)
         
         res_str = f"{exp_name}\t{linenum}\t{deadlinemiss}\n"
+        delete_logdir(logdir)
+
         print(res_str)
         with open(final_logfile, "a") as logfile:
             logfile.write(res_str)
+        num += 1 
+        
+        if num >= 1:
+            break
 
 
-        exit()
-
-    sch = schedulable.missoccur(logparser.parse_currentlogs())
-    print(sch)
-    is_schedulable = schedulable.schedulable(sch)
-    exit()
+    # sch = schedulable.missoccur(logparser.parse_currentlogs())
+    # print(sch)
+    # is_schedulable = schedulable.schedulable(sch)
+    # exit()
 
 # outputstyle:
 # {'thr0-1': True, 'thr1-0': True, 'thr2-2': False, 'thr3-3': False, 'thr0-0': True, 'thr1-1': True}
