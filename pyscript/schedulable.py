@@ -26,10 +26,12 @@ def schedulable(logdatas):
     return ret
 
 
-sch = schedulable(logparser.parse_currentlogs())
-print(sch)
-exit()
+# sch = schedulable(logparser.parse_currentlogs())
+# print(sch)
+# exit()
 
+# outputstyle:
+# {'thr0-1': True, 'thr1-0': True, 'thr2-2': False, 'thr3-3': False, 'thr0-0': True, 'thr1-1': True}
 
 # {
 #     'thr0-1': {
