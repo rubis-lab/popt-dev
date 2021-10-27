@@ -8,9 +8,9 @@ import json
 import shutil
 from tqdm import tqdm
 
-jsondir = '/home/rtss/json'
+jsondir = '/home/rtss/rt-app/rubis/json'
 
-final_logfile = "/home/rtss/final.log"
+final_logfile = "/home/rtss/test.log"
 
 
 def create_logdir(jsonfile):
@@ -38,6 +38,8 @@ if __name__=="__main__":
 
         jsonfile_path = os.path.join(jsondir, jsonfile)
         jsonfile_paths.append(jsonfile_path)
+    
+    print(jsonfile_paths)
 
     for j_idx in tqdm(range(len(jsonfile_paths))):
         jsonfile_path = jsonfile_paths[j_idx]
@@ -53,7 +55,7 @@ if __name__=="__main__":
         linenum, deadlinemiss = schedulable.misscount(logdatas)
         
         res_str = f"{jsonfilename}\t{linenum}\t{deadlinemiss}\n"
-        delete_logdir(logdir)
+        # delete_logdir(logdir)
 
         print(res_str)
         with open(final_logfile, "a") as logfile:
