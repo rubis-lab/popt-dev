@@ -50,9 +50,9 @@ if __name__=="__main__":
 
         jsonfilename = jsonfile_path.split("/")[-1].split(".")[0]
         # exp_name = jsonfile.split(".")[0]
-        linenum, deadlinemiss = schedulable.misscount(logdatas)
+        linenum, deadlinemiss, runtime_was_zero = schedulable.misscount(logdatas)
         
-        res_str = f"{jsonfilename}\t{linenum}\t{deadlinemiss}\n"
+        res_str = f"{jsonfilename}\t{linenum}\t{deadlinemiss}\t{runtime_was_zero}\n"
         delete_logdir(logdir)
 
         print(res_str)

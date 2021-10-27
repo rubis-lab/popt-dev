@@ -17,8 +17,8 @@ def get_min(lvalue):
 def misscount(logdatas):
     linenum = 0
     deadlinemiss = 0
+    runtime_was_zero = 0
     for lkey in logdatas:
-
         lvalue = logdatas[lkey]
         linenum += lvalue['lines']-startfrom
         
@@ -28,8 +28,10 @@ def misscount(logdatas):
             line = lvalue['data'][idx]
             if int(line[2]) > deadline:
                 deadlinemiss += 1
+            if int(line[2]) == 0:
+                runtime_was_zero += 1
    
-    return linenum, deadlinemiss
+    return linenum, deadlinemiss, runtime_was_zero
 
 # def schedulable(missdata):
 #     for misskey in missdata:
